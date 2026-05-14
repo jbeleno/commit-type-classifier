@@ -1,0 +1,27 @@
+# --- Python / venv ---
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+.ipynb_checkpoints/
+.DS_Store
+.env
+*.log
+
+# --- Large raw dataset (415 MB — regenerable via src/data/download.py) ---
+data/raw/commits_raw.parquet
+# data/processed/ and data/splits/ ARE committed (small enough, useful for repro)
+
+# --- Large model weights (regenerable via training) ---
+# Keep reports/, ensemble/weights.json, probs/*.npy — small and useful
+models_saved/baseline_tfidf.joblib
+models_saved/cnn_text/
+models_saved/distilbert/
+models_saved/codebert/
+
+# --- SQLite history (local prediction log) ---
+db/*.sqlite
+
+# --- IDE ---
+.vscode/
+.idea/

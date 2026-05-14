@@ -1,0 +1,5 @@
+source_dataset: Maxscha/commitbench
+split: train
+rows: 1000000
+columns: ['hash', 'diff', 'message', 'project', 'split', 'diff_languages']
+sample_mode: True (limit=1000000)

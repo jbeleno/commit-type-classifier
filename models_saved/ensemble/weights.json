@@ -1,0 +1,14 @@
+{
+  "models": [
+    "baseline_tfidf",
+    "cnn_text",
+    "distilbert",
+    "codebert"
+  ],
+  "weights": [
+    0.25,
+    0.25,
+    0.25,
+    0.25
+  ]
+}

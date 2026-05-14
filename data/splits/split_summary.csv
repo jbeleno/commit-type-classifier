@@ -1,0 +1,16 @@
+split,label,fraction
+train,docs,0.042
+train,feat,0.1155
+train,fix,0.6263
+train,refactor,0.1111
+train,test,0.1052
+val,docs,0.0419
+val,feat,0.1155
+val,fix,0.6263
+val,refactor,0.111
+val,test,0.1052
+test,docs,0.0419
+test,feat,0.1157
+test,fix,0.6262
+test,refactor,0.111
+test,test,0.1052
