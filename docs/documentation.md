@@ -32,13 +32,11 @@ toc-depth: 3
 numbersections: true
 ---
 
-\newpage
-
 # Introduction
 
 Modern software projects produce thousands of commits whose textual
 description is often the only structured record of what changed and
-why. The Conventional Commits specification [Borges, 2018] formalises a
+why. The Conventional Commits specification [Conventional Commits Contributors, 2018] formalises a
 small vocabulary — `feat`, `fix`, `docs`, `style`, `refactor`, `perf`,
 `test`, `build`, `ci`, `chore`, `revert` — that, when applied
 consistently, enables automated changelog generation, semantic
@@ -71,8 +69,6 @@ in item 4 of the project evaluation rubric (70/15/15 split, class
 balancing, ≥ 3 compared models, appropriate metrics, model
 serialization, separation of training from inference, and the use of
 Python with TensorFlow).
-
-\newpage
 
 # Problem Statement
 
@@ -110,8 +106,6 @@ that does not depend on cloud APIs, and (iv) a user-facing
 application that practitioners can adopt as-is. This work addresses
 that gap for the specific subset of five Conventional-Commit types.
 
-\newpage
-
 # Objectives
 
 ## General Objective
@@ -146,8 +140,6 @@ interface and a command-line interface.
    pipeline, and an automated test suite covering preprocessing,
    splitting and inference.
 
-\newpage
-
 # State of the Art and Related Work
 
 Commit classification has been studied continuously since the early
@@ -167,7 +159,7 @@ study has reused.
 
 ## Conventional Commits and the modern label set
 
-The Conventional Commits specification [Borges, 2018] crystallised an
+The Conventional Commits specification [Conventional Commits Contributors, 2018] crystallised an
 industry-driven label set (`feat`, `fix`, `docs`, `style`, `refactor`,
 `perf`, `test`, `build`, `ci`, `chore`, `revert`) optimised for
 tooling rather than for research. Compared to the Mockus taxonomy it
@@ -198,10 +190,12 @@ variant of the task. Ghadhab et al. [2021] extended the line of work
 with **CodeBERT** — a bimodal transformer pre-trained on paired
 text–code corpora by Feng et al. [2020] — and showed measurable gains
 over generic English BERT when the diff is included in the input.
-More recent work [Sundelin et al., 2024] explores prompting
-decoder-only large language models (Llama, Mistral) for the same task
-but reports that fine-tuned **encoder-only** transformers remain
-competitive at a fraction of the inference cost.
+More recently, Zeng et al. [2025] presented the first systematic study
+of fine-grained Conventional-Commits classification across the full ten
+canonical types, highlighting how the move from the classical
+three-class maintenance taxonomy to the developer-facing Conventional
+Commits vocabulary changes both the class balance and the difficulty
+profile of the task.
 
 ## Ensembles in commit-classification literature
 
@@ -230,15 +224,13 @@ course.
 | 2008 | Hindle et al. | 6 maintenance classes | Keyword matching | First commit-text study |
 | 2015 | Mauczka et al. | 4-class maintenance | Random Forest | Hand-crafted features |
 | 2017 | Levin & Yehudai | 3-class maintenance | Boosted trees + diff | Diff features matter |
-| 2018 | Borges (spec) | Conventional Commits | — | Industry-standard labels |
+| 2018 | Conv. Commits Contributors | Conventional Commits | — | Industry-standard labels |
 | 2020 | Sarwar et al. | Multi-label CC | BERT | First strong transformer result |
 | 2021 | Ghadhab et al. | Maintenance + CC | CodeBERT | Bimodal text+code transformer |
-| 2024 | Sundelin et al. | CC | LLM prompting vs ft. BERT | Fine-tuned BERT competitive |
+| 2025 | Zeng et al. | 10-class CC | First look at fine-grained CC | Direct precursor of this work |
 | **2026** | **This work** | **5-class CC** | **TF-IDF + LR (best of 5)** | **Five-family local benchmark** |
 
 Table: Position of this work in the commit-classification literature.
-
-\newpage
 
 # Requirements
 
@@ -281,8 +273,6 @@ test catalogue in §12 and the use cases in §6.
 | **DR-4** | The class proportions of train, validation and test shall be identical to four decimal places after stratification. (Verified in `data/splits/split_summary.csv`.) |
 | **DR-5** | The raw, processed and split artefacts shall be regeneratable from `src/data/*.py` so that the repository does not need to ship the 415 MB raw parquet file. |
 
-\newpage
-
 # Use Cases and User Stories
 
 The system serves a single primary actor — the **Developer** — and a
@@ -292,15 +282,44 @@ diagram is given in Figure 1.
 
 ## User Stories
 
-| ID | User Story | Linked FR |
-|---|---|---|
-| **UC-1** | *As a* developer reviewing a pull request, *I want to* paste a commit message and its diff into the GUI and receive a predicted Conventional-Commit type, *so that* I can decide whether the author's prefix is consistent with the change. | FR-1, FR-2, FR-3 |
-| **UC-2** | *As a* developer auditing a repository, *I want to* point the system at a local Git folder, scan the last *N* commits and obtain a class-distribution histogram and a per-commit table, *so that* I can spot inconsistencies in how the team applies Conventional Commits. | FR-4 |
-| **UC-3** | *As a* developer or jury reviewer, *I want to* browse the full history of past predictions persisted to SQLite, *so that* I can trace which commits were classified, by which model and when. | FR-5 |
-| **UC-4** | *As a* developer or jury reviewer, *I want to* see a side-by-side comparison of every trained model on the held-out test split, *so that* I can verify the claims made in this document and choose a model for production use. | FR-6 |
-| **UC-5** | *As a* maintainer of the project, *I want to* retrain all models from a single command, *so that* updating the corpus does not require manual reproduction of five training runs. | FR-7 |
-| **UC-6** | *As a* maintainer of the project, *I want to* regenerate the metrics report from a single command, *so that* the documentation table in §14 is always in sync with the latest model artefacts. | FR-8 |
-| **UC-7** | *As a* CI pipeline, *I want to* call the inference layer headlessly with a JSON payload and receive a predicted label and probability vector, *so that* I can integrate commit-type prediction into automated release tooling. | FR-1, FR-2 |
+**UC-1 — Classify a single commit** *(linked FR-1, FR-2, FR-3)*
+: *As a* developer reviewing a pull request, *I want to* paste a commit
+  message and its diff into the GUI and receive a predicted
+  Conventional-Commit type, *so that* I can decide whether the
+  author's prefix is consistent with the change.
+
+**UC-2 — Scan a local repository** *(linked FR-4)*
+: *As a* developer auditing a repository, *I want to* point the system
+  at a local Git folder, scan the last *N* commits and obtain a
+  class-distribution histogram and a per-commit table, *so that* I can
+  spot inconsistencies in how the team applies Conventional Commits.
+
+**UC-3 — Browse the prediction history** *(linked FR-5)*
+: *As a* developer or jury reviewer, *I want to* browse the full
+  history of past predictions persisted to SQLite, *so that* I can
+  trace which commits were classified, by which model and when.
+
+**UC-4 — Compare model metrics** *(linked FR-6)*
+: *As a* developer or jury reviewer, *I want to* see a side-by-side
+  comparison of every trained model on the held-out test split, *so
+  that* I can verify the claims made in this document and choose a
+  model for production use.
+
+**UC-5 — Retrain all models** *(linked FR-7)*
+: *As a* maintainer of the project, *I want to* retrain all models
+  from a single command, *so that* updating the corpus does not
+  require manual reproduction of five training runs.
+
+**UC-6 — Regenerate the metrics report** *(linked FR-8)*
+: *As a* maintainer of the project, *I want to* regenerate the
+  metrics report from a single command, *so that* the documentation
+  table in §14 is always in sync with the latest model artefacts.
+
+**UC-7 — Call inference headlessly** *(linked FR-1, FR-2)*
+: *As a* CI pipeline, *I want to* call the inference layer headlessly
+  with a JSON payload and receive a predicted label and probability
+  vector, *so that* I can integrate commit-type prediction into
+  automated release tooling.
 
 ## Inclusion relationships
 
@@ -314,8 +333,6 @@ Two `<<include>>` relationships make the diagram complete:
   invocation of UC-1 wrapped in a `batch_runs` header row, so each
   commit produced by UC-2 inherits the side-effect of UC-1.
 
-\newpage
-
 # Use Case Diagram
 
 Figure 1 renders all seven use cases against the two actors and the
@@ -328,8 +345,6 @@ reflects the fact that this is a developer tool, not a multi-tenant
 system; the secondary `CI Pipeline` actor is shown with dashed
 *program-level* arrows to make the headless-usage path visible
 without inflating the actor inventory.
-
-\newpage
 
 # Data Dictionary and Entity-Relationship Model
 
@@ -399,8 +414,6 @@ the GUI can show as a single audit event, and (iii) keeps
 `predictions` narrow enough to scale to tens of thousands of rows on
 the same SQLite file without re-engineering.
 
-\newpage
-
 # Class Diagrams
 
 The software architecture is split into two complementary views: the
@@ -410,8 +423,6 @@ diagram from collapsing under its own weight; together they cover
 every Python module under `src/` and `app/`.
 
 ## Offline side — data pipeline and model training
-
-![Figure 3 — Class Diagram (data pipeline + models).](diagrams/png/03_class_pipeline_models.png){ width=95% }
 
 Three sequential modules under `src/data/` (`Downloader`,
 `Preprocessor`, `Splitter`) produce the train, validation and test
@@ -423,11 +434,12 @@ by the two transformer models. The `PrecomputeProbs` helper writes
 each model's probabilities on val and test to disk as `.npy` arrays;
 the `Ensemble` reads only those arrays so it never co-loads
 TensorFlow and PyTorch in the same process — a workaround for a
-known Apple-Silicon MPS contention issue (see §15).
+known Apple-Silicon MPS contention issue (see §15). Figure 3 shows
+the resulting class graph.
+
+![Figure 3 — Class Diagram (data pipeline + models).](diagrams/png/03_class_pipeline_models.png){ width=80% }
 
 ## Online side — inference, GUI and persistence
-
-![Figure 4 — Class Diagram (inference + GUI + history).](diagrams/png/04_class_inference_gui.png){ width=95% }
 
 The `InferenceLayer` (a stateless module that exposes `predict()` and
 `predict_batch()`) is the only point of contact between the front-end
@@ -440,9 +452,9 @@ its fields are guaranteed by FR-1 and FR-2. The diagram intentionally
 inverts the typical "GUI on top, business logic below" reading order
 to emphasise that the inference layer is the dependency root, and
 that the GUI and the CLI are interchangeable consumers of the same
-public surface.
+public surface. Figure 4 illustrates the dependency graph.
 
-\newpage
+![Figure 4 — Class Diagram (inference + GUI + history).](diagrams/png/04_class_inference_gui.png){ width=80% }
 
 # Graphical User Interface — Design and Mockups
 
@@ -493,8 +505,6 @@ a glance even without reading the percentage value.
 Annotated screenshots of the four tabs are kept under
 `docs/mockups/`. A reproduction in this document is pending and will
 be inserted in the final revision.
-
-\newpage
 
 # CLI Catalogue and API Documentation
 
@@ -555,8 +565,6 @@ The current implementation does not host these endpoints over HTTP
 because the rubric explicitly requires a local model and a CLI; the
 shape is documented for future work (§15).
 
-\newpage
-
 # Tests — Unit, Functional and Integration
 
 The system ships with 26 automated tests under `tests/`, all passing
@@ -592,8 +600,6 @@ tested — its correctness is verified end-to-end by the inference
 tests, which would fail if a training script produced a corrupt
 artefact.
 
-\newpage
-
 # Proposed Model Architecture
 
 The end-to-end system can be read at three levels of zoom: (a) the
@@ -602,8 +608,6 @@ base models, (c) the soft-voting ensemble that fuses their
 predictions.
 
 ## End-to-end pipeline
-
-![Figure 5 — End-to-end pipeline.](diagrams/png/05_architecture_pipeline.png){ width=95% }
 
 The raw CommitBench corpus (≈ 10 M rows) is downloaded in streaming
 mode; only a one-million-commit sample is materialised on disk to
@@ -622,11 +626,19 @@ macro-F1 on the validation set, and applies the weighted sum on the
 test set. The inference layer is a stateless module that loads one
 of the five models on demand (LRU-cached) and is called by the
 Streamlit GUI and the Typer CLI; both write their predictions to the
-SQLite history.
+SQLite history. The full sequence is summarised in Figure 5.
+
+![Figure 5 — End-to-end pipeline.](diagrams/png/05_architecture_pipeline.png){ width=70% }
 
 ## Per-model internals
 
-![Figure 6 — Internal architecture of the four base models.](diagrams/png/06_architecture_models.png){ width=100% }
+The four base models cover four distinct families — a classical
+linear model, a shallow convolutional network, a generic
+encoder-only transformer and a code-aware encoder-only transformer.
+Figure 6 lays out their internal pipelines side by side; the
+narrative below walks through each.
+
+![Figure 6 — Internal architecture of the four base models.](diagrams/png/06_architecture_models.png){ width=95% }
 
 **Model 1 — `baseline_tfidf`** is a sklearn pipeline: a word-level
 TF-IDF over the message (1-2 grams, 30k features), a character-level
@@ -655,8 +667,6 @@ the `[CLS]` representation to five logits.
 
 ## Soft-voting ensemble
 
-![Figure 7 — Heterogeneous soft-voting ensemble.](diagrams/png/07_architecture_ensemble.png){ width=85% }
-
 Each base model is executed in its own Python process — the
 `precompute_probs.py` helper — to avoid a TensorFlow / PyTorch / MPS
 contention bug that hangs inference when both libraries try to claim
@@ -668,9 +678,9 @@ is taken on the test set and `argmax` produces the final class.
 Optimal weights converge to uniform (`0.25` each) under our balanced
 training regime, which means no single base model dominates after
 balancing — a known and well-documented property of soft voting on
-diverse families.
+diverse families. Figure 7 illustrates the data flow.
 
-\newpage
+![Figure 7 — Heterogeneous soft-voting ensemble.](diagrams/png/07_architecture_ensemble.png){ width=70% }
 
 # Results and Discussion
 
@@ -752,8 +762,6 @@ We acknowledge three limitations:
   limitation, not an algorithmic one; the workaround is documented
   and reproducible.
 
-\newpage
-
 # Recommendations and Future Work
 
 The system as delivered satisfies the rubric for Component 2 of the
@@ -786,41 +794,58 @@ extended.
    at one developer-day) and would unify the two components of the
    course project.
 
-\newpage
-
 # References
 
-Borges, B. (2018). *Conventional Commits 1.0.0 specification*.
-\url{https://www.conventionalcommits.org}
+Conventional Commits Contributors (2018). *Conventional Commits 1.0.0
+specification*. Available at
+[https://www.conventionalcommits.org/en/v1.0.0](https://www.conventionalcommits.org/en/v1.0.0).
+Community-authored specification, hosted at
+[github.com/conventional-commits/conventionalcommits.org](https://github.com/conventional-commits/conventionalcommits.org),
+licensed under CC BY 3.0.
 
 Feng, Z., Guo, D., Tang, D., Duan, N., Feng, X., Gong, M., Shou, L.,
-Qin, B., Liu, T., Jiang, D. and Zhou, M. (2020). *CodeBERT: a
-pre-trained model for programming and natural languages*. In
-*Findings of EMNLP 2020*.
+Qin, B., Liu, T., Jiang, D. and Zhou, M. (2020). *CodeBERT: A
+Pre-Trained Model for Programming and Natural Languages*. In
+*Findings of the Association for Computational Linguistics: EMNLP
+2020*, pp. 1536–1547.
+[aclanthology.org/2020.findings-emnlp.139](https://aclanthology.org/2020.findings-emnlp.139/).
 
 Ghadhab, L., Jenhani, I., Mkaouer, M. W. and Ben Messaoud, M. (2021).
 *Augmenting commit classification by using fine-grained source code
 changes and a pre-trained deep neural language model*. *Information
-and Software Technology*, 135.
+and Software Technology*, 135, 106566.
+[doi.org/10.1016/j.infsof.2021.106566](https://doi.org/10.1016/j.infsof.2021.106566).
 
 Hindle, A., German, D. M. and Holt, R. (2008). *What do large commits
-tell us? A taxonomical study of large commits*. In *MSR 2008*.
+tell us? A taxonomical study of large commits*. In *Proc. 5th Working
+Conf. on Mining Software Repositories (MSR 2008)*, Leipzig, Germany,
+pp. 99–108.
+[doi.org/10.1145/1370750.1370773](https://doi.org/10.1145/1370750.1370773).
 
 Levin, S. and Yehudai, A. (2017). *Boosting automatic commit
 classification into maintenance activities by utilizing source code
-changes*. In *PROMISE 2017*.
+changes*. In *Proc. 13th Int. Conf. on Predictive Models and Data
+Analytics in Software Engineering (PROMISE 2017)*, pp. 97–106.
+[arXiv:1711.05340](https://arxiv.org/abs/1711.05340).
 
 Mauczka, A., Brosch, F., Schanes, C. and Grechenig, T. (2015).
-*Dataset of developer-labeled commit messages*. In *MSR 2015*.
+*Dataset of developer-labeled commit messages*. In *Proc. 12th IEEE/ACM
+Working Conf. on Mining Software Repositories (MSR 2015)*, pp.
+490–493. [doi.org/10.1109/MSR.2015.71](https://doi.org/10.1109/MSR.2015.71).
 
-Mockus, A. and Votta, L. (2000). *Identifying reasons for software
-changes using historic databases*. In *ICSM 2000*.
+Mockus, A. and Votta, L. G. (2000). *Identifying reasons for software
+changes using historic databases*. In *Proc. Int. Conf. on Software
+Maintenance (ICSM 2000)*, San Jose, USA, pp. 120–130.
+[doi.org/10.1109/ICSM.2000.883028](https://doi.org/10.1109/ICSM.2000.883028).
 
 Sarwar, M. U., Zafar, S., Mkaouer, M. W., Walia, G. S. and Malik, M.
-M. (2020). *Multi-label classification of commit messages using
-transfer learning*. In *ISSREW 2020*.
+Z. (2020). *Multi-label Classification of Commit Messages using
+Transfer Learning*. In *Proc. 2020 IEEE 31st Int. Symp. on Software
+Reliability Engineering Workshops (ISSREW)*, pp. 37–42.
+[doi.org/10.1109/ISSREW51248.2020.00034](https://doi.org/10.1109/ISSREW51248.2020.00034).
 
-Sundelin, A., Gonzalez-Barahona, J. M. and Squire, M. (2024).
-*Prompting large language models for commit classification: a
-comparative study against fine-tuned encoders*. In *MSR 2024*.
+Zeng, Q., Zhang, Y., Qiu, Z. and Liu, H. (2025). *A First Look at
+Conventional Commits Classification*. In *Proc. IEEE/ACM 47th Int.
+Conf. on Software Engineering (ICSE 2025)*.
+[doi.org/10.1109/ICSE55347.2025.00011](https://doi.org/10.1109/ICSE55347.2025.00011).
 
