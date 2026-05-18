@@ -50,6 +50,10 @@ docs-pdf:
 	  --pdf-engine=typst \
 	  --resource-path=docs:docs/diagrams/png
 
+slides:
+	mkdir -p docs/exports
+	$(UV) run python scripts/build_slides.py
+
 docs-docx:
 	mkdir -p docs/exports
 	pandoc docs/documentation.md \

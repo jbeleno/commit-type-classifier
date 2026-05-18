@@ -25,6 +25,7 @@ dependencies = [
     "tqdm>=4.66.0",
     "pydriller>=2.6",
     "tabulate>=0.10.0",
+    "python-pptx>=1.0.2",
 ]
 
 [project.optional-dependencies]

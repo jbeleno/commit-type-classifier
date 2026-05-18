@@ -502,9 +502,17 @@ a glance even without reading the percentage value.
 
 ## Mockups
 
-Annotated screenshots of the four tabs are kept under
-`docs/mockups/`. A reproduction in this document is pending and will
-be inserted in the final revision.
+The four screenshots below were captured against the running Streamlit
+application (`uv run streamlit run app/streamlit_app.py`). The
+high-resolution originals are kept in `docs/mockups/`.
+
+![Figure 8 — Predict tab: empty form ready to accept a commit message and an optional diff. The "classify" button is the only primary action.](mockups/01_predict.jpeg){ width=85% }
+
+![Figure 9 — Repository tab: path picker, commit-count input and model selector. After the scan, this same tab renders a horizontal-bar histogram and a per-commit table.](mockups/02_repository.jpeg){ width=85% }
+
+![Figure 10 — History tab: empty state. Once predictions are logged through the Predict tab or the Repository scan, this tab lists them in reverse-chronological order with the same mono-leaning typography as the rest of the GUI.](mockups/03_history.jpeg){ width=85% }
+
+![Figure 11 — Metrics tab: 5-card grid (one per trained model) with accuracy as the headline number and macro-F1, weighted-F1, precision and recall in the body. The leader (`baseline_tfidf`) carries the sky-blue gutter. Below the grid, the macro-F1 horizontal-bar chart is sorted descending.](mockups/04_metrics.jpeg){ width=85% }
 
 # CLI Catalogue and API Documentation
 
