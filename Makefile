@@ -42,5 +42,20 @@ cli:
 diagrams:
 	plantuml -tpng -o ../png docs/diagrams/puml/*.puml
 
+docs-pdf:
+	mkdir -p docs/exports
+	pandoc docs/documentation.md \
+	  -o docs/exports/documentation.pdf \
+	  --toc --number-sections \
+	  --pdf-engine=typst \
+	  --resource-path=docs:docs/diagrams/png
+
+docs-docx:
+	mkdir -p docs/exports
+	pandoc docs/documentation.md \
+	  -o docs/exports/documentation.docx \
+	  --toc --number-sections \
+	  --resource-path=docs:docs/diagrams/png
+
 clean:
 	rm -rf data/raw data/processed data/splits models_saved db .venv

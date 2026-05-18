@@ -25,3 +25,4 @@ db/*.sqlite
 # --- IDE ---
 .vscode/
 .idea/
+docs/exports/
