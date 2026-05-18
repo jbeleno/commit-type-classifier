@@ -17,6 +17,10 @@ skinparam class {
   StereotypeFontColor #38BDF8
 }
 skinparam stereotypeCBackgroundColor #38BDF8
+skinparam noteFontColor #CBD5E1
+skinparam noteFontName "Fira Code"
+skinparam noteBackgroundColor #0B1220
+skinparam noteBorderColor #38BDF8
 
 hide circle
 hide methods

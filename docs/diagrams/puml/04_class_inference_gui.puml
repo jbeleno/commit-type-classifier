@@ -16,6 +16,12 @@ skinparam class {
   AttributeFontName "Fira Code"
   StereotypeFontColor #38BDF8
 }
+skinparam noteFontColor #CBD5E1
+skinparam noteFontName "Fira Code"
+skinparam noteBackgroundColor #0B1220
+skinparam noteBorderColor #38BDF8
+skinparam packageFontColor #94A3B8
+skinparam packageBorderColor rgba(148,163,184,0.18)
 
 title C2 — Class Diagram (Inference + GUI + History)
 

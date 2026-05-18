@@ -20,6 +20,10 @@ skinparam package {
   FontColor #94A3B8
   FontStyle italic
 }
+skinparam noteFontColor #CBD5E1
+skinparam noteFontName "Fira Code"
+skinparam noteBackgroundColor #0B1220
+skinparam noteBorderColor #38BDF8
 
 title C2 — Internal Architecture of the 4 Base Models
 
