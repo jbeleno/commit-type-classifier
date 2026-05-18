@@ -1,0 +1,126 @@
+@startuml 03_class_pipeline_models
+' Figure 3 — Class Diagram (Data Pipeline + Models)
+' Covers the offline side:  raw dataset -> features -> 5 trained classifiers.
+
+skinparam backgroundColor #0F172A
+skinparam shadowing false
+skinparam defaultFontName "Fira Sans"
+skinparam defaultFontColor #F8FAFC
+
+skinparam class {
+  BorderColor rgba(148,163,184,0.30)
+  BackgroundColor #1E293B
+  ArrowColor #38BDF8
+  FontColor #F8FAFC
+  AttributeFontColor #CBD5E1
+  AttributeFontName "Fira Code"
+  StereotypeFontColor #38BDF8
+}
+
+title C2 — Class Diagram (Data Pipeline + Models)
+
+package "src.data" #0B1220 {
+  class Downloader {
+    + main(sample: int)
+    - try_load(candidate, sample)
+    - stream_to_dataframe(it, limit)
+  }
+  class Preprocessor {
+    + main()
+    - extract_label(msg) : str
+    - strip_prefix(msg) : str
+    - diff_to_text_and_features(diff)
+  }
+  class Splitter {
+    + main()
+    - SPLIT_RATIOS = {70/15/15}
+    - RANDOM_SEED = 42
+  }
+}
+
+package "src.models" #0B1220 {
+  abstract class BaseModel {
+    + train(max_train=None)
+    + evaluate()
+    + load()
+    + save()
+  }
+
+  class BaselineTFIDF {
+    - vec_msg  : TfidfVectorizer
+    - vec_diff : TfidfVectorizer
+    - scaler   : StandardScaler
+    - clf      : LogisticRegression
+    + predict_proba(df)
+  }
+  class CNNTextModel {
+    - msg_vec  : TextVectorization
+    - diff_vec : TextVectorization
+    - scaler   : StandardScaler
+    - model    : keras.Model
+    + predict(df)
+  }
+  class DistilBERTModel {
+    - tokenizer : AutoTokenizer
+    - model     : DistilBertForSequenceClassification
+    - device    : torch.device
+    + predict(df)
+  }
+  class CodeBERTModel {
+    - tokenizer : AutoTokenizer
+    - model     : RobertaForSequenceClassification
+    - device    : torch.device
+    + predict(df)
+  }
+  class Ensemble {
+    - weights : np.ndarray
+    - members : list[str]
+    + _weighted_vote(stack, weights)
+    + train()  ' fit weights via L-BFGS-B
+    + evaluate()
+  }
+
+  class CommitDataset <<torch.Dataset>> {
+    - messages : list[str]
+    - diffs    : list[str]
+    - labels   : list[int]
+    + __getitem__(idx)
+    + __len__()
+  }
+
+  class PrecomputeProbs {
+    + main(model_name)
+    + save(arr, name)
+  }
+}
+
+BaseModel <|-- BaselineTFIDF
+BaseModel <|-- CNNTextModel
+BaseModel <|-- DistilBERTModel
+BaseModel <|-- CodeBERTModel
+BaseModel <|-- Ensemble
+
+DistilBERTModel ..> CommitDataset : feeds
+CodeBERTModel   ..> CommitDataset : feeds
+
+Downloader --> Preprocessor : commits_raw.parquet
+Preprocessor --> Splitter   : commits_clean.parquet
+Splitter --> BaselineTFIDF  : train/val/test
+Splitter --> CNNTextModel   : train/val/test
+Splitter --> DistilBERTModel : train/val/test
+Splitter --> CodeBERTModel  : train/val/test
+
+BaselineTFIDF ..> PrecomputeProbs : .npy probs
+CNNTextModel ..> PrecomputeProbs  : .npy probs
+DistilBERTModel ..> PrecomputeProbs : .npy probs
+CodeBERTModel ..> PrecomputeProbs : .npy probs
+PrecomputeProbs --> Ensemble : stacks val/test probs
+
+note right of Ensemble
+  Loads only the cached
+  probability arrays — never
+  TF + PyTorch in one process
+  (avoids MPS deadlock).
+end note
+
+@enduml

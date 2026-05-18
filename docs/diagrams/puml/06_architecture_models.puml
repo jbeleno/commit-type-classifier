@@ -1,0 +1,92 @@
+@startuml 06_architecture_models
+' Figure 6 — Internal Architecture of each of the 4 base models.
+
+skinparam backgroundColor #0F172A
+skinparam shadowing false
+skinparam defaultFontName "Fira Sans"
+skinparam defaultFontColor #F8FAFC
+
+skinparam rectangle {
+  BorderColor rgba(148,163,184,0.30)
+  BackgroundColor #1E293B
+  FontColor #F8FAFC
+  RoundCorner 6
+}
+skinparam ArrowColor #38BDF8
+skinparam ArrowFontColor #94A3B8
+skinparam package {
+  BorderColor rgba(148,163,184,0.18)
+  BackgroundColor #0B1220
+  FontColor #94A3B8
+  FontStyle italic
+}
+
+title C2 — Internal Architecture of the 4 Base Models
+
+package "Model 1 · baseline_tfidf  (sklearn)" {
+  rectangle "message_clean" as M1_in
+  rectangle "diff_text" as M1_in2
+  rectangle "numeric:\nfiles · +lines · -lines" as M1_num
+  rectangle "TF-IDF\nword 1-2gram\n30k features" as M1_t1
+  rectangle "TF-IDF\nchar_wb 3-5gram\n30k features" as M1_t2
+  rectangle "StandardScaler" as M1_s
+  rectangle "hstack\n→ sparse [N x 60003]" as M1_cat
+  rectangle "LogisticRegression\nsolver=saga, C=1.0\nclass_weight=balanced" as M1_lr
+  rectangle "softmax → 5 classes" as M1_out
+
+  M1_in  --> M1_t1
+  M1_in2 --> M1_t2
+  M1_num --> M1_s
+  M1_t1 --> M1_cat
+  M1_t2 --> M1_cat
+  M1_s  --> M1_cat
+  M1_cat --> M1_lr
+  M1_lr --> M1_out
+}
+
+package "Model 2 · cnn_text  (TensorFlow / Keras)" {
+  rectangle "message_clean\nTextVec · 48 tokens" as M2_m
+  rectangle "diff_text\nTextVec · 384 tokens" as M2_d
+  rectangle "numeric · Dense(16, relu)" as M2_n
+  rectangle "Emb(20k, 64) → Conv1D(128, k=3)\n→ GlobalMaxPool" as M2_b1
+  rectangle "Emb(40k, 64) → Conv1D(128, k=5)\n→ GlobalMaxPool" as M2_b2
+  rectangle "Concatenate" as M2_c
+  rectangle "Dense(128, relu) → Dropout(0.4)" as M2_h
+  rectangle "Dense(5, softmax)" as M2_out
+
+  M2_m --> M2_b1
+  M2_d --> M2_b2
+  M2_b1 --> M2_c
+  M2_b2 --> M2_c
+  M2_n --> M2_c
+  M2_c --> M2_h
+  M2_h --> M2_out
+}
+
+package "Model 3 · distilbert  (HuggingFace, PyTorch + MPS)" {
+  rectangle "[CLS] message [SEP] diff [SEP]\nmax_len = 256" as M3_in
+  rectangle "DistilBertTokenizerFast" as M3_t
+  rectangle "DistilBERT base, 6 layers\n67M params" as M3_b
+  rectangle "Linear head → 5 logits" as M3_h
+  rectangle "softmax" as M3_out
+
+  M3_in --> M3_t
+  M3_t  --> M3_b
+  M3_b  --> M3_h
+  M3_h  --> M3_out
+}
+
+package "Model 4 · codebert  (HuggingFace, PyTorch + MPS)" {
+  rectangle "[CLS] message [SEP] diff [SEP]\nmax_len = 256" as M4_in
+  rectangle "RoBERTa tokenizer\n(BPE, code-aware)" as M4_t
+  rectangle "CodeBERT base, 12 layers\n125M params\npre-trained on text + code" as M4_b
+  rectangle "Linear head → 5 logits" as M4_h
+  rectangle "softmax" as M4_out
+
+  M4_in --> M4_t
+  M4_t  --> M4_b
+  M4_b  --> M4_h
+  M4_h  --> M4_out
+}
+
+@enduml

@@ -1,0 +1,94 @@
+@startuml 04_class_inference_gui
+' Figure 4 — Class Diagram (Inference + GUI + History)
+' Covers the online side:  user interaction -> inference -> persistence.
+
+skinparam backgroundColor #0F172A
+skinparam shadowing false
+skinparam defaultFontName "Fira Sans"
+skinparam defaultFontColor #F8FAFC
+
+skinparam class {
+  BorderColor rgba(148,163,184,0.30)
+  BackgroundColor #1E293B
+  ArrowColor #38BDF8
+  FontColor #F8FAFC
+  AttributeFontColor #CBD5E1
+  AttributeFontName "Fira Code"
+  StereotypeFontColor #38BDF8
+}
+
+title C2 — Class Diagram (Inference + GUI + History)
+
+package "src.inference" #0B1220 {
+  class Prediction <<dataclass>> {
+    + label : str
+    + confidence : float
+    + probabilities : dict[str,float]
+    + model : str
+  }
+  class InferenceLayer {
+    + AVAILABLE_MODELS : list[str]
+    + predict(msg, diff, model_name) : Prediction
+    + predict_batch(records, model_name) : list[Prediction]
+    + model_is_available(name) : bool
+    - _row_from_inputs(msg, diff) : DataFrame
+    - _proba_baseline(df)
+    - _proba_cnn(df)
+    - _proba_hf(df, artifact_dir)
+    - _proba_ensemble(df)
+  }
+}
+
+package "src.history" #0B1220 {
+  class HistoryRepository {
+    + init()
+    + log_prediction(msg, diff, pred, source, batch_run_id) : int
+    + open_batch_run(repo_path, n_commits, model_name) : int
+    + register_model_metrics(name, acc, f1, version)
+    + list_recent(limit) : list[dict]
+    + list_batch_runs(limit) : list[dict]
+    + label_distribution() : dict[str,int]
+  }
+  class ModelRow <<SQLAlchemy>>
+  class BatchRunRow <<SQLAlchemy>>
+  class PredictionRow <<SQLAlchemy>>
+}
+
+package "app" #0B1220 {
+  class StreamlitApp {
+    + main()
+    + tab_predict()
+    + tab_repo()
+    + tab_history()
+    + tab_metrics()
+    - predict_card(p, latency_ms) : str
+    - bar_row(label, value)       : str
+    - chip(label)                 : str
+    - metric_card(model, acc, m)  : str
+  }
+  class CLI <<typer>> {
+    + predict_cmd(message, diff, model)
+    + repo_cmd(path, last, model)
+    + batch_cmd(csv_path, model)
+    + history_cmd(limit)
+    + models_cmd()
+  }
+}
+
+InferenceLayer --> Prediction       : returns
+StreamlitApp   --> InferenceLayer   : uses
+CLI            --> InferenceLayer   : uses
+StreamlitApp   --> HistoryRepository : logs
+CLI            --> HistoryRepository : logs / reads
+HistoryRepository "1" *-- "*" PredictionRow
+HistoryRepository "1" *-- "*" BatchRunRow
+HistoryRepository "1" *-- "*" ModelRow
+
+note bottom of InferenceLayer
+  Each model loader is wrapped in
+  @lru_cache so the first call warms
+  the model and subsequent calls are
+  zero-cost.
+end note
+
+@enduml

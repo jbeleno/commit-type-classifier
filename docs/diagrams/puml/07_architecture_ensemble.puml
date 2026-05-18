@@ -1,0 +1,68 @@
+@startuml 07_architecture_ensemble
+' Figure 7 — Heterogeneous Soft-Voting Ensemble (zoom)
+
+skinparam backgroundColor #0F172A
+skinparam shadowing false
+skinparam defaultFontName "Fira Sans"
+skinparam defaultFontColor #F8FAFC
+
+skinparam rectangle {
+  BorderColor rgba(148,163,184,0.30)
+  BackgroundColor #1E293B
+  FontColor #F8FAFC
+  RoundCorner 6
+}
+skinparam database {
+  BorderColor rgba(148,163,184,0.30)
+  BackgroundColor #0B1220
+  FontColor #F8FAFC
+}
+skinparam ArrowColor #38BDF8
+skinparam ArrowFontColor #94A3B8
+skinparam ArrowFontName "Fira Code"
+
+title C2 — Ensemble (heterogeneous soft-voting)
+
+rectangle "baseline_tfidf\nP1 ∈ ℝ^{N×5}" as P1
+rectangle "cnn_text\nP2 ∈ ℝ^{N×5}" as P2
+rectangle "distilbert\nP3 ∈ ℝ^{N×5}" as P3
+rectangle "codebert\nP4 ∈ ℝ^{N×5}" as P4
+
+database ".npy probabilities\n(per model · per split)" as PROBS
+
+rectangle "Stack\nP ∈ ℝ^{4×N×5}" as STACK
+rectangle "Weight optimization\nL-BFGS-B on val split\nargmin  -macroF1(y, P·w)\nw ∈ ℝ⁴ , w ≥ 0" as OPT
+rectangle "Weighted sum\nŷ_i = Σ_m  w_m · P_{m,i}" as VOTE
+rectangle "argmax → class label" as OUT
+
+database "ensemble/weights.json" as W
+
+P1 --> PROBS
+P2 --> PROBS
+P3 --> PROBS
+P4 --> PROBS
+PROBS --> STACK
+STACK --> OPT  : val.npy
+OPT --> W      : persist 4 weights
+STACK --> VOTE : test.npy
+W --> VOTE     : load
+VOTE --> OUT
+
+note right of OPT
+  Each base model runs in its own
+  Python process (precompute_probs.py)
+  to avoid the TensorFlow + PyTorch
+  MPS deadlock on Apple Silicon.
+end note
+
+note bottom of VOTE
+  Optimal weights on val:
+    baseline_tfidf   0.2500
+    cnn_text         0.2500
+    distilbert       0.2500
+    codebert         0.2500
+  Uniform — none of the four
+  dominates after balancing.
+end note
+
+@enduml

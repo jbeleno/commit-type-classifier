@@ -1,0 +1,96 @@
+@startuml 05_architecture_pipeline
+' Figure 5 — Proposed Model Architecture / End-to-end Pipeline
+' From CommitBench raw down to a served prediction.
+
+skinparam backgroundColor #0F172A
+skinparam shadowing false
+skinparam defaultFontName "Fira Sans"
+skinparam defaultFontColor #F8FAFC
+
+skinparam rectangle {
+  BorderColor rgba(148,163,184,0.30)
+  BackgroundColor #1E293B
+  FontColor #F8FAFC
+  RoundCorner 8
+}
+skinparam database {
+  BorderColor rgba(148,163,184,0.30)
+  BackgroundColor #0B1220
+  FontColor #F8FAFC
+}
+skinparam ArrowColor #38BDF8
+skinparam ArrowFontColor #94A3B8
+skinparam ArrowFontName "Fira Code"
+skinparam noteFontColor #94A3B8
+skinparam noteBackgroundColor #1E293B
+skinparam noteBorderColor rgba(148,163,184,0.18)
+
+title C2 — End-to-end Pipeline (Data → Models → Inference)
+
+database "CommitBench\n(Maxscha/commitbench)\n~10M commits" as DS
+
+rectangle "Download\nsrc/data/download.py" as DL
+rectangle "Filter Conventional Commits\nfeat / fix / docs / refactor / test" as FILT
+rectangle "Preprocess\nstrip prefix · diff features\n(files, +lines, -lines)" as PRE
+rectangle "Stratified Split\n70 / 15 / 15\n(seed = 42)" as SPLIT
+
+database "train\n27,275" as TR
+database "val\n5,845" as VA
+database "test\n5,845" as TE
+
+rectangle "Model 1 · TF-IDF + LogReg" as M1
+rectangle "Model 2 · CNN-text (dual)" as M2
+rectangle "Model 3 · DistilBERT  ft." as M3
+rectangle "Model 4 · CodeBERT  ft." as M4
+rectangle "Model 5 · Ensemble (soft-voting)" as M5
+
+database ".npy probs\n(per model · per split)" as PB
+rectangle "Inference Layer\nsrc/inference.py\n(lru_cache)" as INF
+
+rectangle "Streamlit GUI\n(4 tabs)" as ST
+rectangle "Typer CLI\n(predict / repo / batch)" as CLI
+database "SQLite\nhistory.sqlite" as DB
+
+DS --> DL  : sample = 1,000,000
+DL --> FILT : commits_raw.parquet
+FILT --> PRE : 38,965 rows
+PRE --> SPLIT : commits_clean.parquet
+SPLIT --> TR
+SPLIT --> VA
+SPLIT --> TE
+
+TR --> M1
+TR --> M2
+TR --> M3
+TR --> M4
+
+M1 --> PB
+M2 --> PB
+M3 --> PB
+M4 --> PB
+PB --> M5  : L-BFGS-B weights
+
+M1 --> INF
+M2 --> INF
+M3 --> INF
+M4 --> INF
+M5 --> INF
+
+INF --> ST
+INF --> CLI
+ST --> DB
+CLI --> DB
+
+note bottom of SPLIT
+  Stratified on label.
+  Identical class proportions
+  in all three splits.
+end note
+
+note right of M5
+  Ensemble lives only at evaluation
+  time — it never co-loads TF and
+  PyTorch in the same process.
+end note
+
+@enduml

@@ -1,0 +1,68 @@
+@startuml 01_use_cases
+' Figure 1 — Use Case Diagram (UML)
+' Component: C2 Commit Type Classifier
+' Actor: a single primary actor (Developer); a secondary actor (CI Pipeline) for batch runs.
+
+skinparam backgroundColor #0F172A
+skinparam shadowing false
+skinparam defaultFontName "Fira Sans"
+skinparam defaultFontColor #F8FAFC
+
+skinparam actor {
+  BorderColor #94A3B8
+  BackgroundColor #1E293B
+  FontColor #F8FAFC
+}
+skinparam usecase {
+  BorderColor #94A3B8
+  BackgroundColor #1E293B
+  FontColor #F8FAFC
+  ArrowColor #38BDF8
+}
+skinparam package {
+  BorderColor rgba(148,163,184,0.30)
+  BackgroundColor #0F172A
+  FontColor #94A3B8
+}
+skinparam stereotypeCBackgroundColor #38BDF8
+skinparam noteFontColor #94A3B8
+skinparam noteBackgroundColor #1E293B
+skinparam noteBorderColor rgba(148,163,184,0.18)
+
+left to right direction
+
+title C2 Commit Type Classifier — Use Cases
+
+actor "Developer" as DEV
+actor "CI Pipeline" as CI
+
+rectangle "C2 Commit Type Classifier" as SYS {
+  usecase "UC1\nClassify single commit" as UC1
+  usecase "UC2\nScan local repository" as UC2
+  usecase "UC3\nBrowse prediction history" as UC3
+  usecase "UC4\nCompare model metrics" as UC4
+  usecase "UC5\nTrain models  (CLI)" as UC5
+  usecase "UC6\nEvaluate models on test split" as UC6
+  usecase "UC7\nLog prediction to history" as UC7
+}
+
+DEV --> UC1
+DEV --> UC2
+DEV --> UC3
+DEV --> UC4
+DEV --> UC5
+DEV --> UC6
+
+CI ..> UC1 : programmatic
+CI ..> UC2 : programmatic
+
+UC1 ..> UC7 : <<include>>
+UC2 ..> UC1 : <<include>>
+UC2 ..> UC7 : <<include>>
+
+note bottom of SYS
+  Scope = C2 only.  Local model + GUI + CLI.
+  No cloud, backend or IoT (those belong to C1).
+end note
+
+@enduml

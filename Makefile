@@ -1,4 +1,4 @@
-.PHONY: install data train-baseline train-cnn train-distilbert train-codebert train-ensemble train-all eval-all test app cli clean
+.PHONY: install data train-baseline train-cnn train-distilbert train-codebert train-ensemble train-all eval-all test app cli diagrams clean
 
 UV ?= uv
 
@@ -38,6 +38,9 @@ app:
 
 cli:
 	$(UV) run python -m app.cli --help
+
+diagrams:
+	plantuml -tpng -o ../png docs/diagrams/puml/*.puml
 
 clean:
 	rm -rf data/raw data/processed data/splits models_saved db .venv

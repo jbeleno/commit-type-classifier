@@ -1,0 +1,77 @@
+@startuml 02_er_diagram
+' Figure 2 — Entity-Relationship Diagram
+' Persistence layer:  models  predictions  batch_runs  (SQLite, single-file)
+
+skinparam backgroundColor #0F172A
+skinparam shadowing false
+skinparam defaultFontName "Fira Sans"
+skinparam defaultFontColor #F8FAFC
+
+skinparam class {
+  BorderColor rgba(148,163,184,0.30)
+  BackgroundColor #1E293B
+  ArrowColor #38BDF8
+  FontColor #F8FAFC
+  AttributeFontColor #CBD5E1
+  AttributeFontName "Fira Code"
+  StereotypeFontColor #38BDF8
+}
+skinparam stereotypeCBackgroundColor #38BDF8
+
+hide circle
+hide methods
+
+title C2 Persistence Schema — Entity-Relationship
+
+entity "models" as M <<table>> {
+  + id           : INTEGER  <<PK, autoinc>>
+  --
+    name          : VARCHAR(64)   <<UNIQUE>>
+    version       : VARCHAR(32)
+    trained_at    : DATETIME
+    accuracy_test : FLOAT
+    macro_f1_test : FLOAT
+    notes         : TEXT
+}
+
+entity "batch_runs" as B <<table>> {
+  + id           : INTEGER  <<PK, autoinc>>
+  --
+    ts            : DATETIME
+    repo_path     : VARCHAR(512)
+    n_commits     : INTEGER
+  # model_id      : INTEGER  <<FK -> models.id>>
+}
+
+entity "predictions" as P <<table>> {
+  + id              : INTEGER  <<PK, autoinc>>
+  --
+    ts               : DATETIME
+  # model_id         : INTEGER  <<FK -> models.id>>
+  # batch_run_id     : INTEGER  <<FK -> batch_runs.id, nullable>>
+    message_preview  : VARCHAR(280)
+    diff_preview     : VARCHAR(280)
+    predicted_label  : VARCHAR(32)
+    confidence       : FLOAT
+    probabilities    : JSON
+    source           : VARCHAR(32)
+}
+
+M "1" -- "0..*" P : produces >
+M "1" -- "0..*" B : runs as >
+B "1" -- "0..*" P : groups >
+
+note right of M
+  Auto-populated on first reference
+  (log_prediction creates the row
+  if it doesn't exist).
+end note
+
+note right of P
+  source ∈ { "gui", "cli",
+             "repo-scan", "test" }
+  batch_run_id is NULL for single
+  predictions; set for repo scans.
+end note
+
+@enduml
