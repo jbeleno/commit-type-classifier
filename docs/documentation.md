@@ -3,7 +3,7 @@ title: "Commit Type Classifier"
 subtitle: "Component 2 — AI for Software Engineering"
 author:
   - "Jesús Beleño"
-  - "_partner name to be added_"
+  - "Juan Forero"
 date: "2026-05-18"
 abstract: |
   This document reports the design, implementation and evaluation of an

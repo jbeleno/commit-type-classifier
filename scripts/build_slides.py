@@ -231,7 +231,7 @@ def slide_01_title(p):
         add_chip(s, label, 0.9 + i * 1.15, 3.6, w=1.0)
 
     # Authors / course block
-    add_text(s, "Jesús Beleño  ·  _partner name_", 0.9, 5.0, 12, 0.4,
+    add_text(s, "Jesús Beleño  ·  Juan Forero", 0.9, 5.0, 12, 0.4,
              font_size=18, color=INK, font_name=FONT_SANS, bold=True)
     add_text(s, "BEINSOF52 · Artificial Intelligence  ·  Advisor: Juan Antonio Castro Silva",
              0.9, 5.4, 12, 0.4, font_size=13, color=INK_2, font_name=FONT_MONO)
@@ -484,7 +484,7 @@ def slide_09_thanks(p):
              font_size=56, color=INK, font_name=FONT_SANS, bold=True)
     add_text(s, "Commit Type Classifier  ·  Component 2", 0.9, 3.7, 12, 0.5,
              font_size=20, color=INK_2, font_name=FONT_SANS)
-    add_text(s, "Jesús Beleño  ·  _partner name_", 0.9, 4.2, 12, 0.5,
+    add_text(s, "Jesús Beleño  ·  Juan Forero", 0.9, 4.2, 12, 0.5,
              font_size=15, color=INK_3, font_name=FONT_MONO)
 
     add_card(s, 0.9, 5.2, 11.5, 1.2, gutter=RING)
