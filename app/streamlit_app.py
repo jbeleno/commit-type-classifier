@@ -477,6 +477,106 @@ def _trained_models() -> list[str]:
 # ---------------------------------------------------------------------------
 
 
+def tab_chat() -> None:
+    """Agentic chat — conversational interface backed by tool-calling LLM."""
+    from src.llm import ollama_client
+    from src.llm.agent import (
+        DEFAULT_AGENT_MODEL,
+        TOOLS,
+        run_agent,
+    )
+
+    models = _ollama_models()
+    if not models:
+        st.markdown(
+            '<div class="state-error">Ollama daemon not reachable. '
+            'Start it with <code>ollama serve</code> and pull at least one model.</div>',
+            unsafe_allow_html=True,
+        )
+        return
+
+    st.markdown('<div class="eyebrow">agentic chat · tools: '
+                + ', '.join(sorted(TOOLS)) + '</div>',
+                unsafe_allow_html=True)
+
+    # Persist chat across reruns
+    if "chat_history" not in st.session_state:
+        st.session_state.chat_history = []
+    if "chat_steps" not in st.session_state:
+        st.session_state.chat_steps = []
+
+    col_l, col_r = st.columns([3, 1])
+    with col_r:
+        # default to llama3.2 (best small-model tool caller in our pool)
+        preferred = ["llama3.2:3b-instruct-q4_K_M", "qwen2.5-coder:3b"]
+        default_idx = next((models.index(p) for p in preferred if p in models), 0)
+        agent_model = st.selectbox("agent model", models, index=default_idx,
+                                   help="LLM that decides which tools to call.")
+        if st.button("clear conversation"):
+            st.session_state.chat_history = []
+            st.session_state.chat_steps = []
+            st.rerun()
+
+        st.markdown('<div class="eyebrow" style="margin-top:1rem;">try</div>',
+                    unsafe_allow_html=True)
+        st.markdown(
+            '<div class="muted" style="font-size:0.82rem; line-height:1.5;">'
+            '· "list the models"<br>'
+            '· "classify: fix login bug"<br>'
+            '· "analyze the last 30 commits of /Users/you/repo"<br>'
+            '· "generate a commit for this diff: ..."'
+            '</div>', unsafe_allow_html=True)
+
+    with col_l:
+        # Render chat history
+        for step in st.session_state.chat_steps:
+            if step["role"] == "user":
+                st.markdown(
+                    f'<div class="state-info" style="margin:0.5rem 0;">'
+                    f'<b>you</b><br><span class="mono">{_e(step["content"])}</span>'
+                    f'</div>', unsafe_allow_html=True)
+            elif step["role"] == "tool":
+                args_str = _e(json.dumps(step.get("tool_args") or {}, indent=2, default=str)[:600])
+                result_str = _e(json.dumps(step.get("tool_result") or {}, indent=2, default=str)[:1200])
+                st.markdown(
+                    f'<div class="predict-card" style="border-color:#A78BFA; margin:0.5rem 0;">'
+                    f'<div class="mono" style="color:#A78BFA; font-size:0.85rem;">🔧 tool · {_e(step["tool_name"])}</div>'
+                    f'<details style="margin-top:0.4rem;"><summary class="mono" style="font-size:0.8rem; color:#94A3B8;">args</summary>'
+                    f'<pre class="mono" style="font-size:0.78rem; background:#0B1220; padding:0.5rem; border-radius:4px;">{args_str}</pre>'
+                    f'</details>'
+                    f'<details style="margin-top:0.4rem;" open><summary class="mono" style="font-size:0.8rem; color:#94A3B8;">result</summary>'
+                    f'<pre class="mono" style="font-size:0.78rem; background:#0B1220; padding:0.5rem; border-radius:4px; max-height:280px; overflow:auto;">{result_str}</pre>'
+                    f'</details>'
+                    f'</div>', unsafe_allow_html=True)
+            else:  # assistant
+                st.markdown(
+                    f'<div class="predict-card" style="border-color:#38BDF8; margin:0.5rem 0;">'
+                    f'<div class="mono" style="color:#38BDF8; font-size:0.85rem;">🤖 assistant · {_e(agent_model)} · {step.get("latency_ms", 0):.0f} ms</div>'
+                    f'<div style="margin-top:0.4rem;">{_e(step["content"])}</div>'
+                    f'</div>', unsafe_allow_html=True)
+
+        # Input
+        user_input = st.chat_input("ask the agent — e.g. 'classify the last 50 commits in /path/to/repo'")
+        if user_input:
+            with st.spinner(f"thinking with {agent_model}..."):
+                steps, new_history = run_agent(
+                    user_input,
+                    history=st.session_state.chat_history,
+                    model=agent_model,
+                )
+            for s in steps:
+                st.session_state.chat_steps.append({
+                    "role": s.role,
+                    "content": s.content,
+                    "tool_name": s.tool_name,
+                    "tool_args": s.tool_args,
+                    "tool_result": s.tool_result,
+                    "latency_ms": s.latency_ms,
+                })
+            st.session_state.chat_history = new_history
+            st.rerun()
+
+
 def _ollama_models() -> list[str]:
     try:
         from src.llm import ollama_client
@@ -834,12 +934,13 @@ def main() -> None:
         '</div>',
         unsafe_allow_html=True,
     )
-    tabs = st.tabs(["Generate", "Predict", "Repository", "History", "Metrics"])
-    with tabs[0]: tab_generate()
-    with tabs[1]: tab_predict()
-    with tabs[2]: tab_repo()
-    with tabs[3]: tab_history()
-    with tabs[4]: tab_metrics()
+    tabs = st.tabs(["Chat", "Generate", "Predict", "Repository", "History", "Metrics"])
+    with tabs[0]: tab_chat()
+    with tabs[1]: tab_generate()
+    with tabs[2]: tab_predict()
+    with tabs[3]: tab_repo()
+    with tabs[4]: tab_history()
+    with tabs[5]: tab_metrics()
 
 
 if __name__ == "__main__":

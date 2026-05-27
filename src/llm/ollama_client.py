@@ -45,6 +45,53 @@ def list_models(host: str = OLLAMA_HOST) -> list[str]:
     return [m["name"] for m in r.json().get("models", [])]
 
 
+def chat(
+    model: str,
+    messages: list[Dict[str, Any]],
+    *,
+    tools: Optional[list[Dict[str, Any]]] = None,
+    temperature: float = 0.2,
+    top_p: float = 0.9,
+    max_tokens: int = 512,
+    seed: Optional[int] = 42,
+    fmt: Optional[str] = None,
+    host: str = OLLAMA_HOST,
+    timeout: int = DEFAULT_TIMEOUT,
+) -> Dict[str, Any]:
+    """Conversational call to Ollama's /api/chat with optional tool definitions.
+
+    Returns the raw ``message`` dict from Ollama, which may include
+    ``tool_calls`` if the model decided to call one.
+    """
+    payload: Dict[str, Any] = {
+        "model": model,
+        "messages": messages,
+        "stream": False,
+        "options": {
+            "temperature": temperature,
+            "top_p": top_p,
+            "num_predict": max_tokens,
+            "seed": seed,
+        },
+    }
+    if tools:
+        payload["tools"] = tools
+    if fmt:
+        payload["format"] = fmt
+
+    t0 = time.perf_counter()
+    r = requests.post(f"{host}/api/chat", json=payload, timeout=timeout)
+    elapsed = (time.perf_counter() - t0) * 1000
+    if r.status_code != 200:
+        raise OllamaError(f"Ollama returned {r.status_code}: {r.text[:200]}")
+    data = r.json()
+    msg = data.get("message", {})
+    msg["_latency_ms"] = elapsed
+    msg["_prompt_tokens"] = int(data.get("prompt_eval_count", 0) or 0)
+    msg["_completion_tokens"] = int(data.get("eval_count", 0) or 0)
+    return msg
+
+
 def generate(
     model: str,
     prompt: str,
