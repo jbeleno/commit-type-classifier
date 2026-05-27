@@ -477,6 +477,118 @@ def _trained_models() -> list[str]:
 # ---------------------------------------------------------------------------
 
 
+def _ollama_models() -> list[str]:
+    try:
+        from src.llm import ollama_client
+
+        if not ollama_client.is_alive():
+            return []
+        return ollama_client.list_models()
+    except Exception:
+        return []
+
+
+def tab_generate() -> None:
+    """LLM-based commit-message generation from a diff (hybrid: RAG + LLM + verifier)."""
+    models = _ollama_models()
+    if not models:
+        st.markdown(
+            '<div class="state-error">Ollama daemon not reachable. '
+            'Start it with <code>ollama serve</code> and pull a model with '
+            '<code>ollama pull qwen2.5-coder:3b</code>.</div>',
+            unsafe_allow_html=True,
+        )
+        return
+
+    st.markdown('<div class="eyebrow">generate conventional commit from diff (local llm)</div>', unsafe_allow_html=True)
+
+    col_l, col_r = st.columns([2.2, 1])
+    with col_r:
+        preferred = ["qwen2.5-coder:3b", "llama3.2:3b-instruct-q4_K_M", "qwen2.5-coder:1.5b"]
+        default_idx = next((models.index(p) for p in preferred if p in models), 0)
+        model_name = st.selectbox("ollama model", models, index=default_idx)
+        mode = st.selectbox(
+            "mode",
+            ["hybrid (rag + llm + verifier)", "zero_shot", "few_shot", "chain_of_thought", "json_mode"],
+            index=0,
+        )
+        temperature = st.slider("temperature", 0.0, 1.0, 0.2, 0.05)
+        show_retrieved = st.checkbox("show retrieved similar commits", value=True)
+
+    with col_l:
+        diff = st.text_area(
+            "diff",
+            value="",
+            height=260,
+            placeholder=(
+                "diff --git a/auth.py b/auth.py\n"
+                "@@ -10,3 +10,7 @@\n"
+                "-def login(user, pwd):\n"
+                "-    return check(user, pwd)\n"
+                "+def login(user, pwd):\n"
+                "+    if not user or not pwd:\n"
+                "+        raise ValueError('missing creds')\n"
+                "+    return check(user, pwd)\n"
+            ),
+        )
+
+    if st.button("generate", type="primary"):
+        if not diff.strip():
+            st.markdown('<div class="state-error">Paste a diff first.</div>', unsafe_allow_html=True)
+            return
+
+        with st.spinner(f"running {model_name} ({mode})..."):
+            if mode.startswith("hybrid"):
+                from src.llm.hybrid import hybrid_generate
+
+                r = hybrid_generate(diff, model=model_name, temperature=temperature)
+                color = CLASS_COLORS.get(r.final_type, "#94A3B8")
+                st.markdown(
+                    f'<div class="predict-card" style="border-color:{color}">'
+                    f'  <div class="mono" style="font-size:1.4rem; color:{color}; margin-bottom:8px;">{_e(r.final_message)}</div>'
+                    f'  <div class="muted" style="font-size:0.85rem;">'
+                    f'    llm_type={_e(r.llm_type or "—")} · verifier_type={_e(r.verifier_type)} '
+                    f'({r.verifier_confidence:.2%}) · '
+                    f'type_changed={"yes" if r.type_changed else "no"}'
+                    f'  </div>'
+                    f'  <div class="muted" style="font-size:0.85rem;">'
+                    f'    latency total={r.latency_ms_total:.0f} ms · llm={r.latency_ms_llm:.0f} ms · model={_e(r.model)}'
+                    f'  </div>'
+                    f'</div>',
+                    unsafe_allow_html=True,
+                )
+                if show_retrieved and r.retrieved:
+                    st.markdown('<div class="eyebrow">retrieved similar commits (RAG)</div>', unsafe_allow_html=True)
+                    for ex in r.retrieved:
+                        st.markdown(
+                            f'<div class="state-info">'
+                            f'  <span class="mono">[score={ex.score:.3f}]</span> '
+                            f'  {chip(ex.type)} <span class="mono">{_e(ex.subject[:120])}</span>'
+                            f'</div>',
+                            unsafe_allow_html=True,
+                        )
+            else:
+                from src.llm.generator import generate_commit_message
+
+                gc = generate_commit_message(
+                    diff, model=model_name, strategy=mode, temperature=temperature
+                )
+                color = CLASS_COLORS.get(gc.parsed_type, "#94A3B8") if gc.parsed_type else "#94A3B8"
+                st.markdown(
+                    f'<div class="predict-card" style="border-color:{color}">'
+                    f'  <div class="mono" style="font-size:1.4rem; color:{color}; margin-bottom:8px;">{_e(gc.one_liner)}</div>'
+                    f'  <div class="muted" style="font-size:0.85rem;">'
+                    f'    parsed_type={_e(gc.parsed_type or "—")} · strategy={_e(gc.strategy)} · '
+                    f'    latency={gc.latency_ms:.0f} ms · tokens={gc.completion_tokens}'
+                    f'  </div>'
+                    f'</div>',
+                    unsafe_allow_html=True,
+                )
+
+        st.markdown('<div class="eyebrow">diff</div>', unsafe_allow_html=True)
+        st.markdown(render_diff_block(diff), unsafe_allow_html=True)
+
+
 def tab_predict() -> None:
     trained = _trained_models()
     if not trained:
@@ -705,11 +817,12 @@ def main() -> None:
         '</div>',
         unsafe_allow_html=True,
     )
-    tabs = st.tabs(["Predict", "Repository", "History", "Metrics"])
-    with tabs[0]: tab_predict()
-    with tabs[1]: tab_repo()
-    with tabs[2]: tab_history()
-    with tabs[3]: tab_metrics()
+    tabs = st.tabs(["Generate", "Predict", "Repository", "History", "Metrics"])
+    with tabs[0]: tab_generate()
+    with tabs[1]: tab_predict()
+    with tabs[2]: tab_repo()
+    with tabs[3]: tab_history()
+    with tabs[4]: tab_metrics()
 
 
 if __name__ == "__main__":

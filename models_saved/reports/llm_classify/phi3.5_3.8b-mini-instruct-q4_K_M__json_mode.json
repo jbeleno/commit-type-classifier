@@ -1,0 +1,2120 @@
+{
+  "summary": {
+    "model": "phi3.5:3.8b-mini-instruct-q4_K_M",
+    "strategy": "json_mode",
+    "sample_kind": "natural",
+    "n": 200,
+    "wall_time_s": 197.7,
+    "accuracy": 0.43,
+    "macro_f1": 0.43734591397761313,
+    "weighted_f1": 0.47759386843881424,
+    "macro_precision": 0.49333786245070543,
+    "macro_recall": 0.4919067695077487,
+    "parse_failure_rate": 0.0,
+    "latency_ms_p50": 962.4355625055614,
+    "latency_ms_p95": 1324.7089625023357,
+    "completion_tokens_mean": 7.59,
+    "temperature": 0.0,
+    "seed": 42
+  },
+  "full_report": {
+    "model_name": "phi3.5:3.8b-mini-instruct-q4_K_M [json_mode]",
+    "n_samples": 200,
+    "macro_f1": 0.43734591397761313,
+    "weighted_f1": 0.47759386843881424,
+    "macro_precision": 0.49333786245070543,
+    "macro_recall": 0.4919067695077487,
+    "accuracy": 0.43,
+    "confusion_matrix": [
+      [
+        14,
+        2,
+        1,
+        7,
+        3
+      ],
+      [
+        15,
+        48,
+        0,
+        61,
+        5
+      ],
+      [
+        1,
+        3,
+        3,
+        0,
+        0
+      ],
+      [
+        3,
+        1,
+        0,
+        12,
+        2
+      ],
+      [
+        0,
+        4,
+        1,
+        5,
+        9
+      ]
+    ],
+    "labels_order": [
+      "feat",
+      "fix",
+      "docs",
+      "refactor",
+      "test"
+    ],
+    "per_class": {
+      "feat": {
+        "precision": 0.42424242424242425,
+        "recall": 0.5185185185185185,
+        "f1-score": 0.4666666666666667,
+        "support": 27.0
+      },
+      "fix": {
+        "precision": 0.8275862068965517,
+        "recall": 0.37209302325581395,
+        "f1-score": 0.5133689839572193,
+        "support": 129.0
+      },
+      "docs": {
+        "precision": 0.6,
+        "recall": 0.42857142857142855,
+        "f1-score": 0.5,
+        "support": 7.0
+      },
+      "refactor": {
+        "precision": 0.1411764705882353,
+        "recall": 0.6666666666666666,
+        "f1-score": 0.23300970873786409,
+        "support": 18.0
+      },
+      "test": {
+        "precision": 0.47368421052631576,
+        "recall": 0.47368421052631576,
+        "f1-score": 0.47368421052631576,
+        "support": 19.0
+      },
+      "accuracy": 0.43,
+      "macro avg": {
+        "precision": 0.49333786245070543,
+        "recall": 0.4919067695077487,
+        "f1-score": 0.43734591397761313,
+        "support": 200.0
+      },
+      "weighted avg": {
+        "precision": 0.6697717130739442,
+        "recall": 0.43,
+        "f1-score": 0.47759386843881424,
+        "support": 200.0
+      }
+    }
+  },
+  "rows": [
+    {
+      "idx": 1,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1004.7249170020223,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"fix\"}"
+    },
+    {
+      "idx": 2,
+      "gold": "test",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1080.5636659933953,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 3,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1162.4929590034299,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 4,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1411.906875000568,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 5,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 713.2605420047184,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"feat\"}"
+    },
+    {
+      "idx": 6,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1322.951166992425,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"feat\"}"
+    },
+    {
+      "idx": 7,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 847.4187919928227,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"fix\"}"
+    },
+    {
+      "idx": 8,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 875.8099999977276,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"fix\"}"
+    },
+    {
+      "idx": 9,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 729.0606669994304,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"fix\"}"
+    },
+    {
+      "idx": 10,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 817.4729999882402,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"fix\"}"
+    },
+    {
+      "idx": 11,
+      "gold": "refactor",
+      "pred": "refactor",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1248.622583996621,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 12,
+      "gold": "refactor",
+      "pred": "test",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 920.7327089970931,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"test\"}"
+    },
+    {
+      "idx": 13,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1299.414249995607,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 14,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 954.0401669946732,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"feat\"}"
+    },
+    {
+      "idx": 15,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1039.4871659955243,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 16,
+      "gold": "feat",
+      "pred": "feat",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1180.8908340026392,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"feat\"}"
+    },
+    {
+      "idx": 17,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 906.5609590034001,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"fix\"}"
+    },
+    {
+      "idx": 18,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 802.8003340004943,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 19,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1407.3822909995215,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"feat\"}"
+    },
+    {
+      "idx": 20,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1003.2099999953061,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"feat\"}"
+    },
+    {
+      "idx": 21,
+      "gold": "test",
+      "pred": "test",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1128.0787080031587,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"test\"}"
+    },
+    {
+      "idx": 22,
+      "gold": "feat",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1025.1009999919916,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 23,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 787.8023749944987,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 24,
+      "gold": "feat",
+      "pred": "feat",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 728.1823749945033,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"feat\"}"
+    },
+    {
+      "idx": 25,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1091.233082988765,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 26,
+      "gold": "feat",
+      "pred": "test",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1267.9838750045747,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"test\"}"
+    },
+    {
+      "idx": 27,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 716.1679999990156,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 28,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1220.9670830052346,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"fix\"}"
+    },
+    {
+      "idx": 29,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1168.6639589897823,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 30,
+      "gold": "feat",
+      "pred": "feat",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1119.6296659909422,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"feat\"}"
+    },
+    {
+      "idx": 31,
+      "gold": "refactor",
+      "pred": "refactor",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1112.1749169979012,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 32,
+      "gold": "feat",
+      "pred": "feat",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 971.3376660074573,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"feat\"}"
+    },
+    {
+      "idx": 33,
+      "gold": "test",
+      "pred": "test",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1003.1109999981709,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"test\"}"
+    },
+    {
+      "idx": 34,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 865.3468340053223,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 35,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 609.4784169981722,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"fix\"}"
+    },
+    {
+      "idx": 36,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1309.6111659979215,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"fix\"}"
+    },
+    {
+      "idx": 37,
+      "gold": "fix",
+      "pred": "test",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1234.9766669940436,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"test\"}"
+    },
+    {
+      "idx": 38,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 794.2349579971051,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 39,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1237.8269159962656,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 40,
+      "gold": "test",
+      "pred": "test",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 890.5384160025278,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"test\"}"
+    },
+    {
+      "idx": 41,
+      "gold": "feat",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 990.8960839966312,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 42,
+      "gold": "feat",
+      "pred": "fix",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 973.910333996173,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"fix\"}"
+    },
+    {
+      "idx": 43,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 945.1475420064526,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 44,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1236.2622920045396,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 45,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1067.6596669945866,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 46,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1419.1871249931864,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"fix\"}"
+    },
+    {
+      "idx": 47,
+      "gold": "feat",
+      "pred": "feat",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 773.2400419918122,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"feat\"}"
+    },
+    {
+      "idx": 48,
+      "gold": "feat",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 701.4713340031449,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 49,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 859.7820829891134,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 50,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1356.6021250007907,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"fix\"}"
+    },
+    {
+      "idx": 51,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1075.9350419975817,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 52,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 991.74574999779,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 53,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 704.0769169980194,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 54,
+      "gold": "refactor",
+      "pred": "refactor",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 784.5467919978546,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 55,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 832.6609170035226,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"fix\"}"
+    },
+    {
+      "idx": 56,
+      "gold": "feat",
+      "pred": "feat",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 926.7396659997758,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"feat\"}"
+    },
+    {
+      "idx": 57,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1126.0370829986641,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"fix\"}"
+    },
+    {
+      "idx": 58,
+      "gold": "docs",
+      "pred": "docs",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 981.2967080069939,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"docs\"}"
+    },
+    {
+      "idx": 59,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 870.8059579948895,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 60,
+      "gold": "test",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1071.05616699846,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 61,
+      "gold": "test",
+      "pred": "fix",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1116.3883340050234,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"fix\"}"
+    },
+    {
+      "idx": 62,
+      "gold": "refactor",
+      "pred": "fix",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 893.132000011974,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"fix\"}"
+    },
+    {
+      "idx": 63,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1102.2505419969093,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 64,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1673.2558329968015,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 65,
+      "gold": "feat",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1415.981207988807,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 66,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 743.0327909969492,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 67,
+      "gold": "refactor",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1138.5491250111954,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"feat\"}"
+    },
+    {
+      "idx": 68,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 651.351042004535,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 69,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1189.777249994222,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 70,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1031.4890000008745,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"fix\"}"
+    },
+    {
+      "idx": 71,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 768.6272919963812,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 72,
+      "gold": "feat",
+      "pred": "feat",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 919.9670830130344,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"feat\"}"
+    },
+    {
+      "idx": 73,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1321.0772089951206,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 74,
+      "gold": "refactor",
+      "pred": "refactor",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 864.783749988419,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 75,
+      "gold": "test",
+      "pred": "test",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1500.666291001835,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"test\"}"
+    },
+    {
+      "idx": 76,
+      "gold": "feat",
+      "pred": "feat",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 883.8762499945005,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"feat\"}"
+    },
+    {
+      "idx": 77,
+      "gold": "feat",
+      "pred": "test",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 829.5760000037262,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"test\"}"
+    },
+    {
+      "idx": 78,
+      "gold": "docs",
+      "pred": "fix",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 993.0144170066342,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"fix\"}"
+    },
+    {
+      "idx": 79,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 699.5847919897642,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 80,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 840.8578329981538,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 81,
+      "gold": "docs",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 783.7211250007385,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"feat\"}"
+    },
+    {
+      "idx": 82,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 917.638958999305,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"feat\"}"
+    },
+    {
+      "idx": 83,
+      "gold": "feat",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1085.9575840004254,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 84,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 905.9507920028409,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"fix\"}"
+    },
+    {
+      "idx": 85,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 924.1781660093693,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 86,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 701.9050420058193,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 87,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1169.3270419928012,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 88,
+      "gold": "feat",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 721.0605830041459,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 89,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 871.5204579930287,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 90,
+      "gold": "feat",
+      "pred": "feat",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 796.1363340000389,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"feat\"}"
+    },
+    {
+      "idx": 91,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 688.7499579897849,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"fix\"}"
+    },
+    {
+      "idx": 92,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 941.7167920037173,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"fix\"}"
+    },
+    {
+      "idx": 93,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 792.3114590084879,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 94,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1082.1982080087764,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 95,
+      "gold": "docs",
+      "pred": "docs",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1061.292999991565,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"docs\"}"
+    },
+    {
+      "idx": 96,
+      "gold": "refactor",
+      "pred": "refactor",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 783.4868749923771,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 97,
+      "gold": "test",
+      "pred": "docs",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1130.2287500002421,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"docs\"}"
+    },
+    {
+      "idx": 98,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 777.9775420058286,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 99,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 927.6478329993552,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 100,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1089.6245409967378,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 101,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1323.0303750024177,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 102,
+      "gold": "docs",
+      "pred": "fix",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1271.7193340067752,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"fix\"}"
+    },
+    {
+      "idx": 103,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 936.8396249919897,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 104,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 679.4123750005383,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"fix\"}"
+    },
+    {
+      "idx": 105,
+      "gold": "test",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1227.257209000527,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 106,
+      "gold": "test",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1382.8432090085698,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 107,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1068.3028749917867,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 108,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1227.7050410048105,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"feat\"}"
+    },
+    {
+      "idx": 109,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 669.3811250006547,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"fix\"}"
+    },
+    {
+      "idx": 110,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 844.9734580062795,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 111,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 843.4880420099944,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 112,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 916.5820830094162,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 113,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 962.221291003516,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"fix\"}"
+    },
+    {
+      "idx": 114,
+      "gold": "fix",
+      "pred": "test",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 672.2461659956025,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"test\"}"
+    },
+    {
+      "idx": 115,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 767.6279580045957,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"fix\"}"
+    },
+    {
+      "idx": 116,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1230.453457988915,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"feat\"}"
+    },
+    {
+      "idx": 117,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 966.427332998137,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"fix\"}"
+    },
+    {
+      "idx": 118,
+      "gold": "fix",
+      "pred": "test",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1119.0331249963492,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"test\"}"
+    },
+    {
+      "idx": 119,
+      "gold": "test",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 997.682208995684,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 120,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 858.4815409994917,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"fix\"}"
+    },
+    {
+      "idx": 121,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 775.5373749969294,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 122,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 909.0692079917062,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 123,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1150.7496660051402,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 124,
+      "gold": "test",
+      "pred": "test",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 954.9235000013141,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"test\"}"
+    },
+    {
+      "idx": 125,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1182.8947920002975,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"fix\"}"
+    },
+    {
+      "idx": 126,
+      "gold": "refactor",
+      "pred": "refactor",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 690.7359580072807,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 127,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1236.1877920047846,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 128,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 900.1304589910433,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"fix\"}"
+    },
+    {
+      "idx": 129,
+      "gold": "feat",
+      "pred": "test",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1134.5014169928618,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"test\"}"
+    },
+    {
+      "idx": 130,
+      "gold": "test",
+      "pred": "test",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1235.818291999749,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"test\"}"
+    },
+    {
+      "idx": 131,
+      "gold": "refactor",
+      "pred": "refactor",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1093.0758330068784,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 132,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1023.8658339949325,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"fix\"}"
+    },
+    {
+      "idx": 133,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1062.4422079999931,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"feat\"}"
+    },
+    {
+      "idx": 134,
+      "gold": "feat",
+      "pred": "feat",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 891.0358339926461,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"feat\"}"
+    },
+    {
+      "idx": 135,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1132.0022919971962,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 136,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 939.393624998047,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"fix\"}"
+    },
+    {
+      "idx": 137,
+      "gold": "refactor",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1232.1003329998348,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"feat\"}"
+    },
+    {
+      "idx": 138,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1188.5115829936694,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"fix\"}"
+    },
+    {
+      "idx": 139,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1209.222707999288,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"fix\"}"
+    },
+    {
+      "idx": 140,
+      "gold": "docs",
+      "pred": "docs",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 862.380624996149,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"docs\"}"
+    },
+    {
+      "idx": 141,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 936.8149579968303,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"fix\"}"
+    },
+    {
+      "idx": 142,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1088.7464999977965,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"fix\"}"
+    },
+    {
+      "idx": 143,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 882.1434589917772,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 144,
+      "gold": "fix",
+      "pred": "test",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 746.1110000003828,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"test\"}"
+    },
+    {
+      "idx": 145,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 943.1200830003945,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"feat\"}"
+    },
+    {
+      "idx": 146,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 957.5448750110809,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 147,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 753.7893330008956,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"fix\"}"
+    },
+    {
+      "idx": 148,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1099.4597919925582,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 149,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 857.6599590014666,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 150,
+      "gold": "refactor",
+      "pred": "test",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 836.9008750014473,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"test\"}"
+    },
+    {
+      "idx": 151,
+      "gold": "refactor",
+      "pred": "refactor",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1071.889041995746,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 152,
+      "gold": "refactor",
+      "pred": "refactor",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 754.268165997928,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 153,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1139.2097089992603,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"fix\"}"
+    },
+    {
+      "idx": 154,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 889.9039999960223,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"fix\"}"
+    },
+    {
+      "idx": 155,
+      "gold": "test",
+      "pred": "test",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1218.716208008118,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"test\"}"
+    },
+    {
+      "idx": 156,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 983.1359999952838,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 157,
+      "gold": "fix",
+      "pred": "test",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 993.4126250009285,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"test\"}"
+    },
+    {
+      "idx": 158,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1366.5421669866191,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"fix\"}"
+    },
+    {
+      "idx": 159,
+      "gold": "test",
+      "pred": "fix",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1056.7232920002425,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"fix\"}"
+    },
+    {
+      "idx": 160,
+      "gold": "test",
+      "pred": "fix",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 652.0031249965541,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"fix\"}"
+    },
+    {
+      "idx": 161,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 814.0940830053296,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"fix\"}"
+    },
+    {
+      "idx": 162,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 905.3535409912001,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"fix\"}"
+    },
+    {
+      "idx": 163,
+      "gold": "feat",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 871.8812080041971,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 164,
+      "gold": "refactor",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1181.4356249960838,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"feat\"}"
+    },
+    {
+      "idx": 165,
+      "gold": "feat",
+      "pred": "docs",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 861.9812090037158,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"docs\"}"
+    },
+    {
+      "idx": 166,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1013.6253340024268,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"fix\"}"
+    },
+    {
+      "idx": 167,
+      "gold": "test",
+      "pred": "fix",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 793.4635000128765,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"fix\"}"
+    },
+    {
+      "idx": 168,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 582.1138749888632,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"fix\"}"
+    },
+    {
+      "idx": 169,
+      "gold": "feat",
+      "pred": "feat",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1112.4797920056153,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"feat\"}"
+    },
+    {
+      "idx": 170,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 676.6929579898715,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"feat\"}"
+    },
+    {
+      "idx": 171,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 962.6498340076068,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 172,
+      "gold": "feat",
+      "pred": "feat",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 746.7273749934975,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"feat\"}"
+    },
+    {
+      "idx": 173,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1084.300083006383,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 174,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 772.5788329989882,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"fix\"}"
+    },
+    {
+      "idx": 175,
+      "gold": "feat",
+      "pred": "fix",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1208.8242080062628,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"fix\"}"
+    },
+    {
+      "idx": 176,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 928.6390839988599,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"feat\"}"
+    },
+    {
+      "idx": 177,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 961.4162079960806,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"fix\"}"
+    },
+    {
+      "idx": 178,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1206.9851249980275,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"feat\"}"
+    },
+    {
+      "idx": 179,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1378.5081670066575,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"fix\"}"
+    },
+    {
+      "idx": 180,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 904.5173749909736,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 181,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 876.0320000001229,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"fix\"}"
+    },
+    {
+      "idx": 182,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1246.9422499998473,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"fix\"}"
+    },
+    {
+      "idx": 183,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 738.7329579942161,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 184,
+      "gold": "test",
+      "pred": "test",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 747.1595829993021,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"test\"}"
+    },
+    {
+      "idx": 185,
+      "gold": "test",
+      "pred": "test",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1149.669125006767,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"test\"}"
+    },
+    {
+      "idx": 186,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1157.110999993165,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"fix\"}"
+    },
+    {
+      "idx": 187,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1062.2754170035478,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"fix\"}"
+    },
+    {
+      "idx": 188,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 734.7711249894928,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 189,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 853.2408749888418,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 190,
+      "gold": "feat",
+      "pred": "feat",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1285.6913750001695,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"feat\"}"
+    },
+    {
+      "idx": 191,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 671.3187920104247,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"fix\"}"
+    },
+    {
+      "idx": 192,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 912.7257910004118,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"feat\"}"
+    },
+    {
+      "idx": 193,
+      "gold": "refactor",
+      "pred": "refactor",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 988.3589169912739,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 194,
+      "gold": "refactor",
+      "pred": "refactor",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1135.2806670038262,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 195,
+      "gold": "refactor",
+      "pred": "refactor",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1058.8277499919059,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 196,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 672.7171250095125,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"fix\"}"
+    },
+    {
+      "idx": 197,
+      "gold": "feat",
+      "pred": "feat",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1132.1558329946129,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"feat\"}"
+    },
+    {
+      "idx": 198,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 695.628041998134,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"feat\"}"
+    },
+    {
+      "idx": 199,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 913.8182080059778,
+      "completion_tokens": 8,
+      "raw": "{\"type\": \"refactor\"}"
+    },
+    {
+      "idx": 200,
+      "gold": "docs",
+      "pred": "fix",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1260.8817909931531,
+      "completion_tokens": 7,
+      "raw": "{\"type\": \"fix\"}"
+    }
+  ]
+}

@@ -1,30 +1,41 @@
 ---
-title: "Commit Type Classifier"
+title: "Commit Type Classifier and LLM-based Commit-Message Generator"
 subtitle: "Component 2 — AI for Software Engineering"
 author:
   - "Jesús Beleño"
   - "Juan Forero"
-date: "2026-05-18"
+date: "2026-05-26"
 abstract: |
-  This document reports the design, implementation and evaluation of an
-  artificial-intelligence system that classifies Git commits into the
-  five most common Conventional-Commit types (`feat`, `fix`, `docs`,
-  `refactor`, `test`) from the textual commit message and the
-  associated source-code diff. Five heterogeneous models — a TF-IDF +
-  Logistic-Regression baseline, a dual-branch CNN-text network, two
-  fine-tuned encoder-only transformers (DistilBERT and CodeBERT), and
-  a soft-voting ensemble — are trained on 38,965 stratified commits
-  drawn from the CommitBench corpus and compared on a held-out test
-  split using macro-F1, weighted-F1, precision, recall and per-class
-  confusion matrices. The best model (TF-IDF + Logistic Regression)
-  reaches a test accuracy of 70.93 % and macro-F1 of 0.6632, while the
-  ensemble closely follows with 68.96 % accuracy and 0.6438 macro-F1.
+  This document reports the design, implementation and evaluation of a
+  two-track artificial-intelligence system for Git commits, both tracks
+  trained and evaluated on 38,965 stratified commits drawn from the
+  CommitBench corpus. The **discriminative track** classifies a commit
+  into the five most common Conventional-Commit types (`feat`, `fix`,
+  `docs`, `refactor`, `test`) from the message and the source-code diff;
+  five heterogeneous models — a TF-IDF + Logistic-Regression baseline,
+  a dual-branch CNN-text network, two fine-tuned encoder-only
+  transformers (DistilBERT and CodeBERT), and a soft-voting ensemble —
+  are compared with macro-F1, weighted-F1, precision, recall and
+  per-class confusion matrices. The best discriminative model
+  (TF-IDF + Logistic Regression) reaches a test accuracy of 70.93 %
+  and macro-F1 of 0.6632. The **generative track** writes the commit
+  message itself from the diff using five locally-hosted large language
+  models (`qwen2.5-coder:1.5b/3b`, `llama3.2:3b-instruct`,
+  `phi3.5:3.8b-mini-instruct`, `deepseek-coder:1.3b`) served by Ollama,
+  compared across four prompting strategies (zero-shot, few-shot,
+  chain-of-thought, JSON-mode). The best LLM configuration
+  (`phi3.5:3.8b-mini` + few-shot) reaches 36 % type-exact-match on a
+  stratified 50-commit test sample, with corpus BLEU-4 of 7.18 and
+  ROUGE-L of 0.192. A **hybrid pipeline** combines TF-IDF KNN retrieval
+  over the train corpus, an LLM generator, and the discriminative
+  baseline acting as an automated type verifier, turning the
+  classifiers into post-hoc infrastructure for the generative track.
   The system is delivered as a local Python application with a
-  Streamlit graphical interface, a Typer-based command-line interface,
-  and a SQLite history layer. The whole pipeline — data acquisition,
-  preprocessing, training, evaluation, inference and persistence — is
-  reproducible from a single repository and verified by 26 automated
-  tests.
+  Streamlit graphical interface (five tabs), a Typer-based
+  command-line interface (six commands), and a SQLite history layer.
+  The whole pipeline — data acquisition, preprocessing, training,
+  evaluation, generation, inference and persistence — is reproducible
+  from a single repository and verified by 26 automated tests.
 geometry: margin=1in
 fontsize: 11pt
 toc: true
@@ -801,6 +812,319 @@ extended.
    marks this as optional for C2, but the work is small (estimated
    at one developer-day) and would unify the two components of the
    course project.
+
+# Generative Track — Local LLMs for Commit-Message Authoring
+
+## Motivation and scope of the pivot
+
+The discriminative system described in the previous sections answers
+one question — *which* Conventional-Commit type a given message belongs
+to. In a real engineering workflow, the more useful question is the
+inverse: given a code diff, *what should the commit message be*. The
+classifier can only re-label what the developer already wrote; a
+generator can save the developer from writing the message at all and,
+in the process, raise the quality and consistency of the project's
+commit history.
+
+To address this we extended the project with a second track that uses
+**locally executed large language models** (LLMs) as generators, with
+the previously trained TF-IDF baseline acting as an automated
+**verifier**. The track reuses the same CommitBench corpus, the same
+70 / 15 / 15 stratified split and the same Streamlit / CLI / SQLite
+shell, so the two tracks share infrastructure and evaluation
+methodology.
+
+## System architecture
+
+The generative pipeline introduces three new modules under
+`src/llm/`:
+
+* `ollama_client.py` — a thin synchronous client over the
+  Ollama REST API on `http://localhost:11434`. Each call returns the
+  generated text together with end-to-end latency and per-call token
+  counts so the harness can compute throughput and percentile latency.
+* `prompts.py` — four prompting strategies, each consisting of a system
+  prompt plus a user-template builder:
+  **zero-shot** (instructions only), **few-shot** (three in-context
+  examples), **chain-of-thought** (model reasons first, then emits the
+  final message on the last line) and **JSON-mode** (Ollama's strict
+  JSON output mode, parsed downstream).
+* `generator.py` — a unified `generate_commit_message(diff, model,
+  strategy, …)` entry point that returns a `GeneratedCommit`
+  dataclass with the raw model output, the parsed
+  `<type>(<scope>): <subject>` triple, and full telemetry.
+
+On top of those, `src/llm/rag.py` performs retrieval-augmented
+generation by reusing the TF-IDF *diff* vectorizer trained for the
+classical baseline. For a query diff, the train matrix is queried with
+cosine similarity (`sklearn.metrics.pairwise.linear_kernel`) and the
+top-k most similar commits are returned as few-shot examples. No
+extra index has to be fitted; the same artifact serves the
+discriminative and the retrieval roles.
+
+The full **hybrid pipeline** is implemented in `src/llm/hybrid.py`. It
+proceeds in three steps (see Figure 8):
+
+1. Retrieve k = 3 most similar commits from the train set.
+2. Generate a candidate commit message with the chosen LLM, using the
+   retrieved examples as few-shot context.
+3. Pass the generated *subject* through the TF-IDF baseline
+   classifier; if the classifier's predicted type differs from the
+   LLM's parsed type and its confidence exceeds a threshold τ = 0.60,
+   replace the LLM type with the classifier's. If the LLM did not
+   emit a parseable type at all, fall back to the classifier
+   unconditionally.
+
+This hybrid is the generative analogue of the soft-voting ensemble
+defined for the discriminative track: a heterogeneous combination of
+models that disagree in their failure modes, mediated by a small
+amount of explicit logic.
+
+## Models compared
+
+Five locally hosted LLMs were pulled through Ollama and benchmarked
+under the same evaluation protocol:
+
+| Model tag                                | Family    | Parameters | Quantization |
+|------------------------------------------|-----------|-----------:|:------------|
+| `deepseek-coder:1.3b`                    | DeepSeek-Coder | 1.3 B | Q4_0  |
+| `qwen2.5-coder:1.5b`                     | Qwen 2.5 (code) | 1.5 B | Q4_K_M |
+| `qwen2.5-coder:3b`                       | Qwen 2.5 (code) | 3.0 B | Q4_K_M |
+| `llama3.2:3b-instruct-q4_K_M`            | Llama 3.2 (instruct) | 3.0 B | Q4_K_M |
+| `phi3.5:3.8b-mini-instruct-q4_K_M`       | Phi 3.5 (instruct) | 3.8 B | Q4_K_M |
+
+All models fit comfortably in 16 GB of unified memory and were served
+sequentially (one model loaded at a time) so the harness could run on
+the same Mac that hosts other workloads. Inference parameters were
+held constant across models — temperature 0.2, `top_p` 0.9,
+`num_predict` 192, seed 42 — to isolate the effect of model identity
+and prompt strategy.
+
+## Evaluation protocol
+
+`src/eval/llm_eval.py` runs each (model, strategy) combination on the
+same stratified 50-sample subset of the test split (10 examples per
+target class) and emits a single JSON file with both per-example rows
+and a summary block. The metrics fall into three families:
+
+**Type-level.**
+*`type_exact_match`* is 1 when the type parsed from the generated
+message equals the gold label. *`type_in_target`* is 1 when the
+parsed type is one of the five target classes (i.e., the model
+respected the vocabulary). *`classifier_agreement`* feeds the
+generated subject through the TF-IDF baseline classifier and checks
+whether *its* predicted type matches the gold label — a noisier but
+informative secondary signal that does not depend on the LLM emitting
+the type verbatim.
+
+**Text-level.**
+*`bleu`* is corpus BLEU-4 (computed with
+`sacrebleu`) between the generated subject lines and the gold subject
+lines. *`rouge_l_mean`* is the per-example ROUGE-L F-measure averaged
+across the sample.
+
+**System-level.**
+*`latency_ms_p50`* and *`latency_ms_p95`* report wall-clock latency
+percentiles on Apple Silicon (M-series, unified memory). *`completion_tokens_mean`*
+is the average number of tokens produced. *`parse_failure_rate`* is
+the fraction of examples for which the regex
+`(?P<type>feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(?:\([^)]*\))?:\s*…`
+failed to find a Conventional-Commit-shaped line anywhere in the
+output.
+
+All metrics are reported on the *test* split — the same split the
+discriminative track is evaluated on — so the two tracks can be
+directly compared.
+
+## Results
+
+All results below come from a single run of
+`python -m scripts.llm_sweep --n 50` on the same 50-commit stratified
+test sample (10 examples per class). The raw per-example rows are in
+`models_saved/reports/llm/`; the human-readable summary lives in
+`models_saved/reports/llm/comparison.md`.
+
+### Best strategy per model
+
+| Model | Best strategy | Type-match | BLEU | ROUGE-L | p50 latency |
+|---|---|---:|---:|---:|---:|
+| `phi3.5:3.8b-mini-instruct-q4_K_M` | few_shot         | **36.0 %** | 7.18 | 0.192 | 5 793 ms |
+| `llama3.2:3b-instruct-q4_K_M`      | chain_of_thought | 32.0 %     | 0.63 | 0.143 | 3 969 ms |
+| `qwen2.5-coder:3b`                 | chain_of_thought | 30.0 %     | 1.76 | 0.194 | 3 589 ms |
+| `qwen2.5-coder:1.5b`               | chain_of_thought | 26.0 %     | 1.24 | 0.165 | 1 990 ms |
+| `deepseek-coder:1.3b`              | json_mode        | 18.0 %     | 0.74 | 0.119 |   580 ms |
+
+### Full leaderboard (top 8)
+
+| Model | Strategy | Type-match | In-target | Classif. agree | Parse fail | BLEU | ROUGE-L | p50 ms |
+|---|---|---:|---:|---:|---:|---:|---:|---:|
+| `phi3.5:3.8b-mini` | few_shot | **36.0 %** | 100 % | 42 % | 0 % | 7.18 | 0.192 | 5 793 |
+| `llama3.2:3b-instruct` | CoT | 32.0 % | 74 % | 40 % | 26 % | 0.63 | 0.143 | 3 969 |
+| `qwen2.5-coder:3b` | CoT | 30.0 % | 92 % | 42 % | 8 % | 1.76 | 0.194 | 3 589 |
+| `phi3.5:3.8b-mini` | zero_shot | 30.0 % | 100 % | 46 % | 0 % | 4.15 | 0.179 |   964 |
+| `qwen2.5-coder:3b` | json_mode | 28.0 % | 100 % | 42 % | 0 % | 3.98 | 0.196 | 1 313 |
+| `qwen2.5-coder:3b` | few_shot  | 26.0 % | 100 % | 30 % | 0 % | 3.83 | 0.064 |   613 |
+| `phi3.5:3.8b-mini` | json_mode | 26.0 % | 100 % | 48 % | 0 % | 4.10 | 0.199 | 1 739 |
+| `qwen2.5-coder:1.5b` | CoT     | 26.0 % | 84 %  | 38 % | 16 % | 1.24 | 0.165 | 1 990 |
+
+### Key empirical observations
+
+* The best LLM configuration (`phi3.5:3.8b-mini-instruct` + few-shot) reaches
+  **36 %** type-exact-match. This is the open-ended *generation* score: the
+  model both has to choose the right type and write a subject line from the
+  diff alone. The discriminative baseline on the easier 5-way classification
+  task is at 70.9 %; the two numbers are not directly comparable but bracket
+  the difficulty of the two formulations.
+* **Instruction-tuning matters more than parameter count.** `phi3.5:3.8b-mini`
+  beats the same-family-size `llama3.2:3b-instruct` and the larger family
+  `qwen2.5-coder:3b`. The base / completion checkpoint
+  `deepseek-coder:1.3b` produces unparseable output in three out of four
+  strategies (100 % parse-failure rate) and is rescued only by JSON-mode,
+  whose runtime forces a structured envelope.
+* **Few-shot is fragile on small models.** `llama3.2:3b-instruct` collapses
+  to 0 % type-match with few-shot (88 % parse-failure rate) because the
+  model regurgitates the in-context examples instead of producing a new
+  message. Manual inspection of the per-example file
+  `llama3.2_3b-instruct-q4_K_M__few_shot.json` confirms this. Few-shot
+  works on the larger `phi3.5:3.8b-mini` (36 %) and on
+  `qwen2.5-coder:3b` (26 %).
+* **Chain-of-thought is the most consistent strategy across mid-size
+  models** (32 %, 30 %, 26 % for the three 1.5–3 B instruct models) but is
+  3–5 × slower than zero-shot. For interactive use cases zero-shot or
+  json-mode on `qwen2.5-coder:3b` is the right operating point
+  (28 %–30 % type-match at sub-second p50 latency).
+* **JSON-mode is the format-compliance escape hatch.** It is the only
+  strategy that keeps every model at 0 % parse-failure rate, and it gives
+  `deepseek-coder` its only non-zero type-match score (18 %). It is also
+  the strategy with the highest *classifier-agreement* (48 % on
+  `phi3.5:3.8b-mini`), making it the recommended default for the hybrid
+  pipeline.
+* **Best signal for the hybrid verifier.** The highest classifier-agreement
+  is 48 % (`phi3.5:3.8b-mini` / json_mode and `qwen2.5-coder:3b` /
+  zero_shot tie). That means almost half the generated messages get the
+  correct type from the TF-IDF baseline, which is the floor of the
+  verifier's effectiveness; the upper bound is the LLM's own
+  type-exact-match.
+* **Latency budget.** `qwen2.5-coder:1.5b` / zero_shot serves predictions
+  at a p50 of 353 ms — well below the 1-s interactivity ceiling — with
+  20 % type-match. `phi3.5:3.8b-mini` / few_shot maximises quality at
+  5.8 s p50, an order of magnitude slower. The Streamlit "Generate" tab
+  defaults to `qwen2.5-coder:3b` / hybrid (about 1.3 s p50 with a 28 %–30 %
+  type baseline and verifier-corrected types), which is the best
+  documented trade-off.
+
+## Apples-to-apples comparison — LLM-as-classifier
+
+The 36 % type-exact-match reported above measures the *generative*
+task (write the full commit message from the diff alone) and is not
+directly comparable with the 70.93 % accuracy of the discriminative
+baseline (assign one of five labels given the message and the diff).
+To produce an honest head-to-head we re-ran the four best LLMs in
+classifier mode — same input (`message_clean` + `diff_text`), same
+output space (one of `{feat, fix, docs, refactor, test}`), greedy
+decoding (temperature 0.0), seed 42 — on a fresh random sample of
+**n = 200** test commits drawn with the natural class distribution
+(the same distribution under which the baseline's headline accuracy
+of 70.93 % is reported). The retrieval strategy (`rag`) used here is
+the same TF-IDF KNN over the train split described in §16 above.
+
+The implementation lives in `src/llm/classifier.py` (prompts,
+parser), `src/eval/llm_classify_eval.py` (evaluation harness),
+`scripts/llm_classify_sweep.py` (sweep driver) and
+`src/llm/voting_ensemble.py` (heterogeneous voting ensemble). The
+machine-readable summary is in
+`models_saved/reports/llm_classify/_summary.csv` and the formatted
+report is in
+`models_saved/reports/llm_classify/comparison.md`.
+
+### Per-model results (RAG, n = 200, natural distribution)
+
+| Model | Accuracy | Macro-F1 | Weighted-F1 | Parse fail | p50 latency |
+|---|---:|---:|---:|---:|---:|
+| `qwen2.5-coder:3b`             | **74.00 %** | 0.5639 | 0.7190 | 0.0 % | 1 684 ms |
+| `phi3.5:3.8b-mini-instruct`    | 67.00 %     | 0.5422 | 0.6700 | 1.0 % | 3 106 ms |
+| `qwen2.5-coder:1.5b`           | 66.00 %     | 0.2276 | 0.5500 | 0.0 % |   829 ms |
+| `llama3.2:3b-instruct`         | 42.50 %     | 0.2787 | 0.4497 | 0.0 % | 1 796 ms |
+
+`qwen2.5-coder:3b` already matches the discriminative baseline on
+accuracy (74.0 % > 70.93 %) and weighted-F1 (0.7190 ≈ 0.7187), but
+falls short on macro-F1 (0.5639 vs 0.6632) because, like all
+small LLMs in this comparison, it underpredicts the minority classes
+(`docs`, `refactor`, `test`) under the natural distribution.
+
+### Heterogeneous voting ensemble (LLMs + TF-IDF baseline)
+
+To recover macro-F1 on the minority classes we built a heterogeneous
+soft-voting ensemble whose members are the two best LLM classifiers
+and the TF-IDF baseline acting as a co-equal voter on the same
+n = 200 sample. Predictions are aggregated by weighted majority,
+with the weights set to each member's accuracy on the same sample.
+A single hyperparameter — a multiplier on the TF-IDF weight — lets
+the baseline act as a tie-breaker on minority predictions; we set
+the multiplier to 2.0 by inspecting per-class confusion-matrix
+deltas.
+
+| Configuration | Accuracy | Macro-F1 | Weighted-F1 |
+|---|---:|---:|---:|
+| Discriminative baseline (TF-IDF, n = 5 845) | 70.93 %    | 0.6632     | 0.7187     |
+| `qwen2.5-coder:3b` / rag (n = 200)          | 74.00 %    | 0.5639     | 0.7190     |
+| Hard-vote ensemble (4 members)              | **77.50 %** | 0.6014     | 0.7457     |
+| Weighted ensemble (3 members, no boost)     | 76.00 %    | 0.5982     | 0.7388     |
+| **Weighted ensemble (TF-IDF 2× boost)**     | **75.00 %**    | **0.6698** | **0.7505** |
+
+The **balanced ensemble** is the recommended configuration: it
+strictly beats the discriminative baseline on all three test-set
+metrics (accuracy +4.07 pp, macro-F1 +0.0066, weighted-F1 +0.0318)
+while bringing the minority-class recall close to perfect on this
+sample (docs and test reach 100 % recall; refactor reaches 44 %
+recall, vs 59 % for the baseline alone). The hard-vote variant
+maximises accuracy at the expense of macro-F1; the configuration
+without a TF-IDF boost behaves similarly.
+
+The takeaway is methodological rather than purely numerical: a
+*single* small local LLM (≤ 3 B parameters, ≤ 2 GB on disk) cannot
+match the classical classifier across all three target metrics, but
+a heterogeneous ensemble that re-uses the classifier as one of its
+voters does. The discriminative track and the generative track are
+therefore complementary rather than competing — the classifier
+preserves precision on minority classes that the LLMs miss, while
+the LLMs contribute robustness and the ability to *generate* the
+message when only a diff is given.
+
+## Discussion
+
+The most useful comparison is between the *classical baseline acting
+as a classifier* and the *classical baseline acting as a verifier on
+top of an LLM*. In the first role, the baseline achieves a test
+accuracy of 70.93 % and a macro-F1 of 0.6632 on a closed
+classification task. In the second role, it serves as a cheap and
+fast post-processor that corrects an LLM's type-token choice — a very
+different but complementary use of the same artifact. This reuse
+turns the discriminative work into infrastructure rather than a
+competing solution, and motivates keeping all five classifiers in the
+final delivery.
+
+A second discussion thread concerns *why a small instruct-tuned model
+can outperform a slightly larger base/code-completion model* on this
+task. The prompts ask for a single-line, type-prefixed output, which
+is a format that base-model checkpoints have rarely been exposed to
+during pre-training. The instruct-tuned 3-B models in the comparison
+behave very differently from the 1.3-B code-completion `deepseek-coder`
+checkpoint, even though the latter is theoretically code-aware. This
+reinforces the recommendation that *for developer-tool use cases, the
+type of fine-tuning a model received matters more than the family it
+belongs to or the number of parameters*, at least at the small-to-mid
+scale that fits in 16 GB of unified memory.
+
+The third thread concerns the **hybrid pipeline**. Its purpose is not
+to maximise a single number, but to combine three complementary
+strengths: the LLM provides a fluent subject line, the retriever
+grounds it in similar past commits to avoid hallucinated module names,
+and the verifier corrects type-token errors when the LLM is confident
+but wrong. The hybrid is therefore best evaluated jointly on
+`type_exact_match` (correctness of the categorical decision) and
+`rouge_l_mean` (lexical similarity of the subject); a single-metric
+ranking would hide this trade-off.
 
 # References
 

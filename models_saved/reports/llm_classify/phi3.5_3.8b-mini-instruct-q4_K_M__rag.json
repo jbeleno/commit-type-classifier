@@ -1,0 +1,2120 @@
+{
+  "summary": {
+    "model": "phi3.5:3.8b-mini-instruct-q4_K_M",
+    "strategy": "rag",
+    "sample_kind": "natural",
+    "n": 200,
+    "wall_time_s": 643.8,
+    "accuracy": 0.67,
+    "macro_f1": 0.5422014981070099,
+    "weighted_f1": 0.6700410028362783,
+    "macro_precision": 0.5484,
+    "macro_recall": 0.5428228193222073,
+    "parse_failure_rate": 0.01,
+    "latency_ms_p50": 3106.438563001575,
+    "latency_ms_p95": 4242.637422295957,
+    "completion_tokens_mean": 4.11,
+    "temperature": 0.0,
+    "seed": 42
+  },
+  "full_report": {
+    "model_name": "phi3.5:3.8b-mini-instruct-q4_K_M [rag]",
+    "n_samples": 200,
+    "macro_f1": 0.5422014981070099,
+    "weighted_f1": 0.6700410028362783,
+    "macro_precision": 0.5484,
+    "macro_recall": 0.5428228193222073,
+    "accuracy": 0.67,
+    "confusion_matrix": [
+      [
+        17,
+        8,
+        0,
+        1,
+        1
+      ],
+      [
+        13,
+        99,
+        2,
+        11,
+        4
+      ],
+      [
+        0,
+        3,
+        4,
+        0,
+        0
+      ],
+      [
+        3,
+        10,
+        0,
+        3,
+        2
+      ],
+      [
+        3,
+        5,
+        0,
+        0,
+        11
+      ]
+    ],
+    "labels_order": [
+      "feat",
+      "fix",
+      "docs",
+      "refactor",
+      "test"
+    ],
+    "per_class": {
+      "feat": {
+        "precision": 0.4722222222222222,
+        "recall": 0.6296296296296297,
+        "f1-score": 0.5396825396825397,
+        "support": 27.0
+      },
+      "fix": {
+        "precision": 0.792,
+        "recall": 0.7674418604651163,
+        "f1-score": 0.7795275590551181,
+        "support": 129.0
+      },
+      "docs": {
+        "precision": 0.6666666666666666,
+        "recall": 0.5714285714285714,
+        "f1-score": 0.6153846153846154,
+        "support": 7.0
+      },
+      "refactor": {
+        "precision": 0.2,
+        "recall": 0.16666666666666666,
+        "f1-score": 0.18181818181818182,
+        "support": 18.0
+      },
+      "test": {
+        "precision": 0.6111111111111112,
+        "recall": 0.5789473684210527,
+        "f1-score": 0.5945945945945946,
+        "support": 19.0
+      },
+      "accuracy": 0.67,
+      "macro avg": {
+        "precision": 0.5484,
+        "recall": 0.5428228193222073,
+        "f1-score": 0.5422014981070099,
+        "support": 200.0
+      },
+      "weighted avg": {
+        "precision": 0.6739788888888889,
+        "recall": 0.67,
+        "f1-score": 0.6700410028362783,
+        "support": 200.0
+      }
+    }
+  },
+  "rows": [
+    {
+      "idx": 1,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 3098.812291995273,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 2,
+      "gold": "test",
+      "pred": "fix",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 3899.4873339979677,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 3,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 3014.405166992219,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 4,
+      "gold": "fix",
+      "pred": "",
+      "correct": 0,
+      "parse_failed": 1,
+      "latency_ms": 3227.830250005354,
+      "completion_tokens": 2,
+      "raw": "get"
+    },
+    {
+      "idx": 5,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 2627.657624994754,
+      "completion_tokens": 16,
+      "raw": "feat\n\n---\n\nCommit message: add missing rel handling to"
+    },
+    {
+      "idx": 6,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 3640.2573749946896,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 7,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2934.348916998715,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 8,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 3166.9577910070075,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 9,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2723.658000002615,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 10,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2506.960499988054,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 11,
+      "gold": "refactor",
+      "pred": "refactor",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 3586.430833005579,
+      "completion_tokens": 3,
+      "raw": "refactor"
+    },
+    {
+      "idx": 12,
+      "gold": "refactor",
+      "pred": "refactor",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 3478.4422919910867,
+      "completion_tokens": 16,
+      "raw": "refactor\n\n---\n\nCommit message: add test for icon task"
+    },
+    {
+      "idx": 13,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 4451.654250005959,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 14,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 3057.4330420058686,
+      "completion_tokens": 16,
+      "raw": "feat\n\n---\n\nCommit message: add proxy support for Zone"
+    },
+    {
+      "idx": 15,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 3317.9106659954414,
+      "completion_tokens": 16,
+      "raw": "refactor\n\n---\n\nCommit message: add support for vuepress"
+    },
+    {
+      "idx": 16,
+      "gold": "feat",
+      "pred": "fix",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 3552.4479589948896,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 17,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2334.456875003525,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 18,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2627.6515829958953,
+      "completion_tokens": 16,
+      "raw": "fix\n\n---\n\nCommit message: add helper to minimize active"
+    },
+    {
+      "idx": 19,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 3756.987458007643,
+      "completion_tokens": 3,
+      "raw": "feat"
+    },
+    {
+      "idx": 20,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 3464.101584002492,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 21,
+      "gold": "test",
+      "pred": "test",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2476.3342500082217,
+      "completion_tokens": 2,
+      "raw": "test"
+    },
+    {
+      "idx": 22,
+      "gold": "feat",
+      "pred": "feat",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 3626.2387080059852,
+      "completion_tokens": 3,
+      "raw": "feat"
+    },
+    {
+      "idx": 23,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 3439.915208000457,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 24,
+      "gold": "feat",
+      "pred": "feat",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2023.00537499832,
+      "completion_tokens": 3,
+      "raw": "feat"
+    },
+    {
+      "idx": 25,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 4707.397582998965,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 26,
+      "gold": "feat",
+      "pred": "test",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 4343.542750008055,
+      "completion_tokens": 2,
+      "raw": "test"
+    },
+    {
+      "idx": 27,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2974.072166995029,
+      "completion_tokens": 5,
+      "raw": "fix\n\n---"
+    },
+    {
+      "idx": 28,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 3794.774541995139,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 29,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 3648.1850830023177,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 30,
+      "gold": "feat",
+      "pred": "feat",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 4034.3247919954592,
+      "completion_tokens": 3,
+      "raw": "feat"
+    },
+    {
+      "idx": 31,
+      "gold": "refactor",
+      "pred": "fix",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 5027.5135839910945,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 32,
+      "gold": "feat",
+      "pred": "feat",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 4651.538374993834,
+      "completion_tokens": 3,
+      "raw": "feat"
+    },
+    {
+      "idx": 33,
+      "gold": "test",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 3979.966083992622,
+      "completion_tokens": 3,
+      "raw": "feat"
+    },
+    {
+      "idx": 34,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2700.7845409971196,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 35,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2160.8033329976024,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 36,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 3931.1954169970704,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 37,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 3942.6443750126055,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 38,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 3207.0146670012036,
+      "completion_tokens": 3,
+      "raw": "refactor"
+    },
+    {
+      "idx": 39,
+      "gold": "fix",
+      "pred": "docs",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 4332.993832998909,
+      "completion_tokens": 2,
+      "raw": "docs"
+    },
+    {
+      "idx": 40,
+      "gold": "test",
+      "pred": "test",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 3412.245624989737,
+      "completion_tokens": 2,
+      "raw": "test"
+    },
+    {
+      "idx": 41,
+      "gold": "feat",
+      "pred": "fix",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 3152.48266600247,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 42,
+      "gold": "feat",
+      "pred": "fix",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 3230.278666000231,
+      "completion_tokens": 16,
+      "raw": "fix\n\n---\n\nCommit message: fixed #<I> and"
+    },
+    {
+      "idx": 43,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 3288.467792008305,
+      "completion_tokens": 3,
+      "raw": "refactor"
+    },
+    {
+      "idx": 44,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 3688.29120900773,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 45,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 3798.848958002054,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 46,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 4057.6956250006333,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 47,
+      "gold": "feat",
+      "pred": "feat",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2815.6409579969477,
+      "completion_tokens": 3,
+      "raw": "feat"
+    },
+    {
+      "idx": 48,
+      "gold": "feat",
+      "pred": "fix",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 2890.795375002199,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 49,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2839.7454999940237,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 50,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 3359.2080420057755,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 51,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 3714.680416000192,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 52,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 3488.6728749988833,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 53,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 3238.9941250003176,
+      "completion_tokens": 16,
+      "raw": "refactor\n\n---\n\nCommit message: add support for python3"
+    },
+    {
+      "idx": 54,
+      "gold": "refactor",
+      "pred": "fix",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 2539.122583999415,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 55,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2408.647666001343,
+      "completion_tokens": 5,
+      "raw": "fix\n\n---"
+    },
+    {
+      "idx": 56,
+      "gold": "feat",
+      "pred": "feat",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 3599.8113339883275,
+      "completion_tokens": 3,
+      "raw": "feat"
+    },
+    {
+      "idx": 57,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 3929.219790996285,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 58,
+      "gold": "docs",
+      "pred": "docs",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 3185.2376660099253,
+      "completion_tokens": 2,
+      "raw": "docs"
+    },
+    {
+      "idx": 59,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 3253.6277499893913,
+      "completion_tokens": 3,
+      "raw": "feat"
+    },
+    {
+      "idx": 60,
+      "gold": "test",
+      "pred": "fix",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 3222.2235829976853,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 61,
+      "gold": "test",
+      "pred": "test",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2968.204415999935,
+      "completion_tokens": 2,
+      "raw": "test"
+    },
+    {
+      "idx": 62,
+      "gold": "refactor",
+      "pred": "fix",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 4612.595667000278,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 63,
+      "gold": "fix",
+      "pred": "test",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 3928.792249993421,
+      "completion_tokens": 2,
+      "raw": "test"
+    },
+    {
+      "idx": 64,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 4241.947165995953,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 65,
+      "gold": "feat",
+      "pred": "feat",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 3355.6559169956017,
+      "completion_tokens": 3,
+      "raw": "feat"
+    },
+    {
+      "idx": 66,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 3323.760958999628,
+      "completion_tokens": 3,
+      "raw": "feat"
+    },
+    {
+      "idx": 67,
+      "gold": "refactor",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 3659.1750419902382,
+      "completion_tokens": 3,
+      "raw": "feat"
+    },
+    {
+      "idx": 68,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2167.290042008972,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 69,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 3280.1924999948824,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 70,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 3464.9169170006644,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 71,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2281.7592500068713,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 72,
+      "gold": "feat",
+      "pred": "feat",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 3078.2529580028495,
+      "completion_tokens": 3,
+      "raw": "feat"
+    },
+    {
+      "idx": 73,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 3193.121999996947,
+      "completion_tokens": 3,
+      "raw": "refactor"
+    },
+    {
+      "idx": 74,
+      "gold": "refactor",
+      "pred": "fix",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 2924.6141250041546,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 75,
+      "gold": "test",
+      "pred": "test",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 3539.2594580043806,
+      "completion_tokens": 2,
+      "raw": "test"
+    },
+    {
+      "idx": 76,
+      "gold": "feat",
+      "pred": "feat",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 3121.426458004862,
+      "completion_tokens": 16,
+      "raw": "feat\n\n---\n\nCommit message: add lifeCycleScript"
+    },
+    {
+      "idx": 77,
+      "gold": "feat",
+      "pred": "feat",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 3167.2189999953844,
+      "completion_tokens": 3,
+      "raw": "feat"
+    },
+    {
+      "idx": 78,
+      "gold": "docs",
+      "pred": "fix",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 2507.6867089956068,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 79,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2804.2557500011753,
+      "completion_tokens": 16,
+      "raw": "fix\n\n---\n\nCommit message: discussion was not updated correctly after"
+    },
+    {
+      "idx": 80,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 3244.2539170006057,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 81,
+      "gold": "docs",
+      "pred": "docs",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1995.2952909952728,
+      "completion_tokens": 2,
+      "raw": "docs"
+    },
+    {
+      "idx": 82,
+      "gold": "fix",
+      "pred": "test",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 2634.5323330024257,
+      "completion_tokens": 2,
+      "raw": "test"
+    },
+    {
+      "idx": 83,
+      "gold": "feat",
+      "pred": "feat",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 3832.9272080009105,
+      "completion_tokens": 3,
+      "raw": "feat"
+    },
+    {
+      "idx": 84,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 3294.149415989523,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 85,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2381.0280000034254,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 86,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 2580.0150419963757,
+      "completion_tokens": 3,
+      "raw": "feat"
+    },
+    {
+      "idx": 87,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 3989.753333997214,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 88,
+      "gold": "feat",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 3121.314749994781,
+      "completion_tokens": 16,
+      "raw": "refactor\n\n---\n\nCommit message: add static callable for"
+    },
+    {
+      "idx": 89,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 3263.762999995379,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 90,
+      "gold": "feat",
+      "pred": "feat",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 3316.982165997615,
+      "completion_tokens": 10,
+      "raw": "feat add store reference to customer query test"
+    },
+    {
+      "idx": 91,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2474.1843750089174,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 92,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 3750.222250004299,
+      "completion_tokens": 16,
+      "raw": "refactor\n\n---\n\nCommit message: Fix faulty conditional for"
+    },
+    {
+      "idx": 93,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 2495.0457090017153,
+      "completion_tokens": 6,
+      "raw": "refactor\n\n---"
+    },
+    {
+      "idx": 94,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 3654.900624998845,
+      "completion_tokens": 16,
+      "raw": "fix\n\n---\n\nCommit message: Add support for style and class"
+    },
+    {
+      "idx": 95,
+      "gold": "docs",
+      "pred": "docs",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 3358.8126249960624,
+      "completion_tokens": 2,
+      "raw": "docs"
+    },
+    {
+      "idx": 96,
+      "gold": "refactor",
+      "pred": "fix",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 3215.680249995785,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 97,
+      "gold": "test",
+      "pred": "test",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 3480.410749994917,
+      "completion_tokens": 2,
+      "raw": "test"
+    },
+    {
+      "idx": 98,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2130.495167002664,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 99,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2477.873375013587,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 100,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 2689.511582997511,
+      "completion_tokens": 6,
+      "raw": "refactor\n\n---"
+    },
+    {
+      "idx": 101,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 4231.661749989144,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 102,
+      "gold": "docs",
+      "pred": "fix",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 2830.489707994275,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 103,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 3051.0782089986606,
+      "completion_tokens": 3,
+      "raw": "feat"
+    },
+    {
+      "idx": 104,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2484.4556669995654,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 105,
+      "gold": "test",
+      "pred": "test",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 3282.284166009049,
+      "completion_tokens": 2,
+      "raw": "test"
+    },
+    {
+      "idx": 106,
+      "gold": "test",
+      "pred": "test",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 4184.429792003357,
+      "completion_tokens": 2,
+      "raw": "test"
+    },
+    {
+      "idx": 107,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 3897.7431250095833,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 108,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 3476.4923750044545,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 109,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 4255.752291996032,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 110,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2039.3420000036713,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 111,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2704.133166000247,
+      "completion_tokens": 16,
+      "raw": "fix\n\n---\n\nCommit message: fix raft package import path"
+    },
+    {
+      "idx": 112,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2344.1670419997536,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 113,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2271.506083008717,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 114,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2340.2419999911217,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 115,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2573.954417006462,
+      "completion_tokens": 16,
+      "raw": "fix\n\n---\n\nCommit message: #<I> - remove"
+    },
+    {
+      "idx": 116,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 3055.9636669931933,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 117,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2809.224540993455,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 118,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 3377.4785840068944,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 119,
+      "gold": "test",
+      "pred": "test",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2657.2249999881024,
+      "completion_tokens": 2,
+      "raw": "test"
+    },
+    {
+      "idx": 120,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 2576.310124990414,
+      "completion_tokens": 16,
+      "raw": "refactor\n\n---\n\nCommit message: add assertion for swarm"
+    },
+    {
+      "idx": 121,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 3667.0959170005517,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 122,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2701.3546250091167,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 123,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2913.2230000104755,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 124,
+      "gold": "test",
+      "pred": "test",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 3094.40720899147,
+      "completion_tokens": 2,
+      "raw": "test"
+    },
+    {
+      "idx": 125,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 3069.0894589934032,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 126,
+      "gold": "refactor",
+      "pred": "fix",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 2732.2269169962965,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 127,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 3784.4022499921266,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 128,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 3504.549000004772,
+      "completion_tokens": 16,
+      "raw": "fix\n\n---\n\nCommit message: added SPA flag to route"
+    },
+    {
+      "idx": 129,
+      "gold": "feat",
+      "pred": "feat",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 4304.872667009477,
+      "completion_tokens": 3,
+      "raw": "feat"
+    },
+    {
+      "idx": 130,
+      "gold": "test",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 3078.7974590057274,
+      "completion_tokens": 3,
+      "raw": "feat"
+    },
+    {
+      "idx": 131,
+      "gold": "refactor",
+      "pred": "fix",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 3119.7929159970954,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 132,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 3430.03991599835,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 133,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 3198.550833010813,
+      "completion_tokens": 16,
+      "raw": "fix\n\n---\n\nCommit message: add support for custom imageExt"
+    },
+    {
+      "idx": 134,
+      "gold": "feat",
+      "pred": "feat",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 3008.294500003103,
+      "completion_tokens": 3,
+      "raw": "feat"
+    },
+    {
+      "idx": 135,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 3676.130624997313,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 136,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2732.0508749980945,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 137,
+      "gold": "refactor",
+      "pred": "test",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 3363.2272919930983,
+      "completion_tokens": 2,
+      "raw": "test"
+    },
+    {
+      "idx": 138,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 3048.574375003227,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 139,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 3200.0603749911534,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 140,
+      "gold": "docs",
+      "pred": "docs",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2246.4468749967637,
+      "completion_tokens": 2,
+      "raw": "docs"
+    },
+    {
+      "idx": 141,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2880.642000003718,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 142,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2644.5612919924315,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 143,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 2768.385457995464,
+      "completion_tokens": 3,
+      "raw": "feat"
+    },
+    {
+      "idx": 144,
+      "gold": "fix",
+      "pred": "test",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 2163.959832992987,
+      "completion_tokens": 2,
+      "raw": "test"
+    },
+    {
+      "idx": 145,
+      "gold": "fix",
+      "pred": "docs",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 2819.4303330092225,
+      "completion_tokens": 16,
+      "raw": "docs\n\n---\n\nCommit message: add missing responsive meta tag"
+    },
+    {
+      "idx": 146,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2972.777707997011,
+      "completion_tokens": 16,
+      "raw": "fix\n\n---\n\nCommit message: Add support for multiple cache files"
+    },
+    {
+      "idx": 147,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2632.7181670058053,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 148,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 3024.149500008207,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 149,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2013.6355830036337,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 150,
+      "gold": "refactor",
+      "pred": "fix",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 2900.920166997821,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 151,
+      "gold": "refactor",
+      "pred": "fix",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 2397.855540999444,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 152,
+      "gold": "refactor",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 2414.8282920068596,
+      "completion_tokens": 3,
+      "raw": "feat"
+    },
+    {
+      "idx": 153,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2715.158375009196,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 154,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2792.1263340103906,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 155,
+      "gold": "test",
+      "pred": "test",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 3439.0396249946207,
+      "completion_tokens": 2,
+      "raw": "test"
+    },
+    {
+      "idx": 156,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 3268.59437499661,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 157,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2867.8615420067217,
+      "completion_tokens": 16,
+      "raw": "fix\n\n---\n\nCommit message: rename \"Form\" test to"
+    },
+    {
+      "idx": 158,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 3508.7813749996712,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 159,
+      "gold": "test",
+      "pred": "fix",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 2324.5340830035275,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 160,
+      "gold": "test",
+      "pred": "fix",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1865.9142499964219,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 161,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2644.147333005094,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 162,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2697.095083000022,
+      "completion_tokens": 16,
+      "raw": "fix\n\n---\n\nCommit message: fix type mismatch in test case"
+    },
+    {
+      "idx": 163,
+      "gold": "feat",
+      "pred": "fix",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 2015.13800000248,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 164,
+      "gold": "refactor",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 3460.547916998621,
+      "completion_tokens": 3,
+      "raw": "feat"
+    },
+    {
+      "idx": 165,
+      "gold": "feat",
+      "pred": "",
+      "correct": 0,
+      "parse_failed": 1,
+      "latency_ms": 3107.59345900442,
+      "completion_tokens": 2,
+      "raw": "log"
+    },
+    {
+      "idx": 166,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 3105.28366699873,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 167,
+      "gold": "test",
+      "pred": "fix",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 2873.8328340114094,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 168,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1963.1836670014309,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 169,
+      "gold": "feat",
+      "pred": "feat",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2991.4617499889573,
+      "completion_tokens": 3,
+      "raw": "feat"
+    },
+    {
+      "idx": 170,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1893.3233749994542,
+      "completion_tokens": 3,
+      "raw": "feat"
+    },
+    {
+      "idx": 171,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 3205.498124996666,
+      "completion_tokens": 3,
+      "raw": "feat"
+    },
+    {
+      "idx": 172,
+      "gold": "feat",
+      "pred": "feat",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2647.7492919948418,
+      "completion_tokens": 3,
+      "raw": "feat"
+    },
+    {
+      "idx": 173,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2972.8446249937406,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 174,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2527.268334000837,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 175,
+      "gold": "feat",
+      "pred": "fix",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 3345.372084004339,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 176,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 2561.097207988496,
+      "completion_tokens": 3,
+      "raw": "feat"
+    },
+    {
+      "idx": 177,
+      "gold": "fix",
+      "pred": "test",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 3279.317374996026,
+      "completion_tokens": 2,
+      "raw": "test"
+    },
+    {
+      "idx": 178,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 5092.738749997807,
+      "completion_tokens": 3,
+      "raw": "feat"
+    },
+    {
+      "idx": 179,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 3428.9807500026654,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 180,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2361.5140409965534,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 181,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2629.3753329955507,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 182,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 3695.1513329986483,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 183,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 3272.655124994344,
+      "completion_tokens": 16,
+      "raw": "refactor\n\n---\n\nCommit message: add payment method dropdown to"
+    },
+    {
+      "idx": 184,
+      "gold": "test",
+      "pred": "test",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2894.000957996468,
+      "completion_tokens": 2,
+      "raw": "test"
+    },
+    {
+      "idx": 185,
+      "gold": "test",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 2645.7882090035127,
+      "completion_tokens": 3,
+      "raw": "feat"
+    },
+    {
+      "idx": 186,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2911.1154999991413,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 187,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2988.8641249999637,
+      "completion_tokens": 16,
+      "raw": "fix\n\n---\n\nCommit message: add support for user model comparison"
+    },
+    {
+      "idx": 188,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2551.2699999962933,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 189,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 3058.317666000221,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 190,
+      "gold": "feat",
+      "pred": "feat",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 3677.4106670054607,
+      "completion_tokens": 3,
+      "raw": "feat"
+    },
+    {
+      "idx": 191,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 3222.5070830027107,
+      "completion_tokens": 16,
+      "raw": "fix\n\n---\n\nCommit message: fix more deprecated Proptype"
+    },
+    {
+      "idx": 192,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 3424.2661250027595,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 193,
+      "gold": "refactor",
+      "pred": "refactor",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2835.5300840048585,
+      "completion_tokens": 3,
+      "raw": "refactor"
+    },
+    {
+      "idx": 194,
+      "gold": "refactor",
+      "pred": "test",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 2976.6652090038406,
+      "completion_tokens": 2,
+      "raw": "test"
+    },
+    {
+      "idx": 195,
+      "gold": "refactor",
+      "pred": "fix",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 3081.087917002151,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 196,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2461.401583001134,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 197,
+      "gold": "feat",
+      "pred": "fix",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 4012.808250001399,
+      "completion_tokens": 2,
+      "raw": "fix"
+    },
+    {
+      "idx": 198,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 2513.552290998632,
+      "completion_tokens": 16,
+      "raw": "feat\n\n---\n\nCommit message: change requiresRight for copy"
+    },
+    {
+      "idx": 199,
+      "gold": "fix",
+      "pred": "refactor",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 3226.012750004884,
+      "completion_tokens": 16,
+      "raw": "refactor\n\n---\n\nCommit message: fix for missing 'use"
+    },
+    {
+      "idx": 200,
+      "gold": "docs",
+      "pred": "fix",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 3824.244790986995,
+      "completion_tokens": 2,
+      "raw": "fix"
+    }
+  ]
+}
