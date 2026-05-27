@@ -1,0 +1,78 @@
+@startuml 08_architecture_llm_hybrid
+!theme plain
+skinparam backgroundColor #0F172A
+skinparam defaultTextAlignment center
+skinparam defaultFontName "Fira Sans"
+skinparam defaultFontColor #F8FAFC
+skinparam ArrowColor #38BDF8
+skinparam ArrowFontColor #CBD5E1
+
+skinparam component {
+    BackgroundColor #1E293B
+    BorderColor #475569
+    FontColor #F8FAFC
+}
+skinparam database {
+    BackgroundColor #334155
+    BorderColor #475569
+    FontColor #F8FAFC
+}
+skinparam note {
+    BackgroundColor #1E293B
+    BorderColor #38BDF8
+    FontColor #CBD5E1
+}
+
+title Hybrid LLM commit-message generation (Figure 8)
+
+actor "Developer" as Dev #38BDF8
+
+rectangle "Input" as IN #0B1220 {
+    component "git diff" as Diff
+}
+
+rectangle "Retrieval (RAG)" as RAG #0B1220 {
+    component "TF-IDF\nvectorizer\n(reused from baseline)" as Vec
+    database "train corpus\n(27,275 commits)" as Train
+    component "cosine top-k=3" as KNN
+}
+
+rectangle "Generation (LLM, local)" as LLMBOX #0B1220 {
+    component "Ollama\nhttp://localhost:11434" as Ollama
+    component "5 models\n× 4 strategies" as Models
+    note right of Models
+      qwen2.5-coder:1.5b / :3b
+      llama3.2:3b-instruct
+      phi3.5:3.8b-mini
+      deepseek-coder:1.3b
+      ----
+      zero_shot / few_shot
+      chain_of_thought / json_mode
+    end note
+}
+
+rectangle "Parsing & Verification" as VER #0B1220 {
+    component "Conventional\nCommit parser" as Parser
+    component "TF-IDF baseline\nclassifier (verifier)" as Verifier
+    component "type-merge logic\nif conf >= 0.6 and\nllm_type != verifier" as Merge
+}
+
+rectangle "Output" as OUT #0B1220 {
+    component "<type>(<scope>): <subject>" as Final
+}
+
+Dev --> Diff
+Diff --> Vec : transform
+Vec --> KNN
+Train --> KNN : indexed once
+KNN --> Models : few-shot examples
+Diff --> Models : query
+Models --> Ollama : prompt
+Ollama --> Parser : raw text
+Parser --> Verifier : subject
+Verifier --> Merge : verifier_type, confidence
+Parser --> Merge : llm_type
+Merge --> Final
+Final --> Dev
+
+@enduml
