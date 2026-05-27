@@ -21,7 +21,22 @@ from src.config import IDX_TO_CLASS, MODELS_DIR, TARGET_CLASSES
 from src.models.baseline_tfidf import ARTIFACT as BASELINE_PATH, NUMERIC_COLS
 from src.data.preprocess import diff_to_text_and_features, strip_prefix
 
-AVAILABLE_MODELS = ["baseline_tfidf", "cnn_text", "distilbert", "codebert", "ensemble"]
+AVAILABLE_MODELS = [
+    "baseline_tfidf",
+    "cnn_text",
+    "distilbert",
+    "codebert",
+    "ensemble",
+    "llm:qwen2.5-coder:3b",
+    "llm-ensemble",
+]
+
+LLM_ENSEMBLE_MEMBERS = [
+    ("qwen2.5-coder:3b", 0.74),
+    ("phi3.5:3.8b-mini-instruct-q4_K_M", 0.67),
+]
+LLM_ENSEMBLE_TFIDF_BOOST = 2.0
+LLM_ENSEMBLE_TFIDF_ACC = 0.7093
 
 
 @dataclass
@@ -129,12 +144,85 @@ def _proba_ensemble(df: pd.DataFrame) -> np.ndarray:
     return (probs * weights[:, None, None]).sum(axis=0)
 
 
+def _proba_llm_single(df: pd.DataFrame, ollama_model: str) -> np.ndarray:
+    """LLM-as-classifier using RAG-retrieved few-shot examples from the train split.
+
+    Returns a one-hot probability row for each input. Confidence is reported as
+    1.0 for the predicted class and 0.0 for the others, since the LLM emits a
+    discrete label rather than a calibrated distribution.
+    """
+    from src.llm.classifier import build_rag_examples, classify
+
+    out = np.zeros((len(df), len(TARGET_CLASSES)), dtype=float)
+    for i, row in enumerate(df.itertuples(index=False)):
+        msg = str(getattr(row, "message_clean", "") or "")
+        diff = str(getattr(row, "diff_text", "") or "")
+        examples = build_rag_examples(msg, diff, k=3)
+        res = classify(
+            msg, diff,
+            model=ollama_model,
+            strategy="few_shot",
+            few_shot_examples=examples,
+        )
+        if res.predicted in TARGET_CLASSES:
+            out[i, TARGET_CLASSES.index(res.predicted)] = 1.0
+        else:
+            # parse failure → fall back to majority class
+            out[i, TARGET_CLASSES.index("fix")] = 1.0
+    return out
+
+
+def _proba_llm_ensemble(df: pd.DataFrame) -> np.ndarray:
+    """Weighted voting over LLMs + TF-IDF baseline (TF-IDF 2x boost).
+
+    Each member contributes its predicted label weighted by its accuracy
+    (TF-IDF gets the boost multiplier). Output rows are normalized to sum
+    to 1 so they look like probabilities.
+    """
+    from src.llm.classifier import build_rag_examples, classify
+
+    members_preds: List[np.ndarray] = []
+    weights: List[float] = []
+
+    for tag, acc in LLM_ENSEMBLE_MEMBERS:
+        pred_row = np.zeros((len(df), len(TARGET_CLASSES)), dtype=float)
+        for i, row in enumerate(df.itertuples(index=False)):
+            msg = str(getattr(row, "message_clean", "") or "")
+            diff = str(getattr(row, "diff_text", "") or "")
+            examples = build_rag_examples(msg, diff, k=3)
+            res = classify(
+                msg, diff,
+                model=tag,
+                strategy="few_shot",
+                few_shot_examples=examples,
+            )
+            label = res.predicted if res.predicted in TARGET_CLASSES else "fix"
+            pred_row[i, TARGET_CLASSES.index(label)] = 1.0
+        members_preds.append(pred_row)
+        weights.append(acc)
+
+    tfidf_probs = _proba_baseline(df)
+    tfidf_onehot = np.zeros_like(tfidf_probs)
+    tfidf_onehot[np.arange(len(df)), np.argmax(tfidf_probs, axis=1)] = 1.0
+    members_preds.append(tfidf_onehot)
+    weights.append(LLM_ENSEMBLE_TFIDF_ACC * LLM_ENSEMBLE_TFIDF_BOOST)
+
+    w = np.array(weights)
+    stack = np.stack(members_preds, axis=0)
+    combo = (stack * w[:, None, None]).sum(axis=0)
+    row_sums = combo.sum(axis=1, keepdims=True)
+    row_sums[row_sums == 0] = 1.0
+    return combo / row_sums
+
+
 _DISPATCH = {
     "baseline_tfidf": _proba_baseline,
     "cnn_text": _proba_cnn,
     "distilbert": lambda d: _proba_hf(d, MODELS_DIR / "distilbert"),
     "codebert": lambda d: _proba_hf(d, MODELS_DIR / "codebert"),
     "ensemble": _proba_ensemble,
+    "llm:qwen2.5-coder:3b": lambda d: _proba_llm_single(d, "qwen2.5-coder:3b"),
+    "llm-ensemble": _proba_llm_ensemble,
 }
 
 
@@ -149,6 +237,18 @@ def model_is_available(model_name: str) -> bool:
         return (MODELS_DIR / "codebert" / "config.json").exists()
     if model_name == "ensemble":
         return (MODELS_DIR / "ensemble" / "weights.json").exists()
+    if model_name.startswith("llm:") or model_name == "llm-ensemble":
+        try:
+            from src.llm import ollama_client
+
+            if not ollama_client.is_alive():
+                return False
+            available = set(ollama_client.list_models())
+            if model_name == "llm-ensemble":
+                return all(tag in available for tag, _ in LLM_ENSEMBLE_MEMBERS) and BASELINE_PATH.exists()
+            return model_name.removeprefix("llm:") in available
+        except Exception:
+            return False
     return False
 
 
