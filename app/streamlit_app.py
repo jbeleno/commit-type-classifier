@@ -995,35 +995,77 @@ def tab_history() -> None:
         st.markdown(f'<div>{hist_html}</div>', unsafe_allow_html=True)
 
 
-def tab_metrics() -> None:
+def _classifier_summary() -> list[dict]:
     reports_dir = MODELS_DIR / "reports"
     if not reports_dir.exists():
-        st.markdown('<div class="state-empty">No reports yet — train and evaluate models first.</div>',
+        return []
+    rows: list[dict] = []
+    for fp in sorted(reports_dir.glob("*.json")):
+        if fp.stem.endswith("_val") or fp.stem in ("comparison",):
+            continue
+        try:
+            data = json.loads(fp.read_text())
+            rows.append({
+                "model": fp.stem,
+                "accuracy": data["accuracy"],
+                "macro_f1": data["macro_f1"],
+                "weighted_f1": data["weighted_f1"],
+                "macro_precision": data["macro_precision"],
+                "macro_recall": data["macro_recall"],
+            })
+        except (KeyError, json.JSONDecodeError):
+            continue
+    return sorted(rows, key=lambda r: -r["macro_f1"])
+
+
+def _llm_generation_summary() -> pd.DataFrame | None:
+    csv = MODELS_DIR / "reports" / "llm" / "_summary.csv"
+    if not csv.exists():
+        return None
+    df = pd.read_csv(csv)
+    df = df.drop_duplicates(subset=["model", "strategy"], keep="last")
+    return df.sort_values("type_exact_match", ascending=False).reset_index(drop=True)
+
+
+def _llm_classify_summary() -> pd.DataFrame | None:
+    csv = MODELS_DIR / "reports" / "llm_classify" / "_summary.csv"
+    if not csv.exists():
+        return None
+    df = pd.read_csv(csv)
+    df = df.drop_duplicates(subset=["model", "strategy"], keep="last")
+    return df.sort_values("accuracy", ascending=False).reset_index(drop=True)
+
+
+def _ensemble_summary() -> list[dict]:
+    """Read all ensemble_*.json files in the llm_classify reports directory."""
+    d = MODELS_DIR / "reports" / "llm_classify"
+    if not d.exists():
+        return []
+    rows: list[dict] = []
+    for fp in sorted(d.glob("ensemble_*.json")):
+        try:
+            data = json.loads(fp.read_text())
+            rows.append({
+                "config": fp.stem,
+                "accuracy": data.get("accuracy"),
+                "macro_f1": data.get("macro_f1"),
+                "weighted_f1": data.get("weighted_f1"),
+            })
+        except (KeyError, json.JSONDecodeError):
+            continue
+    return sorted(rows, key=lambda r: -(r["accuracy"] or 0))
+
+
+def _section_classifiers() -> None:
+    summary = _classifier_summary()
+    if not summary:
+        st.markdown('<div class="state-empty">No classifier reports yet — train and evaluate first.</div>',
                     unsafe_allow_html=True)
         return
-
-    summary = []
-    for fp in sorted(reports_dir.glob("*.json")):
-        if fp.stem.endswith("_val"):
-            continue
-        data = json.loads(fp.read_text())
-        summary.append({
-            "model": fp.stem,
-            "accuracy": data["accuracy"],
-            "macro_f1": data["macro_f1"],
-            "weighted_f1": data["weighted_f1"],
-            "macro_precision": data["macro_precision"],
-            "macro_recall": data["macro_recall"],
-        })
-
-    if not summary:
-        st.markdown('<div class="state-empty">No test reports yet.</div>', unsafe_allow_html=True)
-        return
-
-    summary.sort(key=lambda r: -r["macro_f1"])
     leader = summary[0]["model"]
 
-    st.markdown('<div class="eyebrow">model comparison · test split</div>', unsafe_allow_html=True)
+    st.markdown('<div class="eyebrow">five classifiers · test split (n = 5,845)</div>',
+                unsafe_allow_html=True)
     cols = st.columns(len(summary))
     for col, row in zip(cols, summary):
         rest = {
@@ -1053,6 +1095,140 @@ def tab_metrics() -> None:
 
     bars = "".join(_f1_bar(r) for r in summary)
     st.markdown(f'<div>{bars}</div>', unsafe_allow_html=True)
+
+
+def _section_llm_generation() -> None:
+    df = _llm_generation_summary()
+    if df is None or df.empty:
+        st.markdown('<div class="state-empty">No LLM generation sweep yet — '
+                    'run <code>python -m scripts.llm_sweep --n 50</code>.</div>',
+                    unsafe_allow_html=True)
+        return
+
+    st.markdown('<div class="eyebrow">5 LLMs × 4 prompt strategies · type-exact-match on stratified n = 50</div>',
+                unsafe_allow_html=True)
+
+    top = df.iloc[0]
+    c1, c2, c3, c4 = st.columns(4)
+    c1.metric("best model", top["model"], top["strategy"])
+    c2.metric("type-match", f"{top['type_exact_match']:.0%}")
+    c3.metric("BLEU-4", f"{top['bleu']:.2f}")
+    c4.metric("p50 latency", f"{int(top['latency_ms_p50'])} ms")
+
+    pretty = df.copy()
+    pretty["type-match"] = (pretty["type_exact_match"] * 100).round(1).astype(str) + "%"
+    pretty["classif. agree"] = (pretty["classifier_agreement"] * 100).round(1).astype(str) + "%"
+    pretty["parse fail"] = (pretty["parse_failure_rate"] * 100).round(1).astype(str) + "%"
+    pretty["bleu"] = pretty["bleu"].round(2)
+    pretty["rouge_L"] = pretty["rouge_l_mean"].round(3)
+    pretty["p50 ms"] = pretty["latency_ms_p50"].round(0).astype(int)
+    show = pretty[["model", "strategy", "type-match", "classif. agree",
+                   "parse fail", "bleu", "rouge_L", "p50 ms"]]
+    st.dataframe(show, use_container_width=True, hide_index=True, height=min(560, 40 + 35 * len(show)))
+
+    chart = df[["model", "strategy", "type_exact_match"]].copy()
+    chart["label"] = chart["model"].str.split(":").str[0].str.replace("3.8b-mini-instruct-q4_K_M", "3.8b", regex=False) + " / " + chart["strategy"]
+    chart_df = chart[["label", "type_exact_match"]].set_index("label").head(10)
+    st.markdown('<div class="eyebrow">top 10 — type-exact-match</div>', unsafe_allow_html=True)
+    st.bar_chart(chart_df, height=200, use_container_width=True)
+
+
+def _section_llm_vs_baseline() -> None:
+    classifier_df = _llm_classify_summary()
+    if classifier_df is None or classifier_df.empty:
+        st.markdown('<div class="state-empty">No LLM-as-classifier results yet — '
+                    'run <code>python -m scripts.llm_classify_sweep --n 200</code>.</div>',
+                    unsafe_allow_html=True)
+        return
+
+    baseline_acc = 0.7093
+    baseline_f1 = 0.6632
+    baseline_wf1 = 0.7187
+
+    st.markdown('<div class="eyebrow">LLM-as-classifier vs TF-IDF baseline · natural distribution n = 200</div>',
+                unsafe_allow_html=True)
+
+    rows = [
+        {"system": "TF-IDF baseline (n=5,845)",
+         "accuracy": baseline_acc, "macro_f1": baseline_f1, "weighted_f1": baseline_wf1,
+         "is_baseline": True, "is_winner": False},
+    ]
+    for _, r in classifier_df.iterrows():
+        rows.append({
+            "system": f"{r['model']} · {r['strategy']}",
+            "accuracy": float(r["accuracy"]),
+            "macro_f1": float(r["macro_f1"]),
+            "weighted_f1": float(r["weighted_f1"]),
+            "is_baseline": False,
+            "is_winner": False,
+        })
+
+    ensemble_rows = _ensemble_summary()
+    for er in ensemble_rows:
+        if er["accuracy"] is None:
+            continue
+        winner = (
+            er["accuracy"] >= baseline_acc
+            and er["macro_f1"] >= baseline_f1
+            and er["weighted_f1"] >= baseline_wf1
+        )
+        rows.append({
+            "system": f"ensemble · {er['config'].replace('ensemble_', '')}",
+            "accuracy": er["accuracy"],
+            "macro_f1": er["macro_f1"],
+            "weighted_f1": er["weighted_f1"],
+            "is_baseline": False,
+            "is_winner": winner,
+        })
+
+    rows.sort(key=lambda r: -r["accuracy"])
+    df = pd.DataFrame(rows)
+    df_display = df.copy()
+    df_display["accuracy"] = (df_display["accuracy"] * 100).round(2).astype(str) + "%"
+    df_display["macro_f1"] = df_display["macro_f1"].round(4)
+    df_display["weighted_f1"] = df_display["weighted_f1"].round(4)
+    df_display = df_display.rename(columns={"macro_f1": "macro F1", "weighted_f1": "weighted F1"})
+
+    def _style_row(row):
+        styles = [""] * 4
+        if df.loc[row.name, "is_winner"]:
+            styles = ["background-color: rgba(34,197,94,0.18); font-weight:600;"] * 4
+        elif df.loc[row.name, "is_baseline"]:
+            styles = ["background-color: rgba(148,163,184,0.12);"] * 4
+        return styles
+
+    st.dataframe(
+        df_display[["system", "accuracy", "macro F1", "weighted F1"]]
+            .style.apply(_style_row, axis=1),
+        use_container_width=True,
+        hide_index=True,
+        height=min(560, 40 + 38 * len(df_display)),
+    )
+
+    winners = [r for r in rows if r["is_winner"]]
+    if winners:
+        w = winners[0]
+        st.markdown(
+            f'<div class="state-info" style="border-left:3px solid #22C55E; padding:0.75rem 1rem; '
+            f'background:rgba(34,197,94,0.08); border-radius:6px; margin-top:0.5rem;">'
+            f'<b style="color:#22C55E;">✓ winner</b><br>'
+            f'<span class="mono">{_e(w["system"])}</span> beats the TF-IDF baseline on every metric: '
+            f'accuracy {w["accuracy"]:.2%} <span class="muted">vs {baseline_acc:.2%}</span>, '
+            f'macro-F1 {w["macro_f1"]:.4f} <span class="muted">vs {baseline_f1:.4f}</span>, '
+            f'weighted-F1 {w["weighted_f1"]:.4f} <span class="muted">vs {baseline_wf1:.4f}</span>.'
+            f'</div>',
+            unsafe_allow_html=True,
+        )
+
+
+def tab_metrics() -> None:
+    sub = st.tabs(["Classifiers", "LLM generation", "LLM vs baseline"])
+    with sub[0]:
+        _section_classifiers()
+    with sub[1]:
+        _section_llm_generation()
+    with sub[2]:
+        _section_llm_vs_baseline()
 
 
 # ---------------------------------------------------------------------------
