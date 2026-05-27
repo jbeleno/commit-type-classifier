@@ -25,4 +25,11 @@ db/*.sqlite
 # --- IDE ---
 .vscode/
 .idea/
-docs/exports/
+
+# --- Build deliverables ---
+# docs/exports/{documentation.pdf, slides.pdf, slides.pptx} ARE committed
+# so the GitHub repo is self-contained for the defense submission.
+# Ignore scratch files inside docs/exports/.
+docs/exports/*.tmp
+docs/exports/*.bak
+docs/exports/ck*.png

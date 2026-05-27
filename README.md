@@ -1,5 +1,21 @@
 # C2 — Commit Classifier + LLM Generator + Agentic Chat
 
+> **Submission / Entrega**
+>
+> | File | Direct link |
+> |---|---|
+> | 📄 Documentation (PDF, 17 sections, 3.5 MB) | [`docs/exports/documentation.pdf`](docs/exports/documentation.pdf) |
+> | 🎞️ Defense slides (PDF, 13 slides) | [`docs/exports/slides.pdf`](docs/exports/slides.pdf) |
+> | 📊 Defense slides (PPTX editable) | [`docs/exports/slides.pptx`](docs/exports/slides.pptx) |
+> | 🖼️ Architecture figures (9 UML diagrams, PNG) | [`docs/diagrams/png/`](docs/diagrams/png/) |
+> | 📈 Model comparison — discriminative track (5 classifiers, n = 5 845) | [`models_saved/reports/comparison.md`](models_saved/reports/comparison.md) |
+> | 🤖 Model comparison — generative track (5 LLMs × 4 strategies, n = 50) | [`models_saved/reports/llm/comparison.md`](models_saved/reports/llm/comparison.md) |
+> | ⚖️ Apples-to-apples + voting-ensemble winner (n = 200) | [`models_saved/reports/llm_classify/comparison.md`](models_saved/reports/llm_classify/comparison.md) |
+>
+> **Authors:** Jesús Beleño · Juan Forero
+> **Advisor:** Juan Antonio Castro Silva (USCO)
+> **Date:** 2026-05-27
+
 Component 2 (50%) of the Artificial Intelligence course project.
 Three complementary tracks over Git commits, all using the same
 preprocessed CommitBench corpus and the same Streamlit / CLI shell:
