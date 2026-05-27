@@ -477,14 +477,136 @@ def _trained_models() -> list[str]:
 # ---------------------------------------------------------------------------
 
 
+def _render_classify_repo(result: Dict) -> None:
+    if "error" in result:
+        st.error(result["error"])
+        return
+    hist = result.get("histogram", {})
+    per = result.get("per_commit", []) or []
+    total = sum(hist.values()) or 1
+    dominant = max(hist.items(), key=lambda kv: kv[1])[0] if hist else "—"
+    c1, c2, c3, c4 = st.columns(4)
+    c1.metric("commits scanned", result.get("n_commits", len(per)))
+    c2.metric("dominant class", dominant, f"{hist.get(dominant, 0) / total:.0%}")
+    c3.metric("model", result.get("model", "—"))
+    c4.metric("classes seen", sum(1 for v in hist.values() if v > 0))
+
+    hist_df = pd.DataFrame(
+        {"class": list(hist.keys()), "count": list(hist.values())}
+    ).set_index("class")
+    st.bar_chart(hist_df, height=160, use_container_width=True)
+
+    if per:
+        df = pd.DataFrame(per)
+        df["confidence"] = df["confidence"].astype(float).round(3)
+        df = df.rename(columns={"predicted_type": "type", "message": "subject"})
+        st.dataframe(
+            df[["hash", "type", "confidence", "subject"]],
+            use_container_width=True,
+            hide_index=True,
+            height=min(420, 40 + 35 * len(df)),
+        )
+
+
+def _render_classify_commit(result: Dict) -> None:
+    if "error" in result:
+        st.error(result["error"])
+        return
+    label = result.get("label", "—")
+    conf = float(result.get("confidence", 0))
+    color = CLASS_COLORS.get(label, "#94A3B8")
+    c1, c2 = st.columns([1, 2])
+    c1.markdown(
+        f'<div class="mono" style="font-size:2.2rem; color:{color}; font-weight:700;">'
+        f'{_e(label)}</div>'
+        f'<div class="muted">confidence {conf:.1%}  ·  '
+        f'{_e(result.get("model", ""))}</div>',
+        unsafe_allow_html=True,
+    )
+    probs = result.get("probabilities", {})
+    if probs:
+        prob_df = pd.DataFrame(
+            {"class": list(probs.keys()), "p": [float(v) for v in probs.values()]}
+        ).set_index("class")
+        c2.bar_chart(prob_df, height=180, use_container_width=True)
+
+
+def _render_generate_commit(result: Dict) -> None:
+    if "error" in result:
+        st.error(result["error"])
+        return
+    msg = result.get("message", "")
+    t = result.get("type", "—")
+    color = CLASS_COLORS.get(t, "#94A3B8")
+    st.markdown(
+        f'<div class="predict-card" style="border-color:{color}">'
+        f'<div class="mono" style="font-size:1.3rem; color:{color}; font-weight:700;">'
+        f'{_e(msg)}</div>'
+        f'<div class="muted" style="font-size:0.85rem; margin-top:0.4rem;">'
+        f'llm_type={_e(result.get("llm_type") or "—")} · '
+        f'verifier_type={_e(result.get("verifier_type", "—"))} '
+        f'({float(result.get("verifier_confidence", 0)):.0%}) · '
+        f'type_changed={"yes" if result.get("type_changed") else "no"} · '
+        f'{float(result.get("latency_ms", 0)):.0f} ms'
+        f'</div></div>', unsafe_allow_html=True,
+    )
+    examples = result.get("retrieved_examples") or []
+    if examples:
+        with st.expander(f"retrieved {len(examples)} similar commits (RAG)", expanded=False):
+            for ex in examples:
+                st.markdown(
+                    f"- `[{float(ex.get('score', 0)):.3f}]` "
+                    f"**{ex.get('type', '')}** · {ex.get('subject', '')[:140]}"
+                )
+
+
+def _render_scan_repo(result: Dict) -> None:
+    if "error" in result:
+        st.error(result["error"])
+        return
+    commits = result.get("commits", []) or []
+    st.caption(f"{result.get('n_commits', len(commits))} commits  ·  {result.get('path', '')}")
+    if not commits:
+        return
+    df = pd.DataFrame(commits)
+    keep = [c for c in ("hash", "author", "date", "message") if c in df.columns]
+    df = df[keep]
+    st.dataframe(df, use_container_width=True, hide_index=True,
+                 height=min(420, 40 + 35 * len(df)))
+
+
+def _render_list(result: Dict) -> None:
+    for k, v in result.items():
+        if isinstance(v, list):
+            st.markdown(f"**{k}**")
+            for item in v:
+                st.markdown(f"- `{item}`")
+        else:
+            st.markdown(f"**{k}:** `{v}`")
+
+
+_TOOL_RENDERERS = {
+    "classify_repo": _render_classify_repo,
+    "classify_commit": _render_classify_commit,
+    "generate_commit_message": _render_generate_commit,
+    "scan_repo": _render_scan_repo,
+    "list_models": _render_list,
+    "list_classes": _render_list,
+}
+
+_TOOL_AVATAR = {
+    "classify_commit":          "🏷️",
+    "classify_repo":            "📊",
+    "generate_commit_message":  "✍️",
+    "scan_repo":                "🔍",
+    "list_models":              "📦",
+    "list_classes":             "🎯",
+}
+
+
 def tab_chat() -> None:
     """Agentic chat — conversational interface backed by tool-calling LLM."""
-    from src.llm import ollama_client
-    from src.llm.agent import (
-        DEFAULT_AGENT_MODEL,
-        TOOLS,
-        run_agent,
-    )
+    from src.llm.agent import TOOLS, run_agent
 
     models = _ollama_models()
     if not models:
@@ -495,67 +617,66 @@ def tab_chat() -> None:
         )
         return
 
-    st.markdown('<div class="eyebrow">agentic chat · tools: '
-                + ', '.join(sorted(TOOLS)) + '</div>',
-                unsafe_allow_html=True)
+    st.markdown(
+        '<div class="eyebrow">agentic chat · '
+        + str(len(TOOLS)) + ' tools available</div>',
+        unsafe_allow_html=True,
+    )
 
-    # Persist chat across reruns
     if "chat_history" not in st.session_state:
         st.session_state.chat_history = []
     if "chat_steps" not in st.session_state:
         st.session_state.chat_steps = []
 
-    col_l, col_r = st.columns([3, 1])
+    col_l, col_r = st.columns([3.2, 1])
     with col_r:
-        # default to llama3.2 (best small-model tool caller in our pool)
         preferred = ["llama3.2:3b-instruct-q4_K_M", "qwen2.5-coder:3b"]
         default_idx = next((models.index(p) for p in preferred if p in models), 0)
-        agent_model = st.selectbox("agent model", models, index=default_idx,
-                                   help="LLM that decides which tools to call.")
-        if st.button("clear conversation"):
+        agent_model = st.selectbox(
+            "agent model", models, index=default_idx,
+            help="LLM that decides which tools to call. llama3.2 is the most reliable tool-caller in our pool.",
+        )
+        if st.button("clear conversation", use_container_width=True):
             st.session_state.chat_history = []
             st.session_state.chat_steps = []
             st.rerun()
 
-        st.markdown('<div class="eyebrow" style="margin-top:1rem;">try</div>',
+        st.markdown('<div class="eyebrow" style="margin-top:1rem;">try saying</div>',
                     unsafe_allow_html=True)
         st.markdown(
-            '<div class="muted" style="font-size:0.82rem; line-height:1.5;">'
-            '· "list the models"<br>'
-            '· "classify: fix login bug"<br>'
-            '· "analyze the last 30 commits of /Users/you/repo"<br>'
-            '· "generate a commit for this diff: ..."'
+            '<div class="muted" style="font-size:0.82rem; line-height:1.6;">'
+            '· list the available models<br>'
+            '· classify: fix race condition<br>'
+            '· analyze last 20 commits of /path/to/repo<br>'
+            '· write a commit for this diff: …'
             '</div>', unsafe_allow_html=True)
 
     with col_l:
-        # Render chat history
         for step in st.session_state.chat_steps:
             if step["role"] == "user":
-                st.markdown(
-                    f'<div class="state-info" style="margin:0.5rem 0;">'
-                    f'<b>you</b><br><span class="mono">{_e(step["content"])}</span>'
-                    f'</div>', unsafe_allow_html=True)
+                with st.chat_message("user"):
+                    st.markdown(step["content"])
             elif step["role"] == "tool":
-                args_str = _e(json.dumps(step.get("tool_args") or {}, indent=2, default=str)[:600])
-                result_str = _e(json.dumps(step.get("tool_result") or {}, indent=2, default=str)[:1200])
-                st.markdown(
-                    f'<div class="predict-card" style="border-color:#A78BFA; margin:0.5rem 0;">'
-                    f'<div class="mono" style="color:#A78BFA; font-size:0.85rem;">🔧 tool · {_e(step["tool_name"])}</div>'
-                    f'<details style="margin-top:0.4rem;"><summary class="mono" style="font-size:0.8rem; color:#94A3B8;">args</summary>'
-                    f'<pre class="mono" style="font-size:0.78rem; background:#0B1220; padding:0.5rem; border-radius:4px;">{args_str}</pre>'
-                    f'</details>'
-                    f'<details style="margin-top:0.4rem;" open><summary class="mono" style="font-size:0.8rem; color:#94A3B8;">result</summary>'
-                    f'<pre class="mono" style="font-size:0.78rem; background:#0B1220; padding:0.5rem; border-radius:4px; max-height:280px; overflow:auto;">{result_str}</pre>'
-                    f'</details>'
-                    f'</div>', unsafe_allow_html=True)
-            else:  # assistant
-                st.markdown(
-                    f'<div class="predict-card" style="border-color:#38BDF8; margin:0.5rem 0;">'
-                    f'<div class="mono" style="color:#38BDF8; font-size:0.85rem;">🤖 assistant · {_e(agent_model)} · {step.get("latency_ms", 0):.0f} ms</div>'
-                    f'<div style="margin-top:0.4rem;">{_e(step["content"])}</div>'
-                    f'</div>', unsafe_allow_html=True)
+                tool_name = step.get("tool_name", "")
+                avatar = _TOOL_AVATAR.get(tool_name, "🔧")
+                with st.chat_message("assistant", avatar=avatar):
+                    st.caption(f"tool · `{tool_name}`")
+                    result = step.get("tool_result") or {}
+                    renderer = _TOOL_RENDERERS.get(tool_name)
+                    if renderer:
+                        renderer(result)
+                    else:
+                        st.json(result, expanded=False)
+                    with st.expander("call details", expanded=False):
+                        st.code(json.dumps(step.get("tool_args") or {}, indent=2, default=str),
+                                language="json")
+            else:
+                with st.chat_message("assistant"):
+                    st.markdown(step["content"])
+                    latency = step.get("latency_ms", 0) or 0
+                    if latency:
+                        st.caption(f"{agent_model} · {latency:.0f} ms")
 
-        # Input
         user_input = st.chat_input("ask the agent — e.g. 'classify the last 50 commits in /path/to/repo'")
         if user_input:
             with st.spinner(f"thinking with {agent_model}..."):
