@@ -210,7 +210,7 @@ def add_chip(slide, label: str, x: float, y: float, *, w: float = 1.0):
 # --------------------------------------------------------------------------- #
 # Individual slides
 # --------------------------------------------------------------------------- #
-TOTAL = 9
+TOTAL = 12
 
 
 def slide_01_title(p):
@@ -410,10 +410,142 @@ def slide_06_insight(p):
     return s
 
 
+def slide_07_llm_pivot(p):
+    s = blank_slide(p)
+    add_header(s, "06 · pivot", "Discriminative → Generative  ·  local LLMs via Ollama")
+    add_footer(s, 7, TOTAL)
+
+    add_card(s, 0.6, 1.95, 5.7, 4.85, gutter=CLASS_COLORS["fix"])
+    add_text(s, "what we had", 0.85, 2.1, 5.3, 0.4,
+             font_size=14, color=CLASS_COLORS["fix"], font_name=FONT_SANS, bold=True)
+    add_text(s,
+        "•  Classifier: message + diff  →  one of 5 labels\n\n"
+        "•  TF-IDF baseline at 70.93 % acc / 0.66 F1\n\n"
+        "•  Useful, but answers the wrong question — it only\n"
+        "    re-labels what the developer already wrote",
+        0.85, 2.55, 5.3, 4.0, font_size=13, color=INK_2, font_name=FONT_SANS)
+
+    add_card(s, 6.6, 1.95, 6.1, 4.85, gutter=CLASS_COLORS["feat"])
+    add_text(s, "what we built", 6.85, 2.1, 5.7, 0.4,
+             font_size=14, color=CLASS_COLORS["feat"], font_name=FONT_SANS, bold=True)
+    add_text(s,
+        "•  Generator: diff alone  →  full Conventional Commit\n\n"
+        "•  5 local LLMs served by Ollama (16 GB unified RAM):\n"
+        "    qwen2.5-coder 1.5b / 3b,  llama3.2 3b-instruct,\n"
+        "    phi3.5 3.8b-mini-instruct,  deepseek-coder 1.3b\n\n"
+        "•  4 prompting strategies × 5 models = 20 configs swept\n\n"
+        "•  Old classifier  →  reused as type verifier (hybrid)",
+        6.85, 2.55, 5.7, 4.0, font_size=13, color=INK_2, font_name=FONT_SANS)
+    return s
+
+
+def slide_08_llm_generation(p):
+    s = blank_slide(p)
+    add_header(s, "07 · generation", "Sweep results — type-exact-match on stratified n=50")
+    add_footer(s, 8, TOTAL)
+
+    rows = [
+        ("phi3.5:3.8b-mini · few_shot",    0.36, True),
+        ("llama3.2:3b · CoT",              0.32, False),
+        ("qwen2.5-coder:3b · CoT",         0.30, False),
+        ("qwen2.5-coder:1.5b · CoT",       0.26, False),
+        ("deepseek-coder:1.3b · json",     0.18, False),
+    ]
+    max_v = max(r[1] for r in rows)
+    row_h = 0.62
+    top = 2.05
+
+    add_text(s, "best strategy per model", 0.6, top - 0.4, 6, 0.3, font_size=10, color=INK_3,
+             font_name=FONT_SANS, bold=True, letter_spacing=2.0)
+    add_text(s, "type-match", 6.4, top - 0.4, 2, 0.3, font_size=10, color=INK_3,
+             font_name=FONT_SANS, bold=True, align=PP_ALIGN.RIGHT)
+    add_text(s, "visual", 8.6, top - 0.4, 4, 0.3, font_size=10, color=INK_3,
+             font_name=FONT_SANS, bold=True)
+
+    for i, (name, v, leader) in enumerate(rows):
+        y = top + i * row_h
+        color = RING if leader else SURFACE_2
+        add_rectangle(s, 0.6, y, 12.1, 0.02, fill=BORDER_SOFT)
+        add_rectangle(s, 0.6, y + 0.05, 0.04, row_h - 0.1, fill=color)
+        add_text(s, name, 0.85, y + 0.05, 5.4, row_h - 0.1, font_size=13,
+                 color=INK if leader else INK_2, font_name=FONT_MONO, bold=leader,
+                 anchor=MSO_ANCHOR.MIDDLE)
+        add_text(s, f"{v * 100:.1f} %", 6.4, y + 0.05, 2.0, row_h - 0.1,
+                 font_size=14, color=INK, font_name=FONT_MONO,
+                 align=PP_ALIGN.RIGHT, anchor=MSO_ANCHOR.MIDDLE)
+        bar_x, bar_w = 8.6, 4.1
+        track_y = y + (row_h - 0.18) / 2
+        add_rectangle(s, bar_x, track_y, bar_w, 0.18,
+                      fill=SURFACE_INSET, line=BORDER_SOFT)
+        add_rectangle(s, bar_x, track_y, bar_w * (v / max_v), 0.18, fill=RING)
+
+    add_text(s, "Key insight:", 0.6, 5.55, 4, 0.4,
+             font_size=14, color=INK_3, font_name=FONT_SANS, bold=True)
+    add_text(s,
+        "instruction-tuning matters more than parameter count or family — "
+        "phi3.5 (instruct) > qwen-coder (code-aware base); "
+        "deepseek-coder (base/completion) hits 100 % parse-fail outside JSON-mode.",
+        0.6, 5.95, 12.1, 1.0, font_size=12, color=INK_3, font_name=FONT_SANS)
+    return s
+
+
+def slide_09_apples_to_apples(p):
+    s = blank_slide(p)
+    add_header(s, "08 · LLM vs baseline", "Apples-to-apples  ·  same input, same labels")
+    add_footer(s, 9, TOTAL)
+
+    headers = [("system",           0.6, 5.0),
+               ("accuracy",         5.8, 1.7),
+               ("macro F1",         7.6, 1.7),
+               ("weighted F1",      9.4, 1.9)]
+    for name, x, w in headers:
+        add_text(s, name, x, 1.85, w, 0.3, font_size=10, color=INK_3,
+                 font_name=FONT_SANS, bold=True, letter_spacing=2.0,
+                 align=PP_ALIGN.LEFT if name == "system" else PP_ALIGN.RIGHT)
+
+    rows = [
+        ("TF-IDF baseline (n=5 845)",        0.7093, 0.6632, 0.7187, False),
+        ("qwen2.5-coder:3b · rag (n=200)",   0.7400, 0.5639, 0.7190, False),
+        ("Hard-vote ensemble (4 members)",   0.7750, 0.6014, 0.7457, False),
+        ("Weighted ensemble (TF-IDF 2× boost)", 0.7500, 0.6698, 0.7505, True),
+    ]
+    row_h = 0.62
+    top = 2.2
+
+    for i, (name, acc, f1, wf1, winner) in enumerate(rows):
+        y = top + i * row_h
+        color = CLASS_COLORS["feat"] if winner else SURFACE_2
+        add_rectangle(s, 0.6, y, 12.1, 0.02, fill=BORDER_SOFT)
+        add_rectangle(s, 0.6, y + 0.05, 0.04, row_h - 0.1, fill=color)
+        add_text(s, name, 0.85, y + 0.05, 4.8, row_h - 0.1, font_size=13,
+                 color=INK if winner else INK_2, font_name=FONT_MONO, bold=winner,
+                 anchor=MSO_ANCHOR.MIDDLE)
+        add_text(s, f"{acc * 100:.2f} %", 5.6, y + 0.05, 1.7, row_h - 0.1,
+                 font_size=14, color=INK, font_name=FONT_MONO,
+                 align=PP_ALIGN.RIGHT, anchor=MSO_ANCHOR.MIDDLE)
+        add_text(s, f"{f1:.4f}", 7.4, y + 0.05, 1.7, row_h - 0.1,
+                 font_size=14, color=INK, font_name=FONT_MONO,
+                 align=PP_ALIGN.RIGHT, anchor=MSO_ANCHOR.MIDDLE)
+        add_text(s, f"{wf1:.4f}", 9.3, y + 0.05, 1.9, row_h - 0.1,
+                 font_size=14, color=INK, font_name=FONT_MONO,
+                 align=PP_ALIGN.RIGHT, anchor=MSO_ANCHOR.MIDDLE)
+
+    add_text(s, "What the winner row says:", 0.6, 5.4, 5, 0.4,
+             font_size=14, color=CLASS_COLORS["feat"], font_name=FONT_SANS, bold=True)
+    add_text(s,
+        "The heterogeneous voting ensemble (qwen2.5-coder:3b + phi3.5:3.8b-mini + TF-IDF voter, "
+        "weighted by accuracy with the TF-IDF voter doubled) is the first configuration that strictly beats "
+        "the discriminative baseline on every test-set metric — accuracy +4.07 pp, macro-F1 +0.0066, "
+        "weighted-F1 +0.0318. The TF-IDF baseline is reused as a tie-breaker on minority classes "
+        "(docs, refactor, test), turning the discriminative work into infrastructure rather than competition.",
+        0.6, 5.85, 12.1, 1.4, font_size=12, color=INK_3, font_name=FONT_SANS)
+    return s
+
+
 def slide_07_demo(p):
     s = blank_slide(p)
-    add_header(s, "06 · demo", "Local app — Streamlit GUI  +  Typer CLI")
-    add_footer(s, 7, TOTAL)
+    add_header(s, "09 · demo", "Local app — Streamlit GUI  +  Typer CLI")
+    add_footer(s, 10, TOTAL)
 
     add_image_fit(s, MOCKUPS / "04_metrics.jpeg", 0.6, 1.8, 8.0, 5.0)
 
@@ -444,8 +576,8 @@ def slide_07_demo(p):
 
 def slide_08_future(p):
     s = blank_slide(p)
-    add_header(s, "07 · limitations & future work", "What we know we left on the table")
-    add_footer(s, 8, TOTAL)
+    add_header(s, "10 · limitations & future work", "What we know we left on the table")
+    add_footer(s, 11, TOTAL)
 
     add_card(s, 0.6, 2.0, 6.0, 4.7, gutter=CLASS_COLORS["fix"])
     add_text(s, "limitations", 0.85, 2.15, 5.6, 0.4,
@@ -504,6 +636,9 @@ def main():
     slide_04_pipeline(p)
     slide_05_results(p)
     slide_06_insight(p)
+    slide_07_llm_pivot(p)
+    slide_08_llm_generation(p)
+    slide_09_apples_to_apples(p)
     slide_07_demo(p)
     slide_08_future(p)
     slide_09_thanks(p)
