@@ -172,6 +172,55 @@ def models():
     console.print(table)
 
 
+@app.command()
+def generate(
+    diff_file: Path = typer.Option(..., "--diff-file", "-f", help="Path to a file with the diff text."),
+    model: str = typer.Option("qwen2.5-coder:3b", "--model", help="Ollama model tag."),
+    mode: str = typer.Option("hybrid", "--mode", help="hybrid | llm-only | strategy=<name>"),
+    show_retrieved: bool = typer.Option(False, "--show-retrieved/--no-show-retrieved"),
+):
+    """Generate a Conventional Commit message from a diff using a local LLM.
+
+    Uses the hybrid pipeline by default: RAG retrieval + LLM + classifier verifier.
+    Pass --mode strategy=zero_shot (or few_shot/chain_of_thought/json_mode) for pure-LLM.
+    """
+    from src.llm import ollama_client
+    from src.llm.generator import generate_commit_message
+    from src.llm.hybrid import hybrid_generate
+
+    if not ollama_client.is_alive():
+        console.print("[red]Ollama daemon not reachable at http://localhost:11434[/red]")
+        raise typer.Exit(2)
+    if model not in ollama_client.list_models():
+        console.print(f"[red]Model '{model}' not pulled. Run: ollama pull {model}[/red]")
+        raise typer.Exit(2)
+
+    diff_text = diff_file.read_text()
+
+    if mode == "hybrid":
+        r = hybrid_generate(diff_text, model=model)
+        console.print(f"[bold green]{r.final_message}[/bold green]")
+        console.print(
+            f"  llm_type={r.llm_type or '—'}  verifier_type={r.verifier_type} "
+            f"(conf={r.verifier_confidence:.2f})  type_changed={r.type_changed}"
+        )
+        console.print(f"  latency total={r.latency_ms_total:.0f} ms  llm={r.latency_ms_llm:.0f} ms")
+        if show_retrieved:
+            for ex in r.retrieved:
+                console.print(f"  ↳ [{ex.score:.3f}] {ex.type}: {ex.subject[:80]}")
+    elif mode.startswith("strategy="):
+        strategy = mode.split("=", 1)[1]
+        gc = generate_commit_message(diff_text, model=model, strategy=strategy)
+        console.print(f"[bold green]{gc.one_liner}[/bold green]")
+        console.print(
+            f"  parsed_type={gc.parsed_type or '—'}  latency={gc.latency_ms:.0f} ms  "
+            f"tokens={gc.completion_tokens}"
+        )
+    else:
+        console.print(f"[red]Unknown mode: {mode}[/red]")
+        raise typer.Exit(2)
+
+
 @app.command(name="history")
 def history_cmd(limit: int = typer.Option(20, "--limit", "-n")):
     """Show last N predictions from local history."""
