@@ -1,0 +1,2120 @@
+{
+  "summary": {
+    "model": "llama3.2:3b-instruct-q4_K_M",
+    "strategy": "rag",
+    "sample_kind": "natural",
+    "n": 200,
+    "wall_time_s": 377.0,
+    "accuracy": 0.425,
+    "macro_f1": 0.278707196924186,
+    "weighted_f1": 0.44966814850414516,
+    "macro_precision": 0.3453982300884956,
+    "macro_recall": 0.3207307674871934,
+    "parse_failure_rate": 0.0,
+    "latency_ms_p50": 1796.0568129929015,
+    "latency_ms_p95": 2330.6739750019906,
+    "completion_tokens_mean": 10.195,
+    "temperature": 0.0,
+    "seed": 42
+  },
+  "full_report": {
+    "model_name": "llama3.2:3b-instruct-q4_K_M [rag]",
+    "n_samples": 200,
+    "macro_f1": 0.278707196924186,
+    "weighted_f1": 0.44966814850414516,
+    "macro_precision": 0.3453982300884956,
+    "macro_recall": 0.3207307674871934,
+    "accuracy": 0.425,
+    "confusion_matrix": [
+      [
+        20,
+        6,
+        0,
+        0,
+        1
+      ],
+      [
+        70,
+        57,
+        1,
+        0,
+        1
+      ],
+      [
+        5,
+        2,
+        0,
+        0,
+        0
+      ],
+      [
+        9,
+        9,
+        0,
+        0,
+        0
+      ],
+      [
+        9,
+        2,
+        0,
+        0,
+        8
+      ]
+    ],
+    "labels_order": [
+      "feat",
+      "fix",
+      "docs",
+      "refactor",
+      "test"
+    ],
+    "per_class": {
+      "feat": {
+        "precision": 0.17699115044247787,
+        "recall": 0.7407407407407407,
+        "f1-score": 0.2857142857142857,
+        "support": 27.0
+      },
+      "fix": {
+        "precision": 0.75,
+        "recall": 0.4418604651162791,
+        "f1-score": 0.5560975609756098,
+        "support": 129.0
+      },
+      "docs": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1-score": 0.0,
+        "support": 7.0
+      },
+      "refactor": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1-score": 0.0,
+        "support": 18.0
+      },
+      "test": {
+        "precision": 0.8,
+        "recall": 0.42105263157894735,
+        "f1-score": 0.5517241379310345,
+        "support": 19.0
+      },
+      "accuracy": 0.425,
+      "macro avg": {
+        "precision": 0.3453982300884956,
+        "recall": 0.3207307674871934,
+        "f1-score": 0.278707196924186,
+        "support": 200.0
+      },
+      "weighted avg": {
+        "precision": 0.5836438053097346,
+        "recall": 0.425,
+        "f1-score": 0.44966814850414516,
+        "support": 200.0
+      }
+    }
+  },
+  "rows": [
+    {
+      "idx": 1,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 3480.330916994717,
+      "completion_tokens": 11,
+      "raw": "feat\nfix\ndocs\nrefactor\ntest"
+    },
+    {
+      "idx": 2,
+      "gold": "test",
+      "pred": "test",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2119.8693750047823,
+      "completion_tokens": 11,
+      "raw": "test \nfeat \ndocs \nrefactor \ntest"
+    },
+    {
+      "idx": 3,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1814.1318749985658,
+      "completion_tokens": 8,
+      "raw": "fix\nfix\nfix\nfeat"
+    },
+    {
+      "idx": 4,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1860.0380409916397,
+      "completion_tokens": 10,
+      "raw": "feat\nfix\nfix\nfeat\nfix"
+    },
+    {
+      "idx": 5,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1622.9718749964377,
+      "completion_tokens": 10,
+      "raw": "feat \n\nfix \n\nfix \n\ndocs \n\ntest"
+    },
+    {
+      "idx": 6,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2225.652832988999,
+      "completion_tokens": 10,
+      "raw": "fix\ntest\nfix\nfeat\nfix"
+    },
+    {
+      "idx": 7,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1755.2866250043735,
+      "completion_tokens": 8,
+      "raw": "fix\nfeat\nfix\nfix"
+    },
+    {
+      "idx": 8,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1990.3614170034416,
+      "completion_tokens": 8,
+      "raw": "feat \n\nfix \n\nfix \n\nfeat"
+    },
+    {
+      "idx": 9,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1557.3454169934848,
+      "completion_tokens": 10,
+      "raw": "fix\nfix\nfix\nfix\nfix"
+    },
+    {
+      "idx": 10,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1562.7545000024838,
+      "completion_tokens": 10,
+      "raw": "feat \n\nfix \n\nfix \n\ntest \n\nfix"
+    },
+    {
+      "idx": 11,
+      "gold": "refactor",
+      "pred": "fix",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 2145.372375001898,
+      "completion_tokens": 9,
+      "raw": "fix \nfix \ndocs \nrefactor"
+    },
+    {
+      "idx": 12,
+      "gold": "refactor",
+      "pred": "fix",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1819.3543340021279,
+      "completion_tokens": 11,
+      "raw": "fix\nfeat\ntest\ndocs\nrefactor"
+    },
+    {
+      "idx": 13,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 2497.6718749967404,
+      "completion_tokens": 11,
+      "raw": "feat \n\nfix \n\ndocs \n\nrefactor \n\ntest"
+    },
+    {
+      "idx": 14,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1563.5429590038257,
+      "completion_tokens": 10,
+      "raw": "feat \n\nfix \n\ntest \n\ntest \n\ndocs"
+    },
+    {
+      "idx": 15,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1797.1329590072855,
+      "completion_tokens": 10,
+      "raw": "fix\nfix\nfeat\nfix\nfeat"
+    },
+    {
+      "idx": 16,
+      "gold": "feat",
+      "pred": "feat",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2139.5367910008645,
+      "completion_tokens": 11,
+      "raw": "feat\nrefactor\nfix\ndocs\nfeat"
+    },
+    {
+      "idx": 17,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1406.6867910005385,
+      "completion_tokens": 8,
+      "raw": "fix\nfeat\nfix\nfeat"
+    },
+    {
+      "idx": 18,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1344.6522919985,
+      "completion_tokens": 8,
+      "raw": "fix\nfeat\nfeat\nfix"
+    },
+    {
+      "idx": 19,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 2189.1621660033707,
+      "completion_tokens": 11,
+      "raw": "feat\nfix\ndocs\nrefactor\ntest"
+    },
+    {
+      "idx": 20,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1753.4829590003937,
+      "completion_tokens": 8,
+      "raw": "feat \n\nfix \nfix \ndocs"
+    },
+    {
+      "idx": 21,
+      "gold": "test",
+      "pred": "test",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1400.0261659966782,
+      "completion_tokens": 8,
+      "raw": "test \n\ntest \n\nfix \n\ntest"
+    },
+    {
+      "idx": 22,
+      "gold": "feat",
+      "pred": "feat",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1913.1015829916578,
+      "completion_tokens": 10,
+      "raw": "feat\nfeat\nfeat\nfeat\nfeat"
+    },
+    {
+      "idx": 23,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1814.9402910057688,
+      "completion_tokens": 11,
+      "raw": "feat \n\nfix \n\ndocs \n\nrefactor \n\ntest"
+    },
+    {
+      "idx": 24,
+      "gold": "feat",
+      "pred": "feat",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1161.5563749946887,
+      "completion_tokens": 11,
+      "raw": "feat \n\nfix \n\ndocs \n\nrefactor \n\nfeat"
+    },
+    {
+      "idx": 25,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 2427.210499998182,
+      "completion_tokens": 11,
+      "raw": "feat \n\ndocs \n\nrefactor \n\ntest \n\nfix"
+    },
+    {
+      "idx": 26,
+      "gold": "feat",
+      "pred": "feat",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2232.215541007463,
+      "completion_tokens": 10,
+      "raw": "feat\ntest\nfeat\ntest\nfeat"
+    },
+    {
+      "idx": 27,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1404.7094999987166,
+      "completion_tokens": 8,
+      "raw": "fix\nfix\nfix\ndocs"
+    },
+    {
+      "idx": 28,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1937.345375001314,
+      "completion_tokens": 8,
+      "raw": "fix \n\nfix \n\nfix \n\nfeat"
+    },
+    {
+      "idx": 29,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1977.3706669948297,
+      "completion_tokens": 10,
+      "raw": "fix\nfix\ndocs\nfix\nfix"
+    },
+    {
+      "idx": 30,
+      "gold": "feat",
+      "pred": "feat",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2051.0249579965603,
+      "completion_tokens": 11,
+      "raw": "feat\nfix\ndocs\nrefactor\ntest"
+    },
+    {
+      "idx": 31,
+      "gold": "refactor",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 2513.806957998895,
+      "completion_tokens": 12,
+      "raw": "feat \n\nfeat \n\nfix \n\nrefactor \n\nrefactor"
+    },
+    {
+      "idx": 32,
+      "gold": "feat",
+      "pred": "fix",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 2145.561874989653,
+      "completion_tokens": 9,
+      "raw": "fix\nfix\ndocs\nrefactor"
+    },
+    {
+      "idx": 33,
+      "gold": "test",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 2163.2062909920933,
+      "completion_tokens": 13,
+      "raw": "feat \n\nfeat \ndocs \nrefactor \ntest \nfix"
+    },
+    {
+      "idx": 34,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1466.6988329991,
+      "completion_tokens": 11,
+      "raw": "feat\nfix\ndocs\nrefactor\ntest"
+    },
+    {
+      "idx": 35,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1261.6368750022957,
+      "completion_tokens": 10,
+      "raw": "fix\nfix\nfix\nfeat\nfix"
+    },
+    {
+      "idx": 36,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1918.3952919993317,
+      "completion_tokens": 10,
+      "raw": "fix\nfix\nfix\nfix\nfeat"
+    },
+    {
+      "idx": 37,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1851.5982079989044,
+      "completion_tokens": 10,
+      "raw": "fix\ntest\ntest\nfeat\ndocs"
+    },
+    {
+      "idx": 38,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1481.049708003411,
+      "completion_tokens": 8,
+      "raw": "feat \n\ntest \ntest \nfix"
+    },
+    {
+      "idx": 39,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2076.1637919931673,
+      "completion_tokens": 8,
+      "raw": "fix \ntest \ntest \nfeat"
+    },
+    {
+      "idx": 40,
+      "gold": "test",
+      "pred": "test",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1754.284374997951,
+      "completion_tokens": 8,
+      "raw": "test \n\ntest \n\ntest \n\ndocs"
+    },
+    {
+      "idx": 41,
+      "gold": "feat",
+      "pred": "fix",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1705.1382909994572,
+      "completion_tokens": 8,
+      "raw": "fix\ndocs\nfix\nfeat"
+    },
+    {
+      "idx": 42,
+      "gold": "feat",
+      "pred": "feat",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1643.896333000157,
+      "completion_tokens": 11,
+      "raw": "feat \n\n---\n\nfix \n\n---\n\nfix \n\n---\n\ntest"
+    },
+    {
+      "idx": 43,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1892.282917004195,
+      "completion_tokens": 8,
+      "raw": "fix\nfix\nfix\nfeat"
+    },
+    {
+      "idx": 44,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 2058.286416999181,
+      "completion_tokens": 11,
+      "raw": "feat \n\nfix \n\ndocs \n\nrefactor \n\ntest"
+    },
+    {
+      "idx": 45,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 2060.4587080015335,
+      "completion_tokens": 11,
+      "raw": "feat \nfix \ndocs \nrefactor \ntest"
+    },
+    {
+      "idx": 46,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1998.7613749981392,
+      "completion_tokens": 8,
+      "raw": "fix \nfeat\nfix\nfix"
+    },
+    {
+      "idx": 47,
+      "gold": "feat",
+      "pred": "feat",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1634.8446249903645,
+      "completion_tokens": 8,
+      "raw": "feat \n\nfix \n\nfix \n\ndocs"
+    },
+    {
+      "idx": 48,
+      "gold": "feat",
+      "pred": "feat",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1680.8330829953775,
+      "completion_tokens": 10,
+      "raw": "feat \n\nfix \ntest \nfix \nfeat"
+    },
+    {
+      "idx": 49,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1635.7834169903072,
+      "completion_tokens": 11,
+      "raw": "feat \n\nfix \n\nfix \n\nfix \n\nrefactor"
+    },
+    {
+      "idx": 50,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1917.6794590021018,
+      "completion_tokens": 10,
+      "raw": "fix\nfix\nfix\nfix\nfix"
+    },
+    {
+      "idx": 51,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2052.730416995473,
+      "completion_tokens": 11,
+      "raw": "fix\nfix\nrefactor\ntest\nfix"
+    },
+    {
+      "idx": 52,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1870.66883299849,
+      "completion_tokens": 8,
+      "raw": "feat \n\nfix \n\nfix \n\ndocs"
+    },
+    {
+      "idx": 53,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1642.0375410089036,
+      "completion_tokens": 11,
+      "raw": "feat \n\nfix \ndocs \nrefactor \ntest"
+    },
+    {
+      "idx": 54,
+      "gold": "refactor",
+      "pred": "fix",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1447.8163329913514,
+      "completion_tokens": 10,
+      "raw": "fix\nfix\nfix\nfeat\nfix"
+    },
+    {
+      "idx": 55,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1347.2501669893973,
+      "completion_tokens": 8,
+      "raw": "fix \n\nfix \n\ndocs \n\nfix"
+    },
+    {
+      "idx": 56,
+      "gold": "feat",
+      "pred": "feat",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2101.9945410080254,
+      "completion_tokens": 16,
+      "raw": "feat \n\n---\n\nCommit message: the boy does not contains a standard error format"
+    },
+    {
+      "idx": 57,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 2301.5925840009004,
+      "completion_tokens": 11,
+      "raw": "feat\nfix\ndocs\nrefactor\ntest"
+    },
+    {
+      "idx": 58,
+      "gold": "docs",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1756.3545840093866,
+      "completion_tokens": 11,
+      "raw": "feat\nfix\ndocs\nrefactor\ntest"
+    },
+    {
+      "idx": 59,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1878.2714999979362,
+      "completion_tokens": 11,
+      "raw": "fix\nrefactor\nfeat\ntest\nfix"
+    },
+    {
+      "idx": 60,
+      "gold": "test",
+      "pred": "fix",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1749.15933299053,
+      "completion_tokens": 10,
+      "raw": "fix\nfix\nfeat\nfix\ndocs"
+    },
+    {
+      "idx": 61,
+      "gold": "test",
+      "pred": "test",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1523.600374988746,
+      "completion_tokens": 10,
+      "raw": "test \n\ntest \n\ntest \n\nfeat \n\ntest"
+    },
+    {
+      "idx": 62,
+      "gold": "refactor",
+      "pred": "fix",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 2413.988665997749,
+      "completion_tokens": 11,
+      "raw": "fix\nrefactor\ndocs\ntest\nfeat"
+    },
+    {
+      "idx": 63,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2262.5750830047764,
+      "completion_tokens": 11,
+      "raw": "fix\ntest\ndocs\nrefactor\ntest"
+    },
+    {
+      "idx": 64,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 2258.3933330024593,
+      "completion_tokens": 11,
+      "raw": "feat \n\nfix \n\ndocs \n\nrefactor \n\ntest"
+    },
+    {
+      "idx": 65,
+      "gold": "feat",
+      "pred": "feat",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1981.4875419979217,
+      "completion_tokens": 11,
+      "raw": "feat\nfix\ndocs\nrefactor\ntest"
+    },
+    {
+      "idx": 66,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1915.9753330022795,
+      "completion_tokens": 11,
+      "raw": "fix \nfeat \ndocs \nrefactor \ntest"
+    },
+    {
+      "idx": 67,
+      "gold": "refactor",
+      "pred": "fix",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1954.4544579985086,
+      "completion_tokens": 8,
+      "raw": "fix\nfeat\nfeat\ndocs"
+    },
+    {
+      "idx": 68,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1473.9983749896055,
+      "completion_tokens": 11,
+      "raw": "feat \n\nfix \n\nfix \n\ndocs \n\nrefactor"
+    },
+    {
+      "idx": 69,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1988.046583996038,
+      "completion_tokens": 10,
+      "raw": "fix \n\nfix \n\nfix \n\nfeat \n\nfix"
+    },
+    {
+      "idx": 70,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2066.2821250007255,
+      "completion_tokens": 10,
+      "raw": "fix\nfix\nfix\nfeat\nfix"
+    },
+    {
+      "idx": 71,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1415.721792000113,
+      "completion_tokens": 8,
+      "raw": "feat\nfix\nfeat\nfix"
+    },
+    {
+      "idx": 72,
+      "gold": "feat",
+      "pred": "feat",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1934.5239579997724,
+      "completion_tokens": 10,
+      "raw": "feat \nfeat \nfix \nfeat \nfeat"
+    },
+    {
+      "idx": 73,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 2062.8304169949843,
+      "completion_tokens": 12,
+      "raw": "feat\nfix\ndocs\nrefactor\nrefactor"
+    },
+    {
+      "idx": 74,
+      "gold": "refactor",
+      "pred": "fix",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1733.5004999913508,
+      "completion_tokens": 10,
+      "raw": "fix\nfix\nfix\ndocs\ntest"
+    },
+    {
+      "idx": 75,
+      "gold": "test",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 2179.4842910021544,
+      "completion_tokens": 11,
+      "raw": "feat \n\ntest \n\ndocs \n\nrefactor \n\nfix"
+    },
+    {
+      "idx": 76,
+      "gold": "feat",
+      "pred": "feat",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1631.1787089944119,
+      "completion_tokens": 11,
+      "raw": "feat \n\nfix \n\nfix \n\nrefactor \n\ntest"
+    },
+    {
+      "idx": 77,
+      "gold": "feat",
+      "pred": "feat",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1907.722667005146,
+      "completion_tokens": 11,
+      "raw": "feat\nfix\ndocs\nrefactor\ntest"
+    },
+    {
+      "idx": 78,
+      "gold": "docs",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1580.8277920004912,
+      "completion_tokens": 10,
+      "raw": "feat \n\nfix \n\nfix \n\ndocs \n\ntest"
+    },
+    {
+      "idx": 79,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1719.7788749908796,
+      "completion_tokens": 10,
+      "raw": "fix\nfix\ntest\nfix\ndocs"
+    },
+    {
+      "idx": 80,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1940.3501250053523,
+      "completion_tokens": 11,
+      "raw": "fix\nfeat\ndocs\nrefactor\ntest"
+    },
+    {
+      "idx": 81,
+      "gold": "docs",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1483.8944999937667,
+      "completion_tokens": 11,
+      "raw": "feat \n\ndocs \n\ndocs \n\nrefactor \n\ndocs"
+    },
+    {
+      "idx": 82,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1681.2127499870257,
+      "completion_tokens": 11,
+      "raw": "feat \n\nfix \n\ntest \n\ndocs \n\nrefactor"
+    },
+    {
+      "idx": 83,
+      "gold": "feat",
+      "pred": "feat",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2388.6852499999804,
+      "completion_tokens": 11,
+      "raw": "feat\nfix\ndocs\nrefactor\ntest"
+    },
+    {
+      "idx": 84,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1838.6993750027614,
+      "completion_tokens": 11,
+      "raw": "fix\nrefactor\ndocs\ntest\nfix"
+    },
+    {
+      "idx": 85,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1412.2436250036117,
+      "completion_tokens": 11,
+      "raw": "feat \n\nfix \n\ndocs \n\nrefactor \n\ntest"
+    },
+    {
+      "idx": 86,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1522.7690000028815,
+      "completion_tokens": 10,
+      "raw": "feat\nfix\nfix\ndocs\ntest"
+    },
+    {
+      "idx": 87,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 2124.4194169994444,
+      "completion_tokens": 11,
+      "raw": "feat \n\nfeat \nfix\nrefactor\ntest"
+    },
+    {
+      "idx": 88,
+      "gold": "feat",
+      "pred": "feat",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1535.6044999934966,
+      "completion_tokens": 8,
+      "raw": "feat \n\nfix \n\ntest \n\ndocs"
+    },
+    {
+      "idx": 89,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1771.3282920012716,
+      "completion_tokens": 11,
+      "raw": "feat \n\nfix \n\ndocs \n\nrefactor \n\ntest"
+    },
+    {
+      "idx": 90,
+      "gold": "feat",
+      "pred": "feat",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1812.072792003164,
+      "completion_tokens": 11,
+      "raw": "feat \n\ntest \n\ndocs \n\nrefactor \n\ntest"
+    },
+    {
+      "idx": 91,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1479.3563749990426,
+      "completion_tokens": 11,
+      "raw": "fix\nrefactor\ndocs\ntest\nfeat"
+    },
+    {
+      "idx": 92,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 2200.997499996447,
+      "completion_tokens": 11,
+      "raw": "feat\nfix\ndocs\nrefactor\ntest"
+    },
+    {
+      "idx": 93,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1434.2863749916432,
+      "completion_tokens": 10,
+      "raw": "feat\nfix\nfeat\nfix\nfix"
+    },
+    {
+      "idx": 94,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1803.4521249937825,
+      "completion_tokens": 8,
+      "raw": "fix\nfeat\nfix\ndocs"
+    },
+    {
+      "idx": 95,
+      "gold": "docs",
+      "pred": "fix",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1913.0294580099871,
+      "completion_tokens": 8,
+      "raw": "fix \nfix \nfix \ndocs"
+    },
+    {
+      "idx": 96,
+      "gold": "refactor",
+      "pred": "fix",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1759.0235829993617,
+      "completion_tokens": 6,
+      "raw": "fix\nfix\nfix"
+    },
+    {
+      "idx": 97,
+      "gold": "test",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1856.8017499928828,
+      "completion_tokens": 11,
+      "raw": "feat \n\nfix \n\ntest \n\ndocs \n\nrefactor"
+    },
+    {
+      "idx": 98,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1329.3810410104925,
+      "completion_tokens": 11,
+      "raw": "feat \n\nfix \n\nfix \n\nrefactor \n\nfix"
+    },
+    {
+      "idx": 99,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1481.679582997458,
+      "completion_tokens": 10,
+      "raw": "feat \n\nfix \n\nfix \n\ndocs \n\nfix"
+    },
+    {
+      "idx": 100,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1627.8368750063237,
+      "completion_tokens": 11,
+      "raw": "fix\nfeat\nrefactor\ndocs\ntest"
+    },
+    {
+      "idx": 101,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 2285.2632499998435,
+      "completion_tokens": 11,
+      "raw": "feat \n\nfix \n\ndocs \n\nrefactor \n\ntest"
+    },
+    {
+      "idx": 102,
+      "gold": "docs",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1795.5732500122394,
+      "completion_tokens": 11,
+      "raw": "feat \n\ndocs \n\nfix \n\ndocs \n\nrefactor"
+    },
+    {
+      "idx": 103,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1795.8772089914419,
+      "completion_tokens": 11,
+      "raw": "feat\nfix\ndocs\nrefactor\ntest"
+    },
+    {
+      "idx": 104,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1425.0924579973798,
+      "completion_tokens": 10,
+      "raw": "feat \n\nfix \n\nfix \n\ndocs \n\ntest"
+    },
+    {
+      "idx": 105,
+      "gold": "test",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1855.0488330074586,
+      "completion_tokens": 11,
+      "raw": "feat \n\ntest \n\ndocs \n\nrefactor \n\ntest"
+    },
+    {
+      "idx": 106,
+      "gold": "test",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 2218.6654589895625,
+      "completion_tokens": 11,
+      "raw": "feat \n\ntest \n\ntest \n\nrefactor \n\ndocs"
+    },
+    {
+      "idx": 107,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2246.1288749909727,
+      "completion_tokens": 12,
+      "raw": "fix\nrefactor\ndocs\ntest\nrefactor"
+    },
+    {
+      "idx": 108,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1989.4722500030184,
+      "completion_tokens": 12,
+      "raw": "feat \n\nfix \n\nrefactor \n\nrefactor \n\nfeat"
+    },
+    {
+      "idx": 109,
+      "gold": "fix",
+      "pred": "docs",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 2461.34362500743,
+      "completion_tokens": 8,
+      "raw": "docs\nfix\nfix\ndocs"
+    },
+    {
+      "idx": 110,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1390.7498749904335,
+      "completion_tokens": 11,
+      "raw": "fix\nrefactor\nfix\nfeat\nfix"
+    },
+    {
+      "idx": 111,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1447.1647080063121,
+      "completion_tokens": 11,
+      "raw": "feat \n\nfix \n\ndocs \n\nrefactor \n\ntest"
+    },
+    {
+      "idx": 112,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1502.6744580100058,
+      "completion_tokens": 11,
+      "raw": "feat \n\nfix \n\ndocs \n\nrefactor \n\ntest"
+    },
+    {
+      "idx": 113,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1504.6129999973346,
+      "completion_tokens": 8,
+      "raw": "fix \n\nfix \n\nfix \n\nfeat"
+    },
+    {
+      "idx": 114,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1500.5372079904191,
+      "completion_tokens": 8,
+      "raw": "feat \n\nfix \n\nfix \n\ndocs"
+    },
+    {
+      "idx": 115,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1507.086708996212,
+      "completion_tokens": 8,
+      "raw": "feat \n\nfix \nfix \nfix"
+    },
+    {
+      "idx": 116,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1971.0397080052644,
+      "completion_tokens": 8,
+      "raw": "feat \n\nfix \n\nfix \n\ndocs"
+    },
+    {
+      "idx": 117,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1680.1770419988316,
+      "completion_tokens": 11,
+      "raw": "feat \n\n---\n\nfix \n\n---\n\nfix \n\n---\n\ndocs"
+    },
+    {
+      "idx": 118,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 2087.874208998983,
+      "completion_tokens": 11,
+      "raw": "feat\nfix\ndocs\nrefactor\ntest"
+    },
+    {
+      "idx": 119,
+      "gold": "test",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1741.653082994162,
+      "completion_tokens": 11,
+      "raw": "feat \n\n---\n\ntest \n\n---\n\ntest \n\n---\n\ndocs"
+    },
+    {
+      "idx": 120,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1602.1202919946518,
+      "completion_tokens": 16,
+      "raw": "feat\nfix\ndocs\nrefactor\ntest \n\nfeat\ntest\nfix"
+    },
+    {
+      "idx": 121,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2327.6207500020973,
+      "completion_tokens": 10,
+      "raw": "fix\nfix\nfix\ndocs\ntest"
+    },
+    {
+      "idx": 122,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1736.5397079993272,
+      "completion_tokens": 11,
+      "raw": "feat\nfix\ndocs\nrefactor\ntest"
+    },
+    {
+      "idx": 123,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1848.5251249949215,
+      "completion_tokens": 11,
+      "raw": "fix\nrefactor\ndocs\ntest\nfeat"
+    },
+    {
+      "idx": 124,
+      "gold": "test",
+      "pred": "test",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1912.618874994223,
+      "completion_tokens": 11,
+      "raw": "test\nfeat\ndocs\nrefactor\ntest"
+    },
+    {
+      "idx": 125,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1947.6082920009503,
+      "completion_tokens": 10,
+      "raw": "fix\nfix\nfix\ndocs\ndocs"
+    },
+    {
+      "idx": 126,
+      "gold": "refactor",
+      "pred": "fix",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1792.7792910049902,
+      "completion_tokens": 11,
+      "raw": "fix\nrefactor\ndocs\ntest\nfix"
+    },
+    {
+      "idx": 127,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2031.476542004384,
+      "completion_tokens": 8,
+      "raw": "fix\nfix\nfix\nfix"
+    },
+    {
+      "idx": 128,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1682.1800830075517,
+      "completion_tokens": 11,
+      "raw": "fix\nfeat\ntest\ndocs\nrefactor"
+    },
+    {
+      "idx": 129,
+      "gold": "feat",
+      "pred": "feat",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2508.731458001421,
+      "completion_tokens": 10,
+      "raw": "feat \n\nfeat \n\nfeat \n\ndocs \n\ndocs"
+    },
+    {
+      "idx": 130,
+      "gold": "test",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 2038.9500839955872,
+      "completion_tokens": 11,
+      "raw": "feat\nfix\ndocs\nrefactor\ntest"
+    },
+    {
+      "idx": 131,
+      "gold": "refactor",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1967.6789999939501,
+      "completion_tokens": 11,
+      "raw": "feat \nfix \ndocs \nrefactor \ntest"
+    },
+    {
+      "idx": 132,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1911.8317919928813,
+      "completion_tokens": 8,
+      "raw": "fix\nfix\nfix\ndocs"
+    },
+    {
+      "idx": 133,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1621.5609170030802,
+      "completion_tokens": 8,
+      "raw": "fix\nfeat\nfeat\nfix"
+    },
+    {
+      "idx": 134,
+      "gold": "feat",
+      "pred": "fix",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1738.093125008163,
+      "completion_tokens": 8,
+      "raw": "fix\nfeat\nfeat\nfix"
+    },
+    {
+      "idx": 135,
+      "gold": "fix",
+      "pred": "test",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 2214.7662499919534,
+      "completion_tokens": 11,
+      "raw": "test \n\nfeat \n\nfix \n\ndocs \n\nrefactor"
+    },
+    {
+      "idx": 136,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1791.2824999948498,
+      "completion_tokens": 11,
+      "raw": "fix\nfeat\ndocs\nrefactor\ntest"
+    },
+    {
+      "idx": 137,
+      "gold": "refactor",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 2165.3845419932622,
+      "completion_tokens": 11,
+      "raw": "feat \n\ndocs \n\ntest \n\nrefactor \n\nfeat"
+    },
+    {
+      "idx": 138,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1914.3210409965832,
+      "completion_tokens": 11,
+      "raw": "feat \nfix \ndocs \nrefactor \ntest"
+    },
+    {
+      "idx": 139,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 2035.146291993442,
+      "completion_tokens": 11,
+      "raw": "feat \n\nfix \n\nfix \n\nfix \n\nrefactor"
+    },
+    {
+      "idx": 140,
+      "gold": "docs",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1618.9761249988806,
+      "completion_tokens": 11,
+      "raw": "feat \n\ndocs \n\nfix \n\nrefactor \n\ndocs"
+    },
+    {
+      "idx": 141,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 2027.4775839934591,
+      "completion_tokens": 11,
+      "raw": "feat\nfix\ndocs\nrefactor\ntest"
+    },
+    {
+      "idx": 142,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1714.6631670038914,
+      "completion_tokens": 10,
+      "raw": "fix\nfix\nfix\nfix\ndocs"
+    },
+    {
+      "idx": 143,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1623.4848339954624,
+      "completion_tokens": 8,
+      "raw": "feat \n\nfix \nfix \ntest"
+    },
+    {
+      "idx": 144,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1427.9562500014435,
+      "completion_tokens": 10,
+      "raw": "feat \n\nfix \n\nfix \n\ndocs \n\ntest"
+    },
+    {
+      "idx": 145,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1679.9183749972144,
+      "completion_tokens": 11,
+      "raw": "fix\nfeat\nrefactor\ntest\ndocs"
+    },
+    {
+      "idx": 146,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1849.9251250032103,
+      "completion_tokens": 11,
+      "raw": "feat\nfix\ndocs\nrefactor\ntest"
+    },
+    {
+      "idx": 147,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1747.6304579904536,
+      "completion_tokens": 11,
+      "raw": "feat \n\nfix \n\nfix \n\ndocs \n\nrefactor"
+    },
+    {
+      "idx": 148,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1732.2609169932548,
+      "completion_tokens": 8,
+      "raw": "feat \n\nfix \n\nfix \n\ntest"
+    },
+    {
+      "idx": 149,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1445.7465000014054,
+      "completion_tokens": 11,
+      "raw": "feat \n\nfix \n\nfix \n\nrefactor \n\ntest"
+    },
+    {
+      "idx": 150,
+      "gold": "refactor",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1972.785499994643,
+      "completion_tokens": 11,
+      "raw": "feat \n\nrefactor \n\ndocs \n\ntest \n\nfix"
+    },
+    {
+      "idx": 151,
+      "gold": "refactor",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1566.7948749905918,
+      "completion_tokens": 11,
+      "raw": "feat\nfix\ndocs\nrefactor\ntest"
+    },
+    {
+      "idx": 152,
+      "gold": "refactor",
+      "pred": "fix",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1501.461957988795,
+      "completion_tokens": 8,
+      "raw": "fix \n\nfix \n\nfix \n\ndocs"
+    },
+    {
+      "idx": 153,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1661.1494589888025,
+      "completion_tokens": 10,
+      "raw": "feat \n\nfix \n\nfix \n\nfix \n\ndocs"
+    },
+    {
+      "idx": 154,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1807.4087080021854,
+      "completion_tokens": 11,
+      "raw": "fix\nrefactor\ntest\ndocs\nfeat"
+    },
+    {
+      "idx": 155,
+      "gold": "test",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 2184.9530000035884,
+      "completion_tokens": 16,
+      "raw": "feat \nfix\ndocs\nrefactor\ntest \n\nfeat\ntest\ndocs"
+    },
+    {
+      "idx": 156,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 2093.5745000024326,
+      "completion_tokens": 11,
+      "raw": "feat\nfix\ndocs\nrefactor\ntest"
+    },
+    {
+      "idx": 157,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1617.2883330000332,
+      "completion_tokens": 11,
+      "raw": "feat\nfix\ntest\ndocs\nrefactor"
+    },
+    {
+      "idx": 158,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2078.6589170020306,
+      "completion_tokens": 8,
+      "raw": "fix\nfix\nfix\nfeat"
+    },
+    {
+      "idx": 159,
+      "gold": "test",
+      "pred": "test",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1541.3166670041392,
+      "completion_tokens": 10,
+      "raw": "test \n\ntest \n\ntest \n\nfix \n\nfix"
+    },
+    {
+      "idx": 160,
+      "gold": "test",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1314.9744999973336,
+      "completion_tokens": 10,
+      "raw": "feat \n\nfix \n\nfix \n\ntest \n\nfix"
+    },
+    {
+      "idx": 161,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1716.3994579896098,
+      "completion_tokens": 10,
+      "raw": "fix\nfix\nfix\nfeat\nfix"
+    },
+    {
+      "idx": 162,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1544.3070840119617,
+      "completion_tokens": 10,
+      "raw": "feat \n\nfix \n\ntest \n\nfix \n\ndocs"
+    },
+    {
+      "idx": 163,
+      "gold": "feat",
+      "pred": "feat",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1312.896000003093,
+      "completion_tokens": 10,
+      "raw": "feat \n\nfix \n\nfix \n\nfix \n\ndocs"
+    },
+    {
+      "idx": 164,
+      "gold": "refactor",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1909.2288329993607,
+      "completion_tokens": 11,
+      "raw": "feat \n\nfeat \n\nrefactor \n\nfeat \n\nfix"
+    },
+    {
+      "idx": 165,
+      "gold": "feat",
+      "pred": "fix",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 2027.3170419968665,
+      "completion_tokens": 8,
+      "raw": "fix\nfix\ndocs\nfix"
+    },
+    {
+      "idx": 166,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1839.560332999099,
+      "completion_tokens": 10,
+      "raw": "fix \nfix \nfix \nfeat \ntest"
+    },
+    {
+      "idx": 167,
+      "gold": "test",
+      "pred": "fix",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1798.374165999121,
+      "completion_tokens": 11,
+      "raw": "fix \ntest \nfeat \ndocs \nrefactor"
+    },
+    {
+      "idx": 168,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1387.0861670002341,
+      "completion_tokens": 11,
+      "raw": "feat \n\nfix \n\ndocs \n\nrefactor \n\ntest"
+    },
+    {
+      "idx": 169,
+      "gold": "feat",
+      "pred": "feat",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1739.3325830053072,
+      "completion_tokens": 11,
+      "raw": "feat\nfix\nrefactor\ntest\ndocs"
+    },
+    {
+      "idx": 170,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1127.5572090089554,
+      "completion_tokens": 10,
+      "raw": "fix\nfix\nfix\ndocs\nfix"
+    },
+    {
+      "idx": 171,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1835.4551250085933,
+      "completion_tokens": 10,
+      "raw": "fix \nfix \nfeat \nfix \ntest"
+    },
+    {
+      "idx": 172,
+      "gold": "feat",
+      "pred": "feat",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1562.6877499889815,
+      "completion_tokens": 11,
+      "raw": "feat \nfix \ndocs \nrefactor \ntest"
+    },
+    {
+      "idx": 173,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1792.23562500556,
+      "completion_tokens": 11,
+      "raw": "feat\nfix\nrefactor\ndocs\ntest"
+    },
+    {
+      "idx": 174,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1500.4483340017032,
+      "completion_tokens": 11,
+      "raw": "feat\nfix\ndocs\nrefactor\ntest"
+    },
+    {
+      "idx": 175,
+      "gold": "feat",
+      "pred": "fix",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1796.2364169943612,
+      "completion_tokens": 8,
+      "raw": "fix\nfeat\nfeat\ndocs"
+    },
+    {
+      "idx": 176,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1737.6818340126192,
+      "completion_tokens": 11,
+      "raw": "feat\nfix\ndocs\nrefactor\ntest"
+    },
+    {
+      "idx": 177,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 2026.589333996526,
+      "completion_tokens": 11,
+      "raw": "feat\ntest\nfeat\ndocs\nrefactor"
+    },
+    {
+      "idx": 178,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 2403.2317499950295,
+      "completion_tokens": 11,
+      "raw": "fix\nfeat\nrefactor\ndocs\ntest"
+    },
+    {
+      "idx": 179,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1913.9303749980172,
+      "completion_tokens": 11,
+      "raw": "feat \n\nfix \n\ndocs \n\nrefactor \n\ntest"
+    },
+    {
+      "idx": 180,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1390.9872919903137,
+      "completion_tokens": 11,
+      "raw": "feat \n\nfix \n\nrefactor \n\nfeat \n\nfix"
+    },
+    {
+      "idx": 181,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1507.1012919943314,
+      "completion_tokens": 11,
+      "raw": "fix \nfix\nrefactor\nfix\nfeat"
+    },
+    {
+      "idx": 182,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1953.1747500004712,
+      "completion_tokens": 10,
+      "raw": "fix\nfix\nfix\ndocs\ntest"
+    },
+    {
+      "idx": 183,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1737.3932079935912,
+      "completion_tokens": 11,
+      "raw": "feat \n\nfix \n\ndocs \n\nrefactor \n\ntest"
+    },
+    {
+      "idx": 184,
+      "gold": "test",
+      "pred": "test",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1599.9867920036195,
+      "completion_tokens": 10,
+      "raw": "test \n\ntest \n\ntest \n\nfeat \n\ntest"
+    },
+    {
+      "idx": 185,
+      "gold": "test",
+      "pred": "test",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1596.5767500019865,
+      "completion_tokens": 10,
+      "raw": "test\ntest\nfix\ntest\ndocs"
+    },
+    {
+      "idx": 186,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1714.0930000023218,
+      "completion_tokens": 10,
+      "raw": "fix\ndocs\nfeat\nfix\nfeat"
+    },
+    {
+      "idx": 187,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1469.381707996945,
+      "completion_tokens": 9,
+      "raw": "fix\nfeat\nfix\nrefactor"
+    },
+    {
+      "idx": 188,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1505.798041995149,
+      "completion_tokens": 11,
+      "raw": "feat\nfix\ndocs\nrefactor\ntest"
+    },
+    {
+      "idx": 189,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1679.6470829867758,
+      "completion_tokens": 11,
+      "raw": "feat \n\nfix \nfix \ndocs \nrefactor"
+    },
+    {
+      "idx": 190,
+      "gold": "feat",
+      "pred": "fix",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 2214.5674169878475,
+      "completion_tokens": 11,
+      "raw": "fix\nfeat\nfix\nrefactor\nfeat"
+    },
+    {
+      "idx": 191,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1661.124459002167,
+      "completion_tokens": 10,
+      "raw": "fix\nfix\nfix\nfix\nfeat"
+    },
+    {
+      "idx": 192,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1891.8336659990018,
+      "completion_tokens": 10,
+      "raw": "fix\nfix\nfix\ndocs\ndocs"
+    },
+    {
+      "idx": 193,
+      "gold": "refactor",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1814.053416994284,
+      "completion_tokens": 12,
+      "raw": "feat \n\nfix \n\nrefactor \n\nrefactor \n\ndocs"
+    },
+    {
+      "idx": 194,
+      "gold": "refactor",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1680.137500006822,
+      "completion_tokens": 11,
+      "raw": "feat \n\ntest \n\nfix \n\ndocs \n\nrefactor"
+    },
+    {
+      "idx": 195,
+      "gold": "refactor",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1850.0523330003489,
+      "completion_tokens": 11,
+      "raw": "feat \nfix \ndocs \nrefactor \ntest"
+    },
+    {
+      "idx": 196,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1444.234124996001,
+      "completion_tokens": 11,
+      "raw": "feat \n\nfix \n\ndocs \n\nrefactor \n\ntest"
+    },
+    {
+      "idx": 197,
+      "gold": "feat",
+      "pred": "test",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 2085.499125008937,
+      "completion_tokens": 11,
+      "raw": "test\nrefactor\nfix\nfeat\ndocs"
+    },
+    {
+      "idx": 198,
+      "gold": "fix",
+      "pred": "fix",
+      "correct": 1,
+      "parse_failed": 0,
+      "latency_ms": 1312.789250005153,
+      "completion_tokens": 10,
+      "raw": "fix\nrefactor\nfix\nrefactor"
+    },
+    {
+      "idx": 199,
+      "gold": "fix",
+      "pred": "feat",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 1626.1452089966042,
+      "completion_tokens": 11,
+      "raw": "feat\nfix\ntest\ndocs\nrefactor"
+    },
+    {
+      "idx": 200,
+      "gold": "docs",
+      "pred": "fix",
+      "correct": 0,
+      "parse_failed": 0,
+      "latency_ms": 2401.2451250018785,
+      "completion_tokens": 2,
+      "raw": "fix"
+    }
+  ]
+}

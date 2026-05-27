@@ -1,0 +1,98 @@
+{
+  "model_name": "qwen2.5-coder:1.5b [rag]",
+  "n_samples": 200,
+  "macro_f1": 0.22762333119154707,
+  "weighted_f1": 0.5500101377882488,
+  "macro_precision": 0.41403141361256546,
+  "macro_recall": 0.23860555782220408,
+  "accuracy": 0.66,
+  "confusion_matrix": [
+    [
+      1,
+      26,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      128,
+      0,
+      1,
+      0
+    ],
+    [
+      0,
+      6,
+      0,
+      1,
+      0
+    ],
+    [
+      1,
+      14,
+      0,
+      2,
+      1
+    ],
+    [
+      0,
+      17,
+      0,
+      1,
+      1
+    ]
+  ],
+  "labels_order": [
+    "feat",
+    "fix",
+    "docs",
+    "refactor",
+    "test"
+  ],
+  "per_class": {
+    "feat": {
+      "precision": 0.5,
+      "recall": 0.037037037037037035,
+      "f1-score": 0.06896551724137931,
+      "support": 27.0
+    },
+    "fix": {
+      "precision": 0.6701570680628273,
+      "recall": 0.9922480620155039,
+      "f1-score": 0.8,
+      "support": 129.0
+    },
+    "docs": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 7.0
+    },
+    "refactor": {
+      "precision": 0.4,
+      "recall": 0.1111111111111111,
+      "f1-score": 0.17391304347826086,
+      "support": 18.0
+    },
+    "test": {
+      "precision": 0.5,
+      "recall": 0.05263157894736842,
+      "f1-score": 0.09523809523809523,
+      "support": 19.0
+    },
+    "accuracy": 0.66,
+    "macro avg": {
+      "precision": 0.41403141361256546,
+      "recall": 0.23860555782220408,
+      "f1-score": 0.22762333119154707,
+      "support": 200.0
+    },
+    "weighted avg": {
+      "precision": 0.5832513089005236,
+      "recall": 0.66,
+      "f1-score": 0.5500101377882488,
+      "support": 200.0
+    }
+  }
+}
