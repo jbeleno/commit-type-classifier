@@ -606,7 +606,7 @@ _TOOL_AVATAR = {
 
 def tab_chat() -> None:
     """Agentic chat — conversational interface backed by tool-calling LLM."""
-    from src.llm.agent import TOOLS, run_agent
+    from src.llm.agent import DEFAULT_CLASSIFIER, DEFAULT_GENERATOR, TOOLS, run_agent
 
     models = _ollama_models()
     if not models:
@@ -618,8 +618,8 @@ def tab_chat() -> None:
         return
 
     st.markdown(
-        '<div class="eyebrow">agentic chat · '
-        + str(len(TOOLS)) + ' tools available</div>',
+        '<div class="eyebrow">agentic chat · LLM end-to-end · '
+        + str(len(TOOLS)) + ' tools</div>',
         unsafe_allow_html=True,
     )
 
@@ -633,9 +633,23 @@ def tab_chat() -> None:
         preferred = ["llama3.2:3b-instruct-q4_K_M", "qwen2.5-coder:3b"]
         default_idx = next((models.index(p) for p in preferred if p in models), 0)
         agent_model = st.selectbox(
-            "agent model", models, index=default_idx,
-            help="LLM that decides which tools to call. llama3.2 is the most reliable tool-caller in our pool.",
+            "orchestrator LLM", models, index=default_idx,
+            help="LLM that decides which tools to call and writes the natural-language interpretation.",
         )
+
+        st.markdown(
+            f'<div class="muted" style="font-size:0.78rem; line-height:1.55; '
+            f'background:#0B1220; border:1px solid #334155; padding:0.55rem 0.7rem; '
+            f'border-radius:6px; margin-top:0.5rem;">'
+            f'<b style="color:#38BDF8;">model stack</b><br>'
+            f'· orchestrator → <span class="mono">{_e(agent_model)}</span><br>'
+            f'· classifier → <span class="mono">{_e(DEFAULT_CLASSIFIER)}</span><br>'
+            f'· generator → <span class="mono">{_e(DEFAULT_GENERATOR)}</span><br>'
+            f'<span style="color:#94A3B8;">all three are LLMs running locally via Ollama.</span>'
+            f'</div>',
+            unsafe_allow_html=True,
+        )
+
         if st.button("clear conversation", use_container_width=True):
             st.session_state.chat_history = []
             st.session_state.chat_steps = []
@@ -648,7 +662,9 @@ def tab_chat() -> None:
             '· list the available models<br>'
             '· classify: fix race condition<br>'
             '· analyze last 20 commits of /path/to/repo<br>'
-            '· write a commit for this diff: …'
+            '· write a commit for this diff: …<br>'
+            '<br>'
+            '<i>(LLM classifier is slower: ~2 s per commit; use baseline_tfidf when you need speed)</i>'
             '</div>', unsafe_allow_html=True)
 
     with col_l:

@@ -40,6 +40,8 @@ from src.llm import ollama_client
 from src.llm.hybrid import hybrid_generate
 
 DEFAULT_AGENT_MODEL = "llama3.2:3b-instruct-q4_K_M"
+DEFAULT_CLASSIFIER = "llm:qwen2.5-coder:3b"   # LLM-powered, RAG few-shot
+DEFAULT_GENERATOR = "qwen2.5-coder:3b"
 MAX_TURNS = 8
 _TOOL_NAMES = {"classify_commit", "generate_commit_message", "scan_repo",
                "classify_repo", "list_models", "list_classes"}
@@ -50,7 +52,7 @@ _TOOL_NAMES = {"classify_commit", "generate_commit_message", "scan_repo",
 # --------------------------------------------------------------------------- #
 
 
-def _tool_classify_commit(message: str, diff: str = "", model: str = "baseline_tfidf") -> Dict[str, Any]:
+def _tool_classify_commit(message: str, diff: str = "", model: str = DEFAULT_CLASSIFIER) -> Dict[str, Any]:
     if model not in AVAILABLE_MODELS:
         return {"error": f"unknown model '{model}'. Use list_models()."}
     p = predict(message or "", diff or "", model)
@@ -62,7 +64,7 @@ def _tool_classify_commit(message: str, diff: str = "", model: str = "baseline_t
     }
 
 
-def _tool_generate_commit_message(diff: str, model: str = "qwen2.5-coder:3b") -> Dict[str, Any]:
+def _tool_generate_commit_message(diff: str, model: str = DEFAULT_GENERATOR) -> Dict[str, Any]:
     r = hybrid_generate(diff or "", model=model)
     return {
         "message": r.final_message,
@@ -116,7 +118,7 @@ def _tool_scan_repo(path: str, last_n: int = 20) -> Dict[str, Any]:
     return {"path": str(p), "n_commits": len(commits), "commits": commits}
 
 
-def _tool_classify_repo(path: str, last_n: int = 20, model: str = "baseline_tfidf") -> Dict[str, Any]:
+def _tool_classify_repo(path: str, last_n: int = 20, model: str = DEFAULT_CLASSIFIER) -> Dict[str, Any]:
     try:
         last_n = int(last_n)
     except (TypeError, ValueError):
@@ -177,14 +179,14 @@ TOOL_SCHEMAS: List[Dict[str, Any]] = [
         "type": "function",
         "function": {
             "name": "classify_commit",
-            "description": "Predict the Conventional Commit type for a single commit.",
+            "description": "Predict the Conventional Commit type for a single commit using a local LLM (default) or any other available model.",
             "parameters": {
                 "type": "object",
                 "properties": {
                     "message": {"type": "string", "description": "The commit message."},
                     "diff": {"type": "string", "description": "The unified diff. Optional."},
                     "model": {"type": "string",
-                              "description": "One of: baseline_tfidf, cnn_text, distilbert, codebert, ensemble, llm:qwen2.5-coder:3b, llm-ensemble. Default baseline_tfidf."},
+                              "description": "Default 'llm:qwen2.5-coder:3b' (LLM with RAG few-shot). Alternatives: 'llm-ensemble', 'baseline_tfidf', 'cnn_text', 'distilbert', 'codebert', 'ensemble'. Use baseline_tfidf only when the user explicitly asks for the fast classical classifier."},
                 },
                 "required": ["message"],
             },
@@ -227,14 +229,14 @@ TOOL_SCHEMAS: List[Dict[str, Any]] = [
         "type": "function",
         "function": {
             "name": "classify_repo",
-            "description": "Scan + classify the last N commits of a local git repo and return a class histogram.",
+            "description": "Scan + classify the last N commits of a local git repo with an LLM (default) and return a class histogram.",
             "parameters": {
                 "type": "object",
                 "properties": {
                     "path": {"type": "string", "description": "Path to a local git repo."},
-                    "last_n": {"type": "integer", "description": "Default 20."},
+                    "last_n": {"type": "integer", "description": "Default 20. Capped at 200."},
                     "model": {"type": "string",
-                              "description": "Classifier or LLM model. Default baseline_tfidf."},
+                              "description": "Default 'llm:qwen2.5-coder:3b' (LLM with RAG few-shot — slower but uses an LLM end-to-end). Use 'baseline_tfidf' only when the user explicitly asks for the fast classical classifier."},
                 },
                 "required": ["path"],
             },
@@ -260,15 +262,16 @@ TOOL_SCHEMAS: List[Dict[str, Any]] = [
 
 
 SYSTEM_PROMPT = (
-    "You are an assistant embedded in a commit-classification project. "
-    "You have access to tools that classify a single commit, generate a "
-    "commit message from a diff, scan a local git repository, and run "
-    "a full classify-the-last-N-commits sweep over a repo. "
+    "You are an autonomous agent that automates software-engineering "
+    "analysis using LOCAL LLMs. Your toolbox runs an LLM "
+    "(`llm:qwen2.5-coder:3b` with RAG few-shot retrieval over a "
+    "CommitBench train corpus) end-to-end for every classification and "
+    "generation request — DO NOT override the model argument unless the "
+    "user explicitly asks for the fast classical baseline. "
     "When the user asks about a repository, prefer `classify_repo`. "
     "When the user pastes a diff and asks for a message, call "
     "`generate_commit_message`. When the user pastes a commit message + "
     "diff and asks for a label, call `classify_commit`. "
-    "If the user did not specify a model, use the default. "
     "AFTER A TOOL RETURNS: the GUI already renders the result as a table "
     "or chart, so DO NOT repeat the data line by line. Write 1-3 SHORT "
     "sentences that INTERPRET the result: what stands out, what is "
