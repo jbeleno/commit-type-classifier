@@ -589,6 +589,17 @@ def tab_generate() -> None:
         st.markdown(render_diff_block(diff), unsafe_allow_html=True)
 
 
+MODEL_LABELS = {
+    "baseline_tfidf":         "baseline_tfidf  —  TF-IDF + LogReg  ·  ~50 ms",
+    "cnn_text":               "cnn_text  —  dual Conv1D  ·  ~200 ms",
+    "distilbert":             "distilbert  —  transformer fine-tuned  ·  ~500 ms",
+    "codebert":               "codebert  —  code-aware transformer  ·  ~500 ms",
+    "ensemble":               "ensemble  —  4-classifier soft vote  ·  ~1 s",
+    "llm:qwen2.5-coder:3b":   "llm:qwen2.5-coder:3b  —  LLM single  ·  demo · ~2 s",
+    "llm-ensemble":           "llm-ensemble  —  qwen-3b + phi3.5 + TF-IDF voter (2× boost)  ·  demo · ~4 s · beats baseline on all 3 metrics",
+}
+
+
 def tab_predict() -> None:
     trained = _trained_models()
     if not trained:
@@ -602,7 +613,13 @@ def tab_predict() -> None:
 
     col_l, col_r = st.columns([2.2, 1])
     with col_r:
-        model_name = st.selectbox("model", trained, index=0)
+        model_name = st.selectbox(
+            "model",
+            trained,
+            index=0,
+            format_func=lambda m: MODEL_LABELS.get(m, m),
+            help="Defaults to the fastest classifier. LLM modes are slower and intended for benchmark/defense, not production use.",
+        )
         log = st.checkbox("log to history", value=True)
 
     with col_l:
@@ -812,7 +829,7 @@ def main() -> None:
         '  <h1>Commit Type Classifier</h1>'
         '  <div class="breadcrumb">'
         '    <b>c2</b> · ai for software engineering · usco · '
-        '    <span class="mono">5 models · 38,965 commits</span>'
+        '    <span class="mono">5 classifiers + 5 LLMs · 38,965 commits</span>'
         '  </div>'
         '</div>',
         unsafe_allow_html=True,
