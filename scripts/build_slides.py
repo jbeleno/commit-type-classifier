@@ -210,7 +210,7 @@ def add_chip(slide, label: str, x: float, y: float, *, w: float = 1.0):
 # --------------------------------------------------------------------------- #
 # Individual slides
 # --------------------------------------------------------------------------- #
-TOTAL = 12
+TOTAL = 13
 
 
 def slide_01_title(p):
@@ -542,10 +542,57 @@ def slide_09_apples_to_apples(p):
     return s
 
 
+def slide_10_agent(p):
+    s = blank_slide(p)
+    add_header(s, "09 · agentic AI", "Topic 11  ·  natural-language interface · LLM end-to-end")
+    add_footer(s, 10, TOTAL)
+
+    # Left card — the stack
+    add_card(s, 0.6, 1.95, 5.8, 4.85, gutter=CLASS_COLORS["docs"])
+    add_text(s, "model stack — all 3 layers are LLMs", 0.85, 2.1, 5.3, 0.4,
+             font_size=14, color=CLASS_COLORS["docs"], font_name=FONT_SANS, bold=True)
+    add_text(s,
+        "orchestrator → llama3.2:3b-instruct\n"
+        "    decides which tool to call,\n"
+        "    writes the final interpretation\n\n"
+        "classifier  → llm:qwen2.5-coder:3b\n"
+        "    RAG few-shot retrieval over\n"
+        "    the train corpus (27 k commits)\n\n"
+        "generator   → qwen2.5-coder:3b\n"
+        "    hybrid pipeline: LLM + verifier\n"
+        "    (the TF-IDF baseline corrects\n"
+        "    the type when confidence ≥ 0.6)",
+        0.85, 2.55, 5.3, 4.2, font_size=12, color=INK_2, font_name=FONT_MONO)
+
+    # Right card — the 6 tools + example
+    add_card(s, 6.7, 1.95, 6.05, 4.85, gutter=CLASS_COLORS["feat"])
+    add_text(s, "6 tool functions", 6.95, 2.1, 5.6, 0.4,
+             font_size=14, color=CLASS_COLORS["feat"], font_name=FONT_SANS, bold=True)
+    add_text(s,
+        "classify_commit         classify_repo\n"
+        "generate_commit_message scan_repo\n"
+        "list_models             list_classes",
+        6.95, 2.5, 5.6, 1.0, font_size=12, color=INK_2, font_name=FONT_MONO)
+
+    add_text(s, "example session", 6.95, 3.65, 5.6, 0.4,
+             font_size=11, color=INK_3, font_name=FONT_SANS, bold=True, letter_spacing=2.0)
+    add_text(s,
+        "👤  \"classify the last 10 commits of\n"
+        "    /Users/jesus/Desktop/skillapp\"\n\n"
+        "🛠  classify_repo  →  histogram\n"
+        "    {feat: 7, refactor: 3, fix: 0,\n"
+        "     docs: 0, test: 0}\n\n"
+        "🤖  \"70 % feat, 30 % refactor, no fix —\n"
+        "    active feature phase, not\n"
+        "    maintenance.\"",
+        6.95, 4.0, 5.6, 2.8, font_size=11, color=INK_2, font_name=FONT_MONO)
+    return s
+
+
 def slide_07_demo(p):
     s = blank_slide(p)
-    add_header(s, "09 · demo", "Local app — Streamlit GUI  +  Typer CLI")
-    add_footer(s, 10, TOTAL)
+    add_header(s, "10 · demo", "Local app — Streamlit GUI (6 tabs) + Typer CLI")
+    add_footer(s, 11, TOTAL)
 
     add_image_fit(s, MOCKUPS / "04_metrics.jpeg", 0.6, 1.8, 8.0, 5.0)
 
@@ -576,8 +623,8 @@ def slide_07_demo(p):
 
 def slide_08_future(p):
     s = blank_slide(p)
-    add_header(s, "10 · limitations & future work", "What we know we left on the table")
-    add_footer(s, 11, TOTAL)
+    add_header(s, "11 · limitations & future work", "What we know we left on the table")
+    add_footer(s, 12, TOTAL)
 
     add_card(s, 0.6, 2.0, 6.0, 4.7, gutter=CLASS_COLORS["fix"])
     add_text(s, "limitations", 0.85, 2.15, 5.6, 0.4,
@@ -639,6 +686,7 @@ def main():
     slide_07_llm_pivot(p)
     slide_08_llm_generation(p)
     slide_09_apples_to_apples(p)
+    slide_10_agent(p)
     slide_07_demo(p)
     slide_08_future(p)
     slide_09_thanks(p)

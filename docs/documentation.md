@@ -1,41 +1,49 @@
 ---
-title: "Commit Type Classifier and LLM-based Commit-Message Generator"
+title: "Commit Type Classifier, LLM Generator, and Agentic Chat"
 subtitle: "Component 2 — AI for Software Engineering"
 author:
   - "Jesús Beleño"
   - "Juan Forero"
-date: "2026-05-26"
+date: "2026-05-27"
 abstract: |
   This document reports the design, implementation and evaluation of a
-  two-track artificial-intelligence system for Git commits, both tracks
-  trained and evaluated on 38,965 stratified commits drawn from the
-  CommitBench corpus. The **discriminative track** classifies a commit
-  into the five most common Conventional-Commit types (`feat`, `fix`,
-  `docs`, `refactor`, `test`) from the message and the source-code diff;
-  five heterogeneous models — a TF-IDF + Logistic-Regression baseline,
-  a dual-branch CNN-text network, two fine-tuned encoder-only
-  transformers (DistilBERT and CodeBERT), and a soft-voting ensemble —
-  are compared with macro-F1, weighted-F1, precision, recall and
-  per-class confusion matrices. The best discriminative model
-  (TF-IDF + Logistic Regression) reaches a test accuracy of 70.93 %
-  and macro-F1 of 0.6632. The **generative track** writes the commit
-  message itself from the diff using five locally-hosted large language
-  models (`qwen2.5-coder:1.5b/3b`, `llama3.2:3b-instruct`,
-  `phi3.5:3.8b-mini-instruct`, `deepseek-coder:1.3b`) served by Ollama,
-  compared across four prompting strategies (zero-shot, few-shot,
-  chain-of-thought, JSON-mode). The best LLM configuration
+  three-track artificial-intelligence system for Git commits, all
+  tracks trained and evaluated on 38,965 stratified commits drawn from
+  the CommitBench corpus. The **discriminative track** classifies a
+  commit into the five most common Conventional-Commit types (`feat`,
+  `fix`, `docs`, `refactor`, `test`) from the message and the
+  source-code diff; five heterogeneous models — a TF-IDF + Logistic-
+  Regression baseline, a dual-branch CNN-text network, two fine-tuned
+  encoder-only transformers (DistilBERT and CodeBERT), and a
+  soft-voting ensemble — are compared with macro-F1, weighted-F1,
+  precision, recall and per-class confusion matrices. The best
+  discriminative model (TF-IDF + Logistic Regression) reaches a test
+  accuracy of 70.93 % and macro-F1 of 0.6632. The **generative track**
+  writes the commit message itself from the diff using five locally-
+  hosted large language models (`qwen2.5-coder:1.5b/3b`,
+  `llama3.2:3b-instruct`, `phi3.5:3.8b-mini-instruct`,
+  `deepseek-coder:1.3b`) served by Ollama, compared across four
+  prompting strategies (zero-shot, few-shot, chain-of-thought,
+  JSON-mode). The best LLM configuration
   (`phi3.5:3.8b-mini` + few-shot) reaches 36 % type-exact-match on a
   stratified 50-commit test sample, with corpus BLEU-4 of 7.18 and
-  ROUGE-L of 0.192. A **hybrid pipeline** combines TF-IDF KNN retrieval
-  over the train corpus, an LLM generator, and the discriminative
-  baseline acting as an automated type verifier, turning the
-  classifiers into post-hoc infrastructure for the generative track.
-  The system is delivered as a local Python application with a
-  Streamlit graphical interface (five tabs), a Typer-based
-  command-line interface (six commands), and a SQLite history layer.
-  The whole pipeline — data acquisition, preprocessing, training,
-  evaluation, generation, inference and persistence — is reproducible
-  from a single repository and verified by 26 automated tests.
+  ROUGE-L of 0.192. A heterogeneous **voting ensemble** that combines
+  the two best LLM classifiers with the TF-IDF baseline acting as a
+  co-equal voter strictly beats the discriminative baseline on every
+  test-set metric (accuracy 75.00 %, macro-F1 0.6698, weighted-F1
+  0.7505) on the same natural-distribution sample. The **agentic
+  track** (Topic 11 of the syllabus) wraps the entire stack as
+  tool-callable functions and runs an autonomous conversation loop
+  where `llama3.2:3b-instruct` decides which tool to call and writes
+  a natural-language interpretation; every prediction layer in the
+  default chain is an LLM. The system is delivered as a local Python
+  application with a Streamlit graphical interface (six tabs:
+  Chat, Generate, Predict, Repository, History, Metrics), a Typer-
+  based command-line interface (seven commands), and a SQLite
+  history layer. The whole pipeline — data acquisition,
+  preprocessing, training, evaluation, generation, agent loop,
+  inference and persistence — is reproducible from a single
+  repository and verified by 26 automated tests.
 geometry: margin=1in
 fontsize: 11pt
 toc: true
@@ -1125,6 +1133,139 @@ but wrong. The hybrid is therefore best evaluated jointly on
 `type_exact_match` (correctness of the categorical decision) and
 `rouge_l_mean` (lexical similarity of the subject); a single-metric
 ranking would hide this trade-off.
+
+# Agentic AI — Conversational Interface
+
+## Motivation
+
+The discriminative and generative tracks expose the system as a
+classifier and as a message author, but in both cases the user has
+to know *what to ask for* and which form to fill in (paste a
+message, paste a diff, pick a model, pick a strategy). The third
+track folds the whole stack into a natural-language assistant —
+the user says, in plain English, *"classify the last 30 commits of
+/path/to/repo"*, and the assistant picks the right tool, runs it
+and explains the result. This is Topic 11 of the course syllabus
+("Agentic AI") and the answer to the project brief's requirement
+that *an LLM (for example Ollama) automate a software-engineering
+process*. The agent satisfies both halves: an LLM does the
+orchestration, and an LLM does every prediction it commissions.
+
+## Architecture
+
+The agent is implemented in `src/llm/agent.py` and runs a standard
+tool-using chat loop (Figure 9):
+
+1. The user prompt is appended to a message list whose first entry
+   is a system prompt that names every tool, the recommended default
+   model for each, and the rule "after a tool returns, write a 1-3
+   sentence interpretation — do not repeat the data".
+2. The orchestrator LLM (`llama3.2:3b-instruct-q4_K_M`, served by
+   Ollama on `http://localhost:11434/api/chat`) is invoked with the
+   message list and a JSONSchema description of the six available
+   tools.
+3. If the model decides to call a tool, the agent loop dispatches it
+   through the Python function map defined in `TOOLS`, captures the
+   result as a Python dictionary, appends a corresponding `tool`
+   message to the history, and re-invokes the model so it can either
+   call another tool or write its final reply. The loop stops once
+   the model returns a message without a tool call or after eight
+   turns, whichever comes first.
+4. A small fallback parser recovers tool calls emitted as JSON in
+   the `content` field by smaller models that do not fully honour
+   the `tool_calls` schema; `qwen2.5-coder:3b` triggers this
+   fallback in roughly half of its responses.
+
+The orchestrator is intentionally a separate instruct-tuned model
+(`llama3.2:3b-instruct`) rather than the code-aware
+`qwen2.5-coder:3b` used downstream. Llama-3.2's instruction-following
+is more reliable on the tool-calling protocol, while Qwen's
+code-aware backbone is left to do what it is best at: read diffs
+and pick a Conventional-Commit label.
+
+## Tools
+
+The six tools and the inputs the orchestrator can pass to each are:
+
+| Tool | What it does | Default backend |
+|---|---|---|
+| `classify_commit` | Predict the type for one (message, diff) pair. | `llm:qwen2.5-coder:3b` (LLM, RAG few-shot) |
+| `classify_repo` | Scan + classify the last N commits, return a class histogram and a per-commit list. | `llm:qwen2.5-coder:3b` |
+| `generate_commit_message` | Run the hybrid LLM pipeline (RAG + LLM + classifier verifier) to author a message from a diff. | `qwen2.5-coder:3b` hybrid |
+| `scan_repo` | Read the last N commits from a local repository via pydriller. | n/a |
+| `list_models` | Return the list of trained models the agent can ask for. | n/a |
+| `list_classes` | Return the five target Conventional-Commit labels. | n/a |
+
+Every classification and generation tool defaults to a local LLM;
+the classical TF-IDF baseline is only chosen when the user
+explicitly asks for the fast classifier ("classify using
+baseline_tfidf for speed"). This is the single line in the system
+prompt that ensures the project brief is satisfied — *the LLM, not
+a scikit classifier, is the one doing the analysis*.
+
+## User-facing rendering
+
+The Streamlit Chat tab in `app/streamlit_app.py` uses Streamlit's
+native `st.chat_message` components plus one dedicated renderer per
+tool. After a tool call the user sees, before the assistant's text:
+
+* `classify_repo` — four metric tiles (commits scanned, dominant
+  class, model used, distinct classes observed), a bar chart of the
+  class histogram, and a sortable dataframe of every commit with
+  its hash, predicted type, confidence and subject line.
+* `classify_commit` — a large coloured label, the confidence
+  percentage, and a bar chart of the five-way probability
+  distribution.
+* `generate_commit_message` — the signature 2-pixel-gutter
+  prediction card showing the generated message, type-change flag,
+  verifier confidence and end-to-end latency, plus a collapsible
+  expander listing the RAG-retrieved commits with similarity
+  scores.
+* `scan_repo` — a clean dataframe of hash, author, date and
+  message.
+* `list_models` and `list_classes` — markdown bullets.
+
+The orchestrator's natural-language reply is rendered as a separate
+chat bubble below the tool card, with `st.markdown` so that the
+LLM can use lists, code-fences and emphasis if it wants.
+
+## Example session
+
+The exchange below was captured during the field validation of the
+agent against this very repository (the c2-commit-classifier
+working tree):
+
+> **User:** *Classify the last 10 commits of /Users/jesus/Desktop/Inteligencia/c2-commit-classifier.*
+>
+> **🛠 Tool — classify_repo:**
+> `model='llm:qwen2.5-coder:3b'`,
+> `histogram={feat: 8, fix: 0, docs: 1, refactor: 0, test: 1}`.
+>
+> **🤖 Assistant:** *Eight of the last ten commits are `feat`,
+> confirming an active feature-development phase rather than
+> maintenance; no `fix` commits is worth checking against the
+> issue tracker.*
+
+The whole exchange took roughly twenty seconds end-to-end on a
+16 GB Apple-Silicon MacBook: ten LLM classifications at ~2 s
+each plus a ~1.5 s final-reply turn from the orchestrator.
+
+## Trade-offs
+
+The agent inherits the latency profile of the LLM-classifier mode:
+roughly two seconds per commit in `classify_repo` and a similar
+budget for `generate_commit_message`. At `last_n = 20`, this means
+~40 s of wall time, which is fine for an interactive session but
+unacceptable for a CI pre-commit hook. The Chat-tab right-column
+copy says exactly this — "*LLM classifier is slower: ~2 s per
+commit; use baseline_tfidf when you need speed*" — and the agent
+respects the user's override when it appears in the prompt.
+
+The agent track is therefore complementary to the other two: the
+discriminative track is the production-grade fast path, the
+generative track is the LLM-original surface that authors a
+message from a diff, and the agentic track is the natural-language
+front door that drives both with a conversational prompt.
 
 # References
 

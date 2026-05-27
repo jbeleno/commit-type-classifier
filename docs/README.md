@@ -9,15 +9,27 @@ This folder holds **every artifact required by the course rubric**
 ```
 docs/
 ├── README.md                  ← you are here
-├── documentation.md           ← the 15-section main document  (English)
+├── documentation.md           ← 17-section main document (English)
 ├── design-system.md           ← UI token spec (visual identity)
 ├── diagrams/
 │   ├── README.md              ← caption table + render command
 │   ├── puml/                  ← PlantUML source (versionable)
-│   └── png/                   ← rendered figures
-├── mockups/                   ← annotated Streamlit screenshots (pending)
-└── slides/                    ← English presentation deck (pending)
+│   └── png/                   ← rendered figures (1–9)
+├── mockups/                   ← annotated Streamlit screenshots
+├── slides/                    ← (build output → `exports/slides.pptx`)
+└── exports/                   ← documentation.pdf, slides.pptx, slides.pdf
 ```
+
+## Project tracks
+
+The project is organised in three complementary tracks; each one
+maps to a different question about Git commits:
+
+| Track | Tab in the Streamlit app | Question it answers |
+|---|---|---|
+| **Discriminative** | Predict, Repository, Metrics | *What type is this commit?* |
+| **Generative** | Generate | *What should the commit message be?* |
+| **Agentic** | Chat | *Run this analysis for me — using English.* |
 
 ## Mapping to the rubric (item 2, 40 %)
 
@@ -31,13 +43,18 @@ docs/
 | Diseño GUI · Mockups | `mockups/` (Streamlit screenshots) |
 | Catálogo Servicios Web · APIs | `documentation.md` §11 (CLI is the API for C2) |
 | Pruebas (Unitarias · Funcionales · Integración) | `documentation.md` §12 (refers to `tests/`) |
-| Gráfica arquitectura del modelo propuesto | Figures 5–7 — `diagrams/png/05_*` through `07_*` |
+| Gráfica arquitectura del modelo propuesto | Figures 5–9 — `diagrams/png/05_*` through `09_*` |
 | Resultados y Discusión | `documentation.md` §14 |
 | Recomendaciones y Trabajos Futuros | `documentation.md` §15 |
+| LLM-based generative track | `documentation.md` §16 + Figure 8 |
+| Apples-to-apples vs the baseline | `documentation.md` §16 (sub-section) + `models_saved/reports/llm_classify/comparison.md` |
+| Agentic AI (Topic 11 of the syllabus) | `documentation.md` §17 + Figure 9 |
 
 ## Quick links
 
 - Diagram captions & re-render command → [`diagrams/README.md`](diagrams/README.md)
 - Visual identity (palette, tokens, components) → [`design-system.md`](design-system.md)
-- Comparison of the 5 trained models → [`../models_saved/reports/comparison.md`](../models_saved/reports/comparison.md)
-- Tests → run `uv run pytest tests/ -q` from the project root (26 tests).
+- Comparison of the 5 trained classifiers → [`../models_saved/reports/comparison.md`](../models_saved/reports/comparison.md)
+- LLM generation sweep (5 × 4 = 20 runs) → [`../models_saved/reports/llm/comparison.md`](../models_saved/reports/llm/comparison.md)
+- LLM-as-classifier head-to-head + voting ensemble winners → [`../models_saved/reports/llm_classify/comparison.md`](../models_saved/reports/llm_classify/comparison.md)
+- Tests → `uv run pytest tests/ -q` from the project root (26 tests).

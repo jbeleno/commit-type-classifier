@@ -1,0 +1,88 @@
+@startuml 09_architecture_agent
+!theme plain
+skinparam backgroundColor #0F172A
+skinparam defaultTextAlignment center
+skinparam defaultFontName "Fira Sans"
+skinparam defaultFontColor #F8FAFC
+skinparam ArrowColor #38BDF8
+skinparam ArrowFontColor #CBD5E1
+
+skinparam component {
+    BackgroundColor #1E293B
+    BorderColor #475569
+    FontColor #F8FAFC
+}
+skinparam database {
+    BackgroundColor #334155
+    BorderColor #475569
+    FontColor #F8FAFC
+}
+skinparam note {
+    BackgroundColor #1E293B
+    BorderColor #A78BFA
+    FontColor #CBD5E1
+}
+
+title Agentic AI pipeline (Figure 9)
+
+actor "User" as User #38BDF8
+
+rectangle "Streamlit Chat tab" as Chat #0B1220 {
+    component "st.chat_input" as Input
+    component "per-tool\nrenderers" as Renderers
+}
+
+rectangle "Orchestrator (LLM)" as Orch #0B1220 {
+    component "llama3.2:3b-instruct\n/api/chat with tools" as Llama
+    note right of Llama
+      Decides which tool to call
+      and writes the natural-language
+      interpretation. Receives the
+      raw tool result and produces
+      1-3 sentences highlighting
+      what stands out.
+    end note
+}
+
+rectangle "Tools (src/llm/agent.py)" as Tools #0B1220 {
+    component "classify_commit" as Tcc
+    component "classify_repo" as Tcr
+    component "generate_commit_message" as Tgm
+    component "scan_repo" as Tsr
+    component "list_models" as Tlm
+    component "list_classes" as Tlc
+}
+
+rectangle "Inference backends" as Back #0B1220 {
+    component "llm:qwen2.5-coder:3b\n(RAG few-shot)" as LLMClf
+    component "qwen2.5-coder:3b\nhybrid (LLM+verifier)" as LLMGen
+    component "pydriller\nlocal git read" as Driller
+    note bottom of LLMClf
+      Default classifier
+      = LLM end-to-end
+    end note
+}
+
+User --> Input : prompt
+Input --> Llama : messages + tool defs
+Llama --> Tcc
+Llama --> Tcr
+Llama --> Tgm
+Llama --> Tsr
+Llama --> Tlm
+Llama --> Tlc
+
+Tcc --> LLMClf
+Tcr --> Driller
+Tcr --> LLMClf
+Tgm --> LLMGen
+Tsr --> Driller
+
+LLMClf --> Llama : per-commit label
+LLMGen --> Llama : final_message
+Driller --> Llama : commits
+
+Llama --> Renderers : final message
+Renderers --> User : chart / table / card
+
+@enduml

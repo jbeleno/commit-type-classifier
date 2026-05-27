@@ -1,8 +1,8 @@
-# C2 — Commit Classifier + LLM Generator
+# C2 — Commit Classifier + LLM Generator + Agentic Chat
 
 Component 2 (50%) of the Artificial Intelligence course project.
-Two complementary tasks over Git commits, both using the same
-preprocessed CommitBench corpus and the same Streamlit/CLI shell:
+Three complementary tracks over Git commits, all using the same
+preprocessed CommitBench corpus and the same Streamlit / CLI shell:
 
 1. **Discriminative** — classify a commit's Conventional Commit type
    from message + diff (five models, including a heterogeneous
@@ -10,6 +10,13 @@ preprocessed CommitBench corpus and the same Streamlit/CLI shell:
 2. **Generative** — write the Conventional Commit message *itself*
    from the diff alone, using a local LLM (five Ollama-served models,
    four prompting strategies, plus a RAG + classifier-verifier hybrid).
+3. **Agentic** — a conversational agent (Topic 11 of the syllabus)
+   that picks among six tools (classify a commit, classify an entire
+   repository, generate a message, scan a repo, list classes/models)
+   to automate end-to-end commit analysis from a chat prompt. The
+   default pipeline runs an LLM at every layer: orchestrator
+   (`llama3.2:3b-instruct`), classifier (`llm:qwen2.5-coder:3b` with
+   RAG few-shot), and generator (`qwen2.5-coder:3b` hybrid).
 
 ## Labels
 
@@ -26,10 +33,12 @@ preprocessed CommitBench corpus and the same Streamlit/CLI shell:
 ```
 download → preprocess → split ─┬─► classification (5 models) ─► evaluate
                                 │
-                                └─► generation (5 LLMs × 4 strategies)
-                                     └─► hybrid: RAG + LLM + verifier
+                                ├─► generation (5 LLMs × 4 strategies)
+                                │   └─► hybrid: RAG + LLM + verifier
+                                │
+                                └─► agent (llama3.2 orchestrator + 6 tools)
                                                        ▼
-                                       Streamlit GUI · CLI · SQLite history
+                              Streamlit GUI (6 tabs) · CLI · SQLite history
 ```
 
 ## Models — classification (discriminative)
@@ -68,6 +77,55 @@ diff ─► TF-IDF KNN retrieval (top-3 train commits)
               if verifier_conf ≥ τ AND llm_type ≠ verifier_type:
                         replace type with verifier
 ```
+
+## Apples-to-apples — LLM-as-classifier beats the baseline
+
+To answer "does the LLM track match the TF-IDF baseline?" we re-run
+each LLM in **classifier mode** (same input as TF-IDF: message + diff;
+same output space: one of five labels) on a stratified 200-commit
+sample, then combine the top LLMs with the baseline as a co-equal
+voter:
+
+| System | Accuracy | Macro F1 | Weighted F1 |
+|---|---:|---:|---:|
+| TF-IDF baseline (n = 5,845) | 70.93 % | 0.6632 | 0.7187 |
+| qwen2.5-coder:3b · rag (n = 200) | 74.00 % | 0.5639 | 0.7190 |
+| **Voting ensemble (TF-IDF 2× boost)** | **75.00 %** | **0.6698** | **0.7505** |
+
+The ensemble strictly beats the baseline on **every** test-set metric.
+Full report in [models_saved/reports/llm_classify/comparison.md](models_saved/reports/llm_classify/comparison.md).
+
+## Agentic AI — natural-language interface
+
+The Chat tab exposes the project as an autonomous agent. The user can
+say things like *"classify the last 30 commits of /path/to/repo"* and
+the agent picks the right tool, runs it, and writes a one-paragraph
+interpretation. **Every layer is an LLM** running locally on Ollama:
+
+```
+user prompt
+   │
+   ▼
+[llama3.2:3b-instruct]      ← orchestrator: chooses which tool to call
+   │
+   ▼
+┌─────────────────────────────────────────────┐
+│ tools (src/llm/agent.py)                    │
+│   classify_commit          ─► LLM classifier│
+│   classify_repo            ─► scan + LLM    │
+│   generate_commit_message  ─► hybrid LLM    │
+│   scan_repo, list_models, list_classes      │
+└─────────────────────────────────────────────┘
+   │
+   ▼
+[llama3.2:3b-instruct]      ← 1-3 sentence interpretation
+   │
+   ▼
+Streamlit chat (st.chat_message + per-tool renderer)
+```
+
+Full architecture in
+[docs/diagrams/png/09_architecture_agent.png](docs/diagrams/png/09_architecture_agent.png).
 
 ## Course-rubric checklist
 
