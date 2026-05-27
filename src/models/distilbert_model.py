@@ -31,6 +31,7 @@ from transformers import (
 )
 
 from src.config import IDX_TO_CLASS, MODELS_DIR, NUM_CLASSES, RANDOM_SEED
+from src.data.balance import balanced_subsample
 from src.utils import evaluation_report, load_split, print_report, save_report
 
 console = Console()
@@ -57,22 +58,12 @@ def _device() -> torch.device:
 
 
 def _balanced_subsample(df, max_n: int):
-    """Undersample majority classes so each class has at most max_n / NUM_CLASSES rows."""
+    """Backward-compat wrapper. The canonical implementation lives in
+    ``src.data.balance.balanced_subsample`` — see that module for the
+    rationale (data-level vs cost-sensitive balancing) and the CLI
+    that materialises ``data/splits/train_balanced.csv``."""
     per_class = max(64, max_n // NUM_CLASSES)
-    chunks = []
-    for label_id in range(NUM_CLASSES):
-        sub = df[df["label_id"] == label_id]
-        if len(sub) > per_class:
-            sub = sub.sample(n=per_class, random_state=RANDOM_SEED)
-        chunks.append(sub)
-    out = (
-        np.concatenate([c.index.values for c in chunks])
-        if chunks
-        else np.array([])
-    )
-    rng = np.random.default_rng(RANDOM_SEED)
-    rng.shuffle(out)
-    return df.loc[out].reset_index(drop=True)
+    return balanced_subsample(df, target_per_class=per_class)
 
 
 def _stratified_subsample(df, max_n: int):

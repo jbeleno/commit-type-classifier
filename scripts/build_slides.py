@@ -302,9 +302,45 @@ def slide_03_approach(p):
 
 def slide_04_pipeline(p):
     s = blank_slide(p)
-    add_header(s, "03 · pipeline", "CommitBench → 70/15/15 → five trained models")
+    add_header(s, "03 · pipeline", "CommitBench → 70/15/15 stratified → balanced → five trained models")
     add_footer(s, 4, TOTAL)
-    add_image_fit(s, DIAGRAMS / "05_architecture_pipeline.png", 0.6, 1.7, 12.1, 5.3)
+    add_image_fit(s, DIAGRAMS / "05_architecture_pipeline.png", 0.6, 1.7, 8.2, 5.3)
+
+    # Right-side card — class balancing
+    add_card(s, 9.0, 1.85, 3.75, 5.05, gutter=CLASS_COLORS["docs"])
+    add_text(s, "class balancing", 9.2, 2.0, 3.4, 0.4,
+             font_size=12, color=CLASS_COLORS["docs"], font_name=FONT_SANS,
+             bold=True, letter_spacing=2.0)
+    add_text(s,
+        "fix          62.6 %\n"
+        "feat         11.6 %\n"
+        "refactor     11.1 %\n"
+        "test         10.5 %\n"
+        "docs          4.2 %",
+        9.2, 2.4, 3.4, 1.3, font_size=10, color=INK_2, font_name=FONT_MONO)
+
+    add_text(s, "cost-sensitive  (sklearn / TF)",
+             9.2, 3.65, 3.4, 0.3, font_size=10, color=CLASS_COLORS["feat"],
+             font_name=FONT_SANS, bold=True)
+    add_text(s,
+        "class_weight=\"balanced\"\n"
+        "w_c = n / (k · n_c)\n"
+        "no data dropped",
+        9.2, 3.95, 3.4, 0.9, font_size=9, color=INK_2, font_name=FONT_MONO)
+
+    add_text(s, "balanced subsample  (BERTs)",
+             9.2, 4.95, 3.4, 0.3, font_size=10, color=CLASS_COLORS["refactor"],
+             font_name=FONT_SANS, bold=True)
+    add_text(s,
+        "src/data/balance.py\n"
+        "1,600 rows × 5 classes\n"
+        "→ train_balanced.csv\n"
+        "MPS-safe alternative",
+        9.2, 5.25, 3.4, 1.2, font_size=9, color=INK_2, font_name=FONT_MONO)
+
+    add_text(s, "equivalent in expectation [He & Garcia, 2009]",
+             9.2, 6.55, 3.4, 0.3, font_size=8, color=INK_3,
+             font_name=FONT_SANS)
     return s
 
 

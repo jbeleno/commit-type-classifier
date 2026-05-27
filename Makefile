@@ -1,4 +1,4 @@
-.PHONY: install data train-baseline train-cnn train-distilbert train-codebert train-ensemble train-all eval-all test app cli diagrams clean
+.PHONY: install data balance train-baseline train-cnn train-distilbert train-codebert train-ensemble train-all eval-all test app cli diagrams clean
 
 UV ?= uv
 
@@ -9,6 +9,9 @@ data:
 	$(UV) run python -m src.data.download --sample 1000000
 	$(UV) run python -m src.data.preprocess
 	$(UV) run python -m src.data.split
+
+balance:
+	$(UV) run python -m src.data.balance --target 1600
 
 train-baseline:
 	$(UV) run python -m src.models.baseline_tfidf all
